@@ -10,21 +10,8 @@ const WHATSAPP_NUMBER = '9779709117067';
   const rm = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const yr = $('#yr'); if (yr) yr.textContent = new Date().getFullYear();
 
-  /* theme: dark by default, the visitor's choice is kept in localStorage ('hitech-theme'); the inline head script sets data-mode before first paint */
-  const tgs = $$('.theme-tg');
-  const setMode = (m, save) => {
-    h.setAttribute('data-mode', m);
-    tgs.forEach(b => {
-      b.setAttribute('aria-pressed', m === 'dark'); b.setAttribute('aria-label', m === 'dark' ? 'Switch to light mode' : 'Switch to dark mode');
-      const l = $('.tg-l', b); if (l) l.textContent = m === 'dark' ? 'Light mode' : 'Dark mode';
-    });
-    if (save) try { localStorage.setItem('hitech-theme', m); } catch (e) { /* storage blocked: the choice lasts for this page only */ }
-  };
-  setMode(h.getAttribute('data-mode') === 'light' ? 'light' : 'dark');
-  tgs.forEach(b => b.addEventListener('click', () => setMode(h.getAttribute('data-mode') === 'dark' ? 'light' : 'dark', true)));
-
   /* header: menus, mobile panel, hide on scroll, navy over dark sections */
-  const nav = $('#nav'), ann = $('.announce'), darks = $$('[data-theme=dark]');
+  const nav = $('#nav'), ann = $('.announce'), darks = $$('[data-tone=navy]');
   const closeMenus = (except) => $$('.mb', nav).forEach(b => {
     if (b === except) return;
     b.setAttribute('aria-expanded', 'false'); $('#' + b.getAttribute('aria-controls')).classList.remove('open');

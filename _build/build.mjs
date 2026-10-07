@@ -292,7 +292,6 @@ const mobileMenu = () => {
       <a class="mp-l" href="support.html"${cur('support.html')}>Support</a>
       <a class="mp-l" href="careers.html"${cur('careers.html')}>Careers</a>
       <a class="mp-l" href="contact.html"${cur('contact.html')}>Contact</a>
-      <button class="mp-l mp-theme theme-tg" type="button" aria-pressed="true" aria-label="Switch to light mode">${THEME_ICO}<span class="tg-l">Light mode</span></button>
       <a class="btn mp-cta" href="contact.html#demo">Request a demo</a>
     </div>`;
 };
@@ -303,7 +302,6 @@ const nav = () => `<header class="nav" id="nav">
       ${navMenus()}
     </ul></nav>
     <div class="nav-r">
-      ${themeBtn('tg-d')}
       <a class="nl nl-c" href="contact.html"${cur('contact.html')}>Contact</a>
       <a class="btn btn-sm" href="contact.html#demo"><span class="d-only">Request a demo</span><span class="m-only">Demo</span></a>
       <button class="burger" id="burger" type="button" aria-expanded="false" aria-controls="mpanel" aria-label="Menu"><i></i><i></i><i></i></button>
@@ -313,7 +311,7 @@ const nav = () => `<header class="nav" id="nav">
 </header>`;
 
 const ADDR = '4th Floor, Divine Complex, Kalimati Chowk, Kalimati, Kathmandu, Nepal';
-const foot = () => `<footer class="foot" data-theme="dark">
+const foot = () => `<footer class="foot" data-tone="navy">
   <div class="wrap">
     <div class="foot-grid">
       <div class="f-brand">
@@ -359,7 +357,7 @@ const render = ({ file, title, desc, body, org = false }) => {
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-<script>document.documentElement.className='js';try{var m=localStorage.getItem('hitech-theme');document.documentElement.setAttribute('data-mode',m==='light'?'light':'dark')}catch(e){document.documentElement.setAttribute('data-mode','dark')}</script>
+<script>document.documentElement.className='js'</script>
 ${PRELOAD[file] ? `<link rel="preload" as="image" href="${BGD}${PRELOAD[file].src}.jpg">\n` : ''}<link rel="stylesheet" href="assets/css/site.css">
 ${org ? ORG + '\n' : ''}</head>
 <body${PROD[file] ? ` data-product="${PROD[file]}"` : ''}>
@@ -435,7 +433,7 @@ const faqSection = (e = 'HiTech FAQ', h = 'Straight answers before you call.', i
 
 const tile = t => {
   const tr = (TRADE_OF[t.id] || []).join(' ');
-  if (t.id === 'tivora') return `<a class="tile tile-core" data-cat="${t.f}" data-trades="${tr}" href="${t.href}" ${XA} data-theme="dark">
+  if (t.id === 'tivora') return `<a class="tile tile-core" data-cat="${t.f}" data-trades="${tr}" href="${t.href}" ${XA} data-tone="navy">
           <div class="tc-copy">${ico('tivora', 'dk')}<h3>${t.name}${SRNEW}</h3><p>${t.home}</p>${IRD('ird-dk')}<span class="go">Explore Tivora ERP ${EXTI}</span></div>
           <div class="tc-img">${shot('dash')}</div>
         </a>`;
@@ -483,7 +481,7 @@ const nepalStrip = (lede = 'Every document is numbered by fiscal year.', paper =
 
 const quote = (q, n, r, big) => `<figure class="quote${big ? ' q-big' : ''}"><blockquote><p>"${q}"</p></blockquote><figcaption><b>${n}</b>${r}</figcaption></figure>`;
 
-const phero = ({ eyebrow, h1, lede, ctas = '', dark = false, extra = '', bg = null }) => `<header class="phero${dark || bg ? ' phero-dk' : ''}${bg ? ' has-bg' : ''}"${dark || bg ? ' data-theme="dark"' : ''}>${bg ? bgl(bg.src, { mode: 'dl', pos: bg.pos, flip: bg.flip, size: bg.size, hero: true }) : ''}
+const phero = ({ eyebrow, h1, lede, ctas = '', dark = false, extra = '', bg = null }) => `<header class="phero${dark || bg ? ' phero-dk' : ''}${bg ? ' has-bg' : ''}"${dark || bg ? ' data-tone="navy"' : ''}>${bg ? bgl(bg.src, { mode: 'dl', pos: bg.pos, flip: bg.flip, size: bg.size, hero: true }) : ''}
   <div class="wrap">
     <p class="eyebrow">${eyebrow}</p>
     <h1>${h1}</h1>
@@ -532,7 +530,7 @@ const PARTNER_PINS = ['itahari', 'birgunj', 'butwal', 'bhairahawa', 'pokhara', '
 /* Tivora ERP highlight (spec 14 P3): compact, not sticky, four real screens cross-fading */
 const TV_SHOTS = ['dash', 'paint', 'jewel', 'sales'];
 const TV_CHIPS = ['book|Books your auditor accepts', 'box|Stock that adds up', 'cal|Nepal built in', 'tools|Built one trade at a time'];
-const coreBand = () => `<section class="sec sec-navy tv-hl" id="core" data-theme="dark" aria-labelledby="core-h">
+const coreBand = () => `<section class="sec sec-navy tv-hl" id="core" data-tone="navy" aria-labelledby="core-h">
   <div class="wrap tv-grid">
     <div class="tv-l">
       <p class="eyebrow">Tivora ERP</p>
@@ -558,8 +556,6 @@ const coreBand = () => `<section class="sec sec-navy tv-hl" id="core" data-theme
 const INTEREST = ['Not sure yet', 'Tivora ERP: Alanza (jewellery)', `Tivora ERP: Paint${NP}`, `Tivora ERP: Trading${NP}`, 'Swastik', 'mySwastikonline', 'Swastik POS', 'Swastik Restaurant', 'Pharmasoft', 'Avocare', 'Bizant', 'HiTech Payroll', 'HiTech Smartsuite', 'eZee hospitality software', 'Custom software, ERP or e-commerce'];
 const interestOpts = sel => INTEREST.map(o => `<option${o.replace(NP, '') === sel ? ' selected' : ''}>${o}</option>`).join('');
 const HPOT = '<div class="hpot" aria-hidden="true"><label>Leave this field empty<input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>';
-const THEME_ICO = '<svg class="tg-sun" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.6M12 18.9v2.6M2.5 12h2.6M18.9 12h2.6M5.3 5.3l1.8 1.8M16.9 16.9l1.8 1.8M5.3 18.7l1.8-1.8M16.9 7.1l1.8-1.8"/></svg><svg class="tg-moon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20 14.2A8.2 8.2 0 0 1 9.8 4 8.3 8.3 0 1 0 20 14.2z"/></svg>';
-const themeBtn = (cls = '') => `<button class="theme-tg${cls ? ' ' + cls : ''}" type="button" aria-pressed="true" aria-label="Switch to light mode">${THEME_ICO}</button>`;
 
 /* call-back strip above the footer on every page except contact.html (spec 14 P23) */
 const leadStrip = prod => `<section class="lead-strip" aria-labelledby="ls-h">
@@ -618,7 +614,7 @@ const WHY_SUP = [['sms', 'Live chat support'], ['pin', 'Onsite support'], ['fact
 const whyBand = () => `<section class="sec has-bg" id="why">${bgl('street-morning', { mode: 'lw', pos: '50% 58%' })}
   <div class="wrap">
     ${head2('Why HiTech', 'Accounting software since 1998.', 'We are HiTech Solutions &amp; Services Pvt. Ltd., a premier business software solution provider in Nepal.')}
-    <div class="why5 stag">${WHY5.map(([i, v, l, n], k) => `<div class="w5${k === 0 ? ' w5-a' : ''}"${k === 0 ? ' data-theme="dark"' : ''}>${ico(i, 's48' + (k === 0 ? ' dk' : ''))}<b class="w5v"${n ? ` data-count="${n}" data-suffix="+"` : ''}>${v}</b><span>${l}</span></div>`).join('')}</div>
+    <div class="why5 stag">${WHY5.map(([i, v, l, n], k) => `<div class="w5${k === 0 ? ' w5-a' : ''}"${k === 0 ? ' data-tone="navy"' : ''}>${ico(i, 's48' + (k === 0 ? ' dk' : ''))}<b class="w5v"${n ? ` data-count="${n}" data-suffix="+"` : ''}>${v}</b><span>${l}</span></div>`).join('')}</div>
     <p class="why-ird"><span class="ird-i">${IRDSVG}</span>All HiTech products are IRD certified.</p>
     <h3 class="gh">Support service</h3>
     <div class="icards sm stag">${WHY_SUP.map(([i, l]) => `<div class="icard">${ico(i, 's48')}<h3>${l}</h3></div>`).join('')}</div>
@@ -627,7 +623,7 @@ const whyBand = () => `<section class="sec has-bg" id="why">${bgl('street-mornin
 </section>`;
 
 const svcCards = () => `<div class="svc stag">
-      <a class="sv sv-big" href="solutions.html#erp" data-theme="dark">${ico('tivora', 's48 dk')}<h3>ERP implementation</h3><p>One system, on Tivora ERP.</p><span class="go">Learn more ${ARROW}</span></a>
+      <a class="sv sv-big" href="solutions.html#erp" data-tone="navy">${ico('tivora', 's48 dk')}<h3>ERP implementation</h3><p>One system, on Tivora ERP.</p><span class="go">Learn more ${ARROW}</span></a>
       <a class="sv" href="solutions.html#application">${ico('layers', 's40')}<h3>Application software</h3><p>Accounting, billing, POS and payroll.</p><span class="go">Learn more ${ARROW}</span></a>
       <a class="sv" href="solutions.html#custom">${ico('code', 's40')}<h3>Customized software</h3><p>Contract and collaborative projects.</p><span class="go">Learn more ${ARROW}</span></a>
       <a class="sv" href="solutions.html#ecommerce">${ico('cartplus', 's40')}<h3>E-commerce</h3><p>B2B and B2C online stores.</p><span class="go">Learn more ${ARROW}</span></a>
@@ -664,7 +660,7 @@ const partnersBand = () => `<section class="sec sec-paper" id="partners-band">
 </section>`;
 
 const hchips = HERO_LOGOS.map(id => { const t = TBY[id]; return `<li><a class="hlogo" href="${t.href}" aria-label="${t.name}, ${t.cat}">${logo(id, '', false)}<span class="tip" aria-hidden="true"><b>${t.name}</b><small>${t.cat}</small></span></a></li>`; }).join('');
-const home = () => `<section class="hero has-bg" id="top" data-theme="dark">
+const home = () => `<section class="hero has-bg" id="top" data-tone="navy">
   <!-- hero-office.jpg: generated corporate-office photo; the real Tivora ERP video plays on the laptop screen -->
   <div class="hero-photo">
     <div class="hero-stage"><img src="${BGD}hero-office.jpg" alt="" width="1920" height="1074"></div>
@@ -759,7 +755,7 @@ const tivoraPage = () => `${phero({ dark: true, eyebrow: 'Tivora ERP', h1: 'One 
   </div>
 </section>
 ${nepalStrip('Bikram Sambat dates, fiscal-year numbers, VAT, TDS and CBMS.', true)}
-<section class="sec sec-navy has-bg" data-theme="dark" id="trades">${bgl('paint', { mode: 'dk', pos: '50% 50%' })}
+<section class="sec sec-navy has-bg" data-tone="navy" id="trades">${bgl('paint', { mode: 'dk', pos: '50% 50%' })}
   <div class="wrap">
     ${head2('Trade packs', 'One platform, one trade at a time.')}
     ${PACKS}
@@ -776,7 +772,7 @@ const tradeDetail = ([id, name, ic, prods, pts, links]) => {
 const EZEE_CARDS = [['hospitality', 'FrontDesk', 'Hotel management system'], ['chef', 'BurrP!', 'Restaurant software'], ['globe', 'Absolute', 'Hotel booking software'], ['cal', 'Reservation', 'Booking engine'], ['link', 'Centrix', 'Channel manager'], ['book', 'iMenu', 'Restaurant menu software'], ['star', 'iFeedback', 'Feedback system']];
 const ezeeSection = () => `<section class="sec" id="ezee">
   <div class="wrap">
-    <div class="ez" data-theme="dark">
+    <div class="ez" data-tone="navy">
       <div class="ez-h">
         <div class="ez-t">
           <p class="eyebrow">Authorized dealer</p>
@@ -810,7 +806,7 @@ const productPage = p => {
   const rel = p.related.map(id => TBY[id]);
   const plate = `<div class="plate plate-w">${logo(p.id, `${p.name} logo`, false)}</div>`;
   const strengths = [...SHARED_STR, ...p.str];
-  return `<header class="phero phero-dk phero-prod has-bg" data-theme="dark">${bgl(HB[p.id].src, { mode: 'dl', pos: HB[p.id].pos, flip: HB[p.id].flip, size: HB[p.id].size, hero: true })}
+  return `<header class="phero phero-dk phero-prod has-bg" data-tone="navy">${bgl(HB[p.id].src, { mode: 'dl', pos: HB[p.id].pos, flip: HB[p.id].flip, size: HB[p.id].size, hero: true })}
   <div class="wrap hp-grid">
     <div>
       <p class="eyebrow">${p.cat}</p>
@@ -887,7 +883,7 @@ const RESP = ['doc|Sign an MOU with HiTech', 'star|Recommend HiTech products', '
 const VALUES = [['check', 'Simplicity', 'Clear paths to profitability.'], ['layers', 'Choice', 'Extend services across our portfolio.'], ['target', 'Innovation', 'New ways to grow your business.']];
 const NETWORK = [['HiTech Solution', 'Itahari / Biratnagar'], ['HiTech Solutions & Services', 'Birgunj'], ['CSE Enterprises', 'Butwal'], ['HiTech Solutions & Services', 'Bhairahawa'], ['Kaas Business Solutions and Services Pvt. Ltd.', 'Pokhara'], ['Swastik Solutions & Service Center', 'Nepalgunj'], ['Amar & Company', 'Janakpur'], ['CSE Trade Link', 'Narayanghat'], ['Family Computer', 'Siraha'], ['Rahul Sahewal', 'Jhapa'], ['Creative Concern', 'Mahendranagar'], ['Global Trading & Suppliers', 'Dang']];
 const pnode = (i, l, k) => `<span class="pn2" style="--i:${k}">${ico(i, 's32')}<b>${l}</b></span>`;
-const partnersPage = () => `<header class="phero phero-dk has-bg" data-theme="dark">${bgl(HB.partners.src, { mode: 'dl', pos: HB.partners.pos, hero: true })}
+const partnersPage = () => `<header class="phero phero-dk has-bg" data-tone="navy">${bgl(HB.partners.src, { mode: 'dl', pos: HB.partners.pos, hero: true })}
   <div class="wrap hp-grid">
     <div>
       <p class="eyebrow">Partners</p>
@@ -940,7 +936,7 @@ ${demo({ e: 'Partner inquiry', h: 'Start a conversation.', l: 'Tell us who you a
 
 /* ---------- ABOUT ---------- */
 const aboutPage = () => `${phero({ bg: HB.about, eyebrow: 'About HiTech', h1: 'Accounting software since 1998.', lede: 'HiTech serves small businesses, chartered accountants, retailers, corporates, stores, restaurants and cafes across Nepal.', ctas: btn('contact.html#demo', 'Request a demo') })}
-<section class="sec sec-navy" data-theme="dark" aria-label="HiTech at a glance" style="padding-block:clamp(48px,6vw,80px)">
+<section class="sec sec-navy" data-tone="navy" aria-label="HiTech at a glance" style="padding-block:clamp(48px,6vw,80px)">
   <div class="wrap stats stag">
     <div><b data-count="10000" data-suffix="+">10,000+</b><span>Clients</span></div>
     <div><b data-count="25" data-suffix="+">25+</b><span>Years</span></div>
@@ -964,7 +960,7 @@ const aboutPage = () => `${phero({ bg: HB.about, eyebrow: 'About HiTech', h1: 'A
     <ul class="ichips pl stag"><li class="ic"><a href="${TIVORA_URL}" ${XA}>${ico('tivora', 's40')}<span class="l">Tivora ERP${SRNEW}</span></a></li>${TILES.map(t => `<li class="ic"><a href="${t.href}">${ico(t.id, 's40')}<span class="l">${t.name}</span></a></li>`).join('')}</ul>
   </div>
 </section>
-<section class="sec sec-navy" data-theme="dark" id="join">
+<section class="sec sec-navy" data-tone="navy" id="join">
   <div class="wrap band-dk rv"><div><p class="eyebrow">Careers</p><h2>Join the team.</h2></div><div><div class="btns">${btn('careers.html', 'See open roles')}</div></div></div>
 </section>
 ${demo()}`;
