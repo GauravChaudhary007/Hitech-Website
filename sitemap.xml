@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>DEPLOY_URL/</loc></url>
-  <url><loc>DEPLOY_URL/products.html</loc></url>
-  <url><loc>DEPLOY_URL/product-swastik.html</loc></url>
-  <url><loc>DEPLOY_URL/product-myswastikonline.html</loc></url>
-  <url><loc>DEPLOY_URL/product-pos.html</loc></url>
-  <url><loc>DEPLOY_URL/product-restaurant.html</loc></url>
-  <url><loc>DEPLOY_URL/product-pharmasoft.html</loc></url>
-  <url><loc>DEPLOY_URL/product-avocare.html</loc></url>
-  <url><loc>DEPLOY_URL/product-bizant.html</loc></url>
-  <url><loc>DEPLOY_URL/solutions.html</loc></url>
-  <url><loc>DEPLOY_URL/partners.html</loc></url>
-  <url><loc>DEPLOY_URL/about.html</loc></url>
-  <url><loc>DEPLOY_URL/support.html</loc></url>
-  <url><loc>DEPLOY_URL/careers.html</loc></url>
-  <url><loc>DEPLOY_URL/contact.html</loc></url>
+  <url><loc>https://www.hitechnepal.com.np/</loc></url>
+  <url><loc>https://www.hitechnepal.com.np/products.html</loc></url>
+  <url><loc>https://www.hitechnepal.com.np/product-swastik.html</loc></url>
+  <url><loc>https://www.hitechnepal.com.np/product-myswastikonline.html</loc></url>
+  <url><loc>https://www.hitechnepal.com.np/product-pos.html</loc></url>
+  <url><loc>https://www.hitechnepal.com.np/product-restaurant.html</loc></url>
+  <url><loc>https://www.hitechnepal.com.np/product-pharmasoft.html</loc></url>
+  <url><loc>https://www.hitechnepal.com.np/product-avocare.html</loc></url>
+  <url><loc>https://www.hitechnepal.com.np/product-bizant.html</loc></url>
+  <url><loc>https://www.hitechnepal.com.np/solutions.html</loc></url>
+  <url><loc>https://www.hitechnepal.com.np/partners.html</loc></url>
+  <url><loc>https://www.hitechnepal.com.np/about.html</loc></url>
+  <url><loc>https://www.hitechnepal.com.np/support.html</loc></url>
+  <url><loc>https://www.hitechnepal.com.np/careers.html</loc></url>
+  <url><loc>https://www.hitechnepal.com.np/contact.html</loc></url>
 </urlset>

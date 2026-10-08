@@ -2,7 +2,7 @@
 
 Source: SPEC.md section 14 (management feedback, 23 points). The CEO's instruction: change only what the 23 points ask.
 
-Status: **Phase A is done and accepted** (points 1, 4, 5, 6, 7, 8, 9, 10, 12, 13, 14, 15, 17, 18, 20, 21, 22). **Phase B is done** (points 2, 3, 11, 16, 19, 23 and the Partners map from 21), plus two Phase A corrections.
+Status: **Phase A is done and accepted** (points 1, 4, 5, 6, 7, 8, 9, 10, 12, 13, 14, 15, 17, 18, 20, 21, 22). **Phase B is done** (points 2, 3, 11, 19, 23 and the Partners map from 21; point 16, the dark theme, was built and then removed at CEO request), plus two Phase A corrections.
 
 All changes were made in `_build/build.mjs`, `assets/css/site.css`, `assets/js/site.js` and the new `lead-endpoint/` folder, then regenerated with `node _build/build.mjs`. No generated HTML was edited by hand.
 
@@ -13,6 +13,16 @@ All changes were made in `_build/build.mjs`, `assets/css/site.css`, `assets/js/s
 - Copy gate clean. Index visible words: 869 (limit 900). Links, anchors and ids: no dead links, no duplicate ids. Sitemap lists 15 existing pages and not `tivora.html`.
 - Keyboard: skip link first, every control has a visible focus indicator, mega menus open with Enter and close with Escape. No JavaScript: all new content (tiles, Why HiTech, eZee, "Watch on Facebook" link) is visible.
 - Screenshots (1440 and 390, every page) are in `hitech-review/v2/`, plus `index-hero-1440/1024/390.png`.
+
+## QA run (Phase B, final, light theme only)
+
+- Console errors: 0 on all 17 pages at 1440, 390 and 360. Horizontal overflow: 0 at 1440, 390 and 360 (the earlier 1px overflow of the map at 360 is gone). Fonts: Poppins 400, 600 and 700 only on every page. Reduced motion (emulated): no running animation and nothing hidden on all 17 pages.
+- Contrast: 0 failures on flat backgrounds on all pages; the only flag is the off-screen honeypot label (aria-hidden, never seen). Text over photos: 0 failures at 1440 and at 390 except the numbers inside map pins 9 to 11 and 13 on the 390px home map, where neighbouring pins overlap (see Judgment calls 22); the legend lists every city.
+- Copy gate clean (no dashes, no banned words); grep gates: 0 hits for every listed term, with the one intended `Pharmacy` (Avocare module label, P8 correction), 0 hits for `data-theme`, `data-mode`, `hitech-theme`, `prefers-color-scheme`, "Switch to", "Light mode", "Dark mode", "Request a call back", "head office". `Mahendranagar` only on `partners.html`. All Tivora ERP links go to `https://www.tivoraerp.com` (80 links, new tab). Sitemap lists the 15 existing pages. No dead links or anchors, no duplicate ids.
+- Popup (accelerated timers, 10 times faster): appearances at 8.6 to 9.8 s, then 15.0 s, 15.3 s, 15.2 s after each dismissal, then 180.7 s. Not while typing in a field (deferred), not on `contact.html`, Escape and overlay click close, focus is trapped (Tab and Shift+Tab stay inside) and returns to the opener, body scroll lock, `role="dialog"` with `aria-modal`. Demo buttons preset "Interested in" (Swastik, eZee).
+- Lead forms (mock servers, `window.open` stubbed open or blocked): working endpoint, failing endpoint (500) and no server (file://) each give the right panel in both the tab-opened and tab-blocked case; input is cleared on success and kept on error; the honeypot is not posted. `node lead-endpoint/check.mjs` passes. `lead.php` itself was not executed (no PHP here).
+- Home page height at 1440: 15,206px before Phase B, **11,037px after (72.6 percent, target at most 75)**. Tivora highlight section 544px (limit 560).
+- Screenshots (1440 and 390, light) of all 17 pages, the home and Partners maps (mid-draw, mid-pins, finished, at 1440 and 390), and the popup and strip, are in `hitech-review/v2/`. The dark-theme screenshots were deleted with the theme.
 
 ## Per-point entries
 
@@ -117,7 +127,7 @@ All changes were made in `_build/build.mjs`, `assets/css/site.css`, `assets/js/s
 
 ### P11. Branches map (done)
 - Home `#branches`-style section (`#coverage`): kicker "Our branches", H2 "14 cities across Nepal.", the 14 cities exactly as listed (numbered west to east: 1 Nepalgunj, 2 Surkhet, 3 Dang, 4 Butwal, 5 Pokhara, 6 Chitwan, 7 Birgunj, 8 Rautahat, 9 Janakpur, 10 Siraha, 11 Katari, 12 Udayapur, 13 Biratnagar, 14 Birtamode). No Kathmandu pin, no "head office" wording anywhere, Mahendranagar is not a branch.
-- Map data comes from `assets/data/nepal-map.json` and is inlined into the HTML at build time (no runtime dependency, works over file://). Outline stroke is indigo (light) or cyan (dark), 6 percent tint fill. The map is `role="img"` with a text alternative listing the cities.
+- Map data comes from `assets/data/nepal-map.json` and is inlined into the HTML at build time (no runtime dependency, works over file://). Outline stroke is indigo, 6 percent tint fill. The map is `role="img"` with a text alternative listing the cities.
 - Animation, once on reveal: outline draws (2.2s), fill fades in, pins drop in west to east 150ms apart with a bounce, each pin has a soft pulsing ripple (2.4s loop, paused off-screen), and a faint shimmer sweeps across every 6s. Under reduced motion everything is static.
 - Numbered pins plus a two-column legend (map 7/12, legend 5/12; stacked on tablet and phone, map first). Hovering or focusing a legend row highlights its pin and shows the city name; hovering a pin highlights its row. Legend rows are keyboard focusable.
 - `support.html` coverage band uses the same component. Branch table: "(head office)" label dropped (the row is "Kathmandu"), Mahendranagar row removed, "Head office support" card is now "Kathmandu support". No phone numbers were added for new cities.
@@ -125,12 +135,9 @@ All changes were made in `_build/build.mjs`, `assets/css/site.css`, `assets/js/s
 ### P21 (Partners map) (done)
 - `partners.html` `#network`: the card grid is replaced by the same map component with the 12 partner locations, numbered 1 to 12 in the original list order, legend "partner name" and city. "12 partners" numeral and both HTML comments kept. Mahendranagar appears here only as a partner location.
 
-### P16. Dark and light mode (done)
-- Header toggle (desktop) and a row in the mobile menu. Button has `aria-pressed` and an `aria-label` of "Switch to light mode" or "Switch to dark mode". Default is dark; the choice is stored in `localStorage` key `hitech-theme` (inside try/catch); an inline script in `<head>` sets the mode before first paint, so there is no flash and it works over file://. `prefers-color-scheme` is ignored as instructed.
-- The attribute is `data-mode="dark|light"` on `<html>`, not `data-theme`: the existing `data-theme="dark"` already marks navy sections and would have collided.
-- Dark palette (brand colours only): page `#000059`, alternate sections and footer `#00003A`, cards `rgba(255,255,255,.06)` with a `1px` border at `.14`, text white, secondary text `rgba(255,255,255,.8)`, captions `#B8C0E0`, links and eyebrows `#009AD4`, inputs `rgba(255,255,255,.08)`, header `rgba(0,0,89,.94)` with the dark-background logo. Photo washes become navy (`.95` to `.88` on text sections, higher than the suggested `.9` to `.75` so cyan text stays AA). Logo plates, laptop screens and tooltips stay light.
-- How it is built: the dark rules are a generated block at the end of `site.css` (between `DARK:BEGIN` and `DARK:END`), produced from the light rules by `_build/gendark.py` plus hand-written exceptions in `_build/dark-manual.css`. After changing light CSS run `python _build/gendark.py`.
-
+### P16. Dark and light mode (removed at CEO request)
+- The dark theme was built and then cancelled by the CEO. The site is light only, as it looked after Phase A. Removed: the header and mobile-menu toggle, the `hitech-theme` localStorage handling, the inline head script, the whole generated dark CSS block, `_build/gendark.py` and `_build/dark-manual.css`. `:root` now has `color-scheme: light`. No replacement was added and no light colours were changed.
+- Side effect: the old `data-theme="dark"` attribute that marks the navy sections (it existed before this revision and is not a theme) was renamed `data-tone="navy"` in the build, CSS and JS, so the site has no `data-theme` at all. Looks are unchanged.
 ### P19. Inquiry popup (done)
 - Modal on every page except `contact.html` (the markup is not even included there). Fields: Name (required), Mobile (required, tel), Email, Interested in (same options as the main form), Message (3 rows), hidden honeypot, source recorded as the page file name. Button "Send on WhatsApp" (see P23), heading "Talk to HiTech.", line "Tell us what you run and we will call you."
 - Close button, overlay click and Esc close it; focus is trapped inside and returned to the opener; `role="dialog"`, `aria-modal="true"`, labelled by the heading; body scroll is locked; no animation under reduced motion.
@@ -184,9 +191,9 @@ All changes were made in `_build/build.mjs`, `assets/css/site.css`, `assets/js/s
 13. **Footer Tivora column** has no separate heading: the single link "Tivora ERP" is styled as the column heading so the columns stay aligned.
 14. **Email/WhatsApp-sourced Avocare features**: only the module list from the Avocare email template and the strengths from the Avocare presentation ("Why Avocare HMS") were used.
 15. **"IRD certified" on tiles for Payroll and Smartsuite**: added, because the point says all HiTech products.
-16. **Theme attribute**: `data-mode` instead of the spec's `data-theme` on `<html>` (name collision with the navy-section marker).
+16. (Removed with the dark theme, P16.)
 17. **Partner pin numbers** follow the original list order (1 to 12) so the legend reads in sequence; the pins still drop in west to east. The 14 branch pins are numbered west to east.
-18. **Wash opacity in dark mode** is `.95` to `.88`, a little stronger than the `.9` to `.75` in the spec, because cyan text over a lighter wash did not reach 4.5:1.
+18. (Removed with the dark theme, P16.)
 19. **Hero "Request a demo"** and all other demo buttons open the popup, but the plain "Request a demo" band forms on pages stay (the spec says existing form bands stay).
 20. **"Coming later" packs** are small dashed chips in the highlight (one chip each, with the words "Coming later") instead of cards.
 21. **`.announce`, marquee, scroll-story, why-tiles, voices and old coverage CSS** is still in `site.css` unused.

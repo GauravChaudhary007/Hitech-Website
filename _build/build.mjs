@@ -4,6 +4,7 @@ import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
+const SITE_URL = (process.env.SITE_URL || 'https://www.hitechnepal.com.np').replace(/\/+$/, '');
 const out = (f, s) => writeFileSync(join(ROOT, f), s);
 const NP = '<!-- NAME PENDING -->';
 const IMG = 'assets/img/';
@@ -335,7 +336,7 @@ const ORG = '<script type="application/ld+json">{"@context":"https://schema.org"
 const PROD = {};
 const render = ({ file, title, desc, body, org = false }) => {
   PAGE = file;
-  const url = `DEPLOY_URL/${file === 'index.html' ? '' : file}`;
+  const url = `${SITE_URL}/${file === 'index.html' ? '' : file}`;
   const html = `<!doctype html>
 <html lang="en" class="no-js">
 <head>
@@ -344,19 +345,17 @@ const render = ({ file, title, desc, body, org = false }) => {
 <title>${title}</title>
 <meta name="description" content="${desc}">
 <meta name="theme-color" content="#000059">
-<!-- DEPLOY STEP: replace DEPLOY_URL in every page and in sitemap.xml with the live absolute URL -->
 <link rel="canonical" href="${url}">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="HiTech Solutions and Services">
 <meta property="og:title" content="${title}">
 <meta property="og:description" content="${desc}">
 <meta property="og:url" content="${url}">
-<meta property="og:image" content="DEPLOY_URL/${IMG}logo-light.png">
+<meta property="og:image" content="${SITE_URL}/${IMG}logo-light.png">
 <meta name="twitter:card" content="summary">
 <link rel="icon" type="image/png" href="${IMG}icon.png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="preload" as="font" type="font/woff2" href="assets/fonts/poppins-600-latin.woff2" crossorigin>
+<link rel="stylesheet" href="assets/fonts/fonts.css">
 <script>document.documentElement.className='js'</script>
 ${PRELOAD[file] ? `<link rel="preload" as="image" href="${BGD}${PRELOAD[file].src}.jpg">\n` : ''}<link rel="stylesheet" href="assets/css/site.css">
 ${org ? ORG + '\n' : ''}</head>
@@ -866,7 +865,7 @@ const servicesRedirect = () => `<!doctype html>
 <title>Moved to Solutions | HiTech Solutions and Services</title>
 <meta name="robots" content="noindex">
 <meta http-equiv="refresh" content="0; url=solutions.html">
-<link rel="canonical" href="DEPLOY_URL/solutions.html">
+<link rel="canonical" href="${SITE_URL}/solutions.html">
 </head>
 <body>
 <p>This page has moved to <a href="solutions.html">Solutions</a>.</p>
@@ -1026,6 +1025,6 @@ add('contact.html', 'Contact HiTech | Request a demo, quote or call', 'Contact H
 render({ file: '404.html', title: 'Page not found | HiTech Solutions and Services', desc: 'This page could not be found. Go back to the HiTech home page.', body: p404() });
 out('services.html', servicesRedirect());
 
-out('sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${pages.map(p => `  <url><loc>DEPLOY_URL/${p === 'index.html' ? '' : p}</loc></url>`).join('\n')}\n</urlset>\n`);
-out('robots.txt', 'User-agent: *\nAllow: /\n\nSitemap: DEPLOY_URL/sitemap.xml\n');
+out('sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${pages.map(p => `  <url><loc>${SITE_URL}/${p === 'index.html' ? '' : p}</loc></url>`).join('\n')}\n</urlset>\n`);
+out('robots.txt', `User-agent: *\nAllow: /\n\nSitemap: ${SITE_URL}/sitemap.xml\n`);
 console.log(`built ${pages.length + 2} pages`);

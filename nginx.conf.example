@@ -1,0 +1,39 @@
+# HiTech website: nginx server block example. Adjust server_name, root and the PHP socket.
+# Static site plus one PHP file (lead-endpoint/lead.php) that emails inquiries.
+
+server {
+    listen 80;
+    server_name www.hitechnepal.com.np hitechnepal.com.np;
+    root /var/www/hitech-website;
+    index index.html;
+
+    # After installing the SSL certificate, redirect to HTTPS instead of serving over port 80.
+    # return 301 https://www.hitechnepal.com.np$request_uri;
+
+    error_page 404 /404.html;
+
+    add_header X-Content-Type-Options "nosniff" always;
+    add_header Referrer-Policy "strict-origin-when-cross-origin" always;
+    add_header X-Frame-Options "SAMEORIGIN" always;
+
+    gzip on;
+    gzip_types text/css application/javascript application/json image/svg+xml text/xml;
+
+    location ~ ^/(_build|docs)/ { return 404; }
+    location ~ ^/(package\.json|README\.md|nginx\.conf\.example)$ { return 404; }
+    location ~ ^/lead-endpoint/(README\.md|check\.mjs)$ { return 404; }
+
+    location / {
+        try_files $uri $uri/ =404;
+    }
+
+    location ~* \.(css|js)$ { expires 7d; }
+    location ~* \.(png|jpg|jpeg|svg|mp4)$ { expires 30d; }
+    location ~* \.html$ { expires -1; }
+
+    location = /lead-endpoint/lead.php {
+        include fastcgi_params;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        fastcgi_pass unix:/run/php/php-fpm.sock;   # adjust to the server's PHP-FPM socket
+    }
+}
