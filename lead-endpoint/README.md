@@ -22,7 +22,7 @@ curl -i -X POST https://<your-site>/lead-endpoint/lead.php \
 
 Until the file is uploaded (and when the page is opened from disk), only the WhatsApp tab runs: if it opened, the panel asks the visitor to press send there; if it was blocked too, the forms show "We could not send your message" with the office phone and an "Open WhatsApp" button, and keep what the visitor typed.
 
-The partner form also sends `partnerType` (Reseller, Distributor or Contractor) and `business` (line of business); `lead.php` then uses the subject "Partner application: <type> from <name>".
+The partner form also sends `partnerType` (Reseller, Distributor or Channel Partner) and `business` (line of business); `lead.php` then uses the subject "Partner application: <type> from <name>".
 
 `node lead-endpoint/check.mjs` checks that `lead.php` accepts every field `site.js` sends and that the labels match.
 

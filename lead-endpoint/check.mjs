@@ -19,7 +19,7 @@ for (const l of ['Name', 'Company', 'Phone', 'Email', 'City', 'Partnership type'
 assert.ok(php.includes("'Partner application: '"), 'partner subject line missing');
 assert.ok(js.includes('data.partnerType') && js.includes('data.business'), 'site.js does not send the partner fields');
 const partners = readFileSync(new URL('../partners.html', dir), 'utf8');
-for (const t of ['Reseller', 'Distributor', 'Contractor']) assert.ok(partners.includes(`name="partnerType" value="${t}"`) && php.includes(`'${t}'`), `partner type ${t} is not in both partners.html and lead.php`);
+for (const t of ['Reseller', 'Distributor', 'Channel Partner']) assert.ok(partners.includes(`name="partnerType" value="${t}"`) && php.includes(`'${t}'`), `partner type ${t} is not in both partners.html and lead.php`);
 assert.ok(partners.includes('name="business"') && partners.includes('id="become-a-partner"'), 'partners.html partner form fields missing');
 assert.ok(php.includes("!empty($in['website'])"), 'honeypot check missing');
 

@@ -307,8 +307,8 @@ const WHATSAPP_NUMBER = '9779709117067';
     addEventListener('resize', mark);
     if (d.fonts) d.fonts.ready.then(mark);
     const fromHash = () => {
-      const m = /^#become-a-partner\?type=(reseller|distributor|contractor)$/i.exec(location.hash); if (!m) return;
-      pick(tabs.findIndex(t => t.textContent.toLowerCase() === m[1].toLowerCase()), false, true);
+      const m = /^#become-a-partner\?type=(reseller|distributor|channel-partner)$/i.exec(location.hash); if (!m) return;
+      pick(tabs.findIndex(t => t.textContent.toLowerCase().replace(' ', '-') === m[1].toLowerCase()), false, true);
       const f = $('#become-a-partner'); if (f) f.scrollIntoView({ behavior: rm ? 'auto' : 'smooth' });
     };
     addEventListener('hashchange', fromHash); fromHash();

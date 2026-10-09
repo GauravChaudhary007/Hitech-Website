@@ -53,7 +53,7 @@ foreach ($FIELDS as $k => $max) {
 if (empty($d['name'])) reply(400, false, 'Name is required');
 if (empty($d['phone']) || !preg_match('/^\+?[0-9][0-9 ()-]{5,}$/', $d['phone'])) reply(400, false, 'A valid phone number is required');
 if (!empty($d['email']) && !filter_var($d['email'], FILTER_VALIDATE_EMAIL)) reply(400, false, 'Invalid email');
-if (!empty($d['partnerType']) && !in_array($d['partnerType'], ['Reseller', 'Distributor', 'Contractor'], true)) reply(400, false, 'Invalid partnership type');
+if (!empty($d['partnerType']) && !in_array($d['partnerType'], ['Reseller', 'Distributor', 'Channel Partner'], true)) reply(400, false, 'Invalid partnership type');
 
 // rate limit per IP, file based
 $ip = isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : 'unknown';
