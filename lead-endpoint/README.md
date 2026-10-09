@@ -1,6 +1,6 @@
 # HiTech lead endpoint (inquiries by email and WhatsApp)
 
-Every inquiry form on the site (popup, call-back strip, contact page, demo form) does what the live site does. On submit it (1) opens WhatsApp (wa.me/9779709117067) in a new tab with the inquiry as the prefilled text, and (2) posts the same data as JSON to `lead-endpoint/lead.php`, which validates it and emails it to HiTech with PHP `mail()`. Both always run. The visitor stays on the page and sees a thank-you panel with an "Open WhatsApp again" button in case the tab was blocked.
+Every inquiry form on the site (popup, call-back strip, contact page, demo form, and the "Become a partner" form on `partners.html`) does what the live site does. On submit it (1) opens WhatsApp (wa.me/9779709117067) in a new tab with the inquiry as the prefilled text, and (2) posts the same data as JSON to `lead-endpoint/lead.php`, which validates it and emails it to HiTech with PHP `mail()`. Both always run. The visitor stays on the page and sees a thank-you panel with an "Open WhatsApp again" button in case the tab was blocked.
 
 WhatsApp cannot receive messages automatically without the WhatsApp Business Platform, so **email is the automatic channel; WhatsApp opens on the visitor's device and the visitor taps send.**
 
@@ -21,6 +21,8 @@ curl -i -X POST https://<your-site>/lead-endpoint/lead.php \
 5. Send one inquiry from the site and check the email and the "Open WhatsApp again" button.
 
 Until the file is uploaded (and when the page is opened from disk), only the WhatsApp tab runs: if it opened, the panel asks the visitor to press send there; if it was blocked too, the forms show "We could not send your message" with the office phone and an "Open WhatsApp" button, and keep what the visitor typed.
+
+The partner form also sends `partnerType` (Reseller, Distributor or Contractor) and `business` (line of business); `lead.php` then uses the subject "Partner application: <type> from <name>".
 
 `node lead-endpoint/check.mjs` checks that `lead.php` accepts every field `site.js` sends and that the labels match.
 

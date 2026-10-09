@@ -1,0 +1,75 @@
+{
+ "cg-group": {
+  "file": "cg-group.png",
+  "name": "CG Corp Global (Chaudhary Group)",
+  "source": "https://www.hitechnepal.com.np/images/clients/cg.jpg",
+  "confidence": "high",
+  "note": "copied from the live hitechnepal.com.np clients section"
+ },
+ "jagdamba-steel": {
+  "file": "jagdamba-steel.png",
+  "name": "Jagdamba Steels",
+  "source": "https://www.hitechnepal.com.np/images/clients/jagdamba-steel.png",
+  "confidence": "high",
+  "note": "copied from the live hitechnepal.com.np clients section"
+ },
+ "pashupati-paints": {
+  "file": "pashupati-paints.png",
+  "name": "Pashupati Paints",
+  "source": "https://www.hitechnepal.com.np/images/clients/pashupati-paints.png",
+  "confidence": "high",
+  "note": "copied from the live hitechnepal.com.np clients section"
+ },
+ "shikhar": {
+  "file": "shikhar.png",
+  "name": "Shikhar",
+  "source": "https://www.hitechnepal.com.np/images/clients/shikhar.png",
+  "confidence": "high",
+  "note": "copied from the live hitechnepal.com.np clients section"
+ },
+ "triveni-group": {
+  "file": "triveni-group.png",
+  "name": "Triveni Group",
+  "source": "https://www.hitechnepal.com.np/images/clients/tribeni.png",
+  "confidence": "high",
+  "note": "copied from the live hitechnepal.com.np clients section"
+ },
+ "qfx-cinemas": {
+  "file": "qfx-cinemas.png",
+  "name": "QFX Cinemas",
+  "source": "https://www.hitechnepal.com.np/images/clients/qfx.png",
+  "confidence": "high",
+  "note": "copied from the live hitechnepal.com.np clients section"
+ },
+ "mc-group": {
+  "file": null,
+  "name": "M. C. Group",
+  "note": "no official M. C. Group website found; could not verify a Nepal address"
+ },
+ "goenka-group": {
+  "file": "goenka-group.png",
+  "name": "Goenka Group",
+  "source": "https://goenkagroup.com.np/",
+  "confidence": "high",
+  "note": "Nepal address: Prahari Tole, Siddhartha Nagar, Rupandehi, Nepal; +977-71-571481 (https://goenkagroup.com.np/contact)"
+ },
+ "rajesh-metal-crafts": {
+  "file": "rajesh-metal-crafts.png",
+  "name": "Rajesh Metal Crafts Pvt. Ltd.",
+  "source": "https://www.rajeshmetalcrafts.com/",
+  "confidence": "high",
+  "note": "Nepal address: 502, Central Business Park, Thapathali, Kathmandu, Nepal; +977-1-4101685 (https://www.rajeshmetalcrafts.com/)"
+ },
+ "asian-pharmaceuticals": {
+  "file": "asian-pharmaceuticals.png",
+  "name": "Asian Pharmaceuticals",
+  "source": "https://www.asianpharmaceuticals.com/",
+  "confidence": "high",
+  "note": "Nepal address: Pashupati Rd, Kathmandu 44600, Nepal; +977-1-442-3711 (https://www.asianpharmaceuticals.com/)"
+ },
+ "ctl-pharmaceuticals": {
+  "file": null,
+  "name": "CTL Pharmaceuticals Pvt. Ltd.",
+  "note": "candidate sites ctlpharmaceuticals.com and ctl.com.np unreachable; could not verify address or fetch logo"
+ }
+}

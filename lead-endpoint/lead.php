@@ -11,8 +11,8 @@ $ALLOWED_ORIGIN = '';              // CORS: leave empty when the site and this f
 $RATE_MAX = 5;                     // inquiries per IP ...
 $RATE_WINDOW = 600;                // ... per this many seconds
 
-$FIELDS = ['name' => 100, 'company' => 120, 'phone' => 30, 'email' => 120, 'city' => 80, 'inquiry' => 80, 'interest' => 100, 'message' => 1000, 'page' => 120, 'ts' => 40];
-$LABELS = ['name' => 'Name', 'company' => 'Company', 'phone' => 'Phone', 'email' => 'Email', 'city' => 'City', 'inquiry' => 'Inquiry for', 'interest' => 'Interested in', 'message' => 'Message', 'page' => 'Page'];
+$FIELDS = ['name' => 100, 'company' => 120, 'phone' => 30, 'email' => 120, 'city' => 80, 'partnerType' => 20, 'business' => 160, 'inquiry' => 80, 'interest' => 100, 'message' => 1000, 'page' => 120, 'ts' => 40];
+$LABELS = ['name' => 'Name', 'company' => 'Company', 'phone' => 'Phone', 'email' => 'Email', 'city' => 'City', 'partnerType' => 'Partnership type', 'business' => 'Line of business', 'inquiry' => 'Inquiry for', 'interest' => 'Interested in', 'message' => 'Message', 'page' => 'Page'];
 
 header('Content-Type: application/json; charset=utf-8');
 header('X-Content-Type-Options: nosniff');
@@ -53,6 +53,7 @@ foreach ($FIELDS as $k => $max) {
 if (empty($d['name'])) reply(400, false, 'Name is required');
 if (empty($d['phone']) || !preg_match('/^\+?[0-9][0-9 ()-]{5,}$/', $d['phone'])) reply(400, false, 'A valid phone number is required');
 if (!empty($d['email']) && !filter_var($d['email'], FILTER_VALIDATE_EMAIL)) reply(400, false, 'Invalid email');
+if (!empty($d['partnerType']) && !in_array($d['partnerType'], ['Reseller', 'Distributor', 'Contractor'], true)) reply(400, false, 'Invalid partnership type');
 
 // rate limit per IP, file based
 $ip = isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : 'unknown';
@@ -69,10 +70,11 @@ $hits[] = $now;
 $oneLine = function ($s) { return trim(preg_replace('/[\r\n]+/', ' ', $s)); };
 $lines = [];
 foreach ($LABELS as $k => $label) if (!empty($d[$k])) $lines[] = $label . ': ' . $d[$k];
-$body = "New inquiry from the HiTech website\r\n\r\n" . implode("\r\n", $lines) . "\r\n";
+$isPartner = !empty($d['partnerType']);
+$body = ($isPartner ? "New partner application from the HiTech website" : "New inquiry from the HiTech website") . "\r\n\r\n" . implode("\r\n", $lines) . "\r\n";
 
 $host = preg_replace('/[^a-z0-9.-]/i', '', isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : 'hitechnepal.com.np');
-$subject = '=?UTF-8?B?' . base64_encode('Website inquiry: ' . $oneLine(isset($d['interest']) ? $d['interest'] : (isset($d['inquiry']) ? $d['inquiry'] : 'Call back')) . ' from ' . $oneLine($d['name'])) . '?=';
+$subject = '=?UTF-8?B?' . base64_encode(($isPartner ? 'Partner application: ' . $oneLine($d['partnerType']) : 'Website inquiry: ' . $oneLine(isset($d['interest']) ? $d['interest'] : (isset($d['inquiry']) ? $d['inquiry'] : 'Call back'))) . ' from ' . $oneLine($d['name'])) . '?=';
 $headers = ['From: HiTech website <noreply@' . $host . '>', 'MIME-Version: 1.0', 'Content-Type: text/plain; charset=UTF-8'];
 if (!empty($d['email'])) $headers[] = 'Reply-To: ' . $oneLine($d['email']);
 

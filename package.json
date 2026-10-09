@@ -3,10 +3,13 @@
   "version": "1.0.0",
   "private": true,
   "description": "HiTech Solutions and Services Pvt. Ltd. corporate website (static HTML, CSS and vanilla JS)",
-  "engines": { "node": ">=20" },
+  "engines": {
+    "node": ">=20"
+  },
   "scripts": {
     "build": "node _build/build.mjs",
     "start": "npx --yes serve . -l 3000",
-    "check": "node lead-endpoint/check.mjs"
+    "check": "node lead-endpoint/check.mjs",
+    "check:site": "node _build/check.mjs"
   }
 }

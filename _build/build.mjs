@@ -1,5 +1,5 @@
 // HiTech website v2 generator (Revision 2, visual-first). Zero dependencies, Node 22+.  Run: node _build/build.mjs
-import { readFileSync, writeFileSync } from 'node:fs';
+import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 
@@ -8,6 +8,8 @@ const SITE_URL = (process.env.SITE_URL || 'https://www.hitechnepal.com.np').repl
 const out = (f, s) => writeFileSync(join(ROOT, f), s);
 const NP = '<!-- NAME PENDING -->';
 const IMG = 'assets/img/';
+const BRANCH_KEYS = ['biratnagar', 'birgunj', 'butwal', 'pokhara', 'nepalgunj', 'janakpur', 'chitwan', 'lahan', 'dang', 'surkhet', 'katari', 'udayapur', 'rautahat', 'birtamode', 'bhairahawa', 'simara', 'hetauda', 'narayanghat', 'dharan', 'itahari', 'nuwakot', 'damak'];
+const NBR = BRANCH_KEYS.length;
 let PAGE = '';
 const BGD = 'assets/img/bg/';
 /* page-matched photography (spec 11): src, vertical focus, flip so the subject sits away from the left text column */
@@ -116,7 +118,7 @@ const SRNEW = '<span class="sr"> (opens in a new tab)</span>';
 const XA = 'target="_blank" rel="noopener"';
 const IRDSVG = '<svg viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path d="M10 2l6.5 2.5v5c0 4.2-2.8 7.2-6.5 8.5C6.3 16.7 3.5 13.7 3.5 9.5v-5z"/><path d="M7 10l2.2 2.2L13.2 8"/></svg>';
 const IRD = (cls = '') => `<span class="ird${cls ? ' ' + cls : ''}">${IRDSVG}IRD certified</span>`;
-const LOGO_DIM = { swastik: [640, 585], myswastikonline: [640, 162], pos: [640, 213], restaurant: [640, 510], pharmasoft: [640, 496], avocare: [640, 247], bizant: [640, 472], payroll: [640, 611], smartsuite: [640, 157], ezee: [640, 464] };
+const LOGO_DIM = { swastik: [640, 585], myswastikonline: [640, 162], pos: [640, 213], restaurant: [640, 510], pharmasoft: [640, 496], avocare: [640, 247], bizant: [640, 472], payroll: [640, 611], smartsuite: [640, 157], ezee: [640, 464], tivora: [640, 134] };
 const logo = (id, alt = '', lazy = true) => `<img src="${IMG}logos/${id}.png" alt="${alt}" width="${LOGO_DIM[id][0]}" height="${LOGO_DIM[id][1]}"${lazy ? ' loading="lazy" decoding="async"' : ''}>`;
 const lplate = (id, cls = '', alt = '') => `<span class="lplate${cls ? ' ' + cls : ''}">${logo(id, alt)}</span>`;
 /* icon + short label chips: 'icon|label|sub' */
@@ -130,7 +132,7 @@ const SHARED_STR = ['shield|IRD (VAT) certified solution', 'users|Largest client
 const PRODUCTS = [
   { id: 'swastik', f: 'acc', name: 'Swastik', cat: 'Business accounting', badge: 'Desktop', tag: 'Not just accounting software, your complete business manager.', home: 'Accounting, inventory and invoicing. IRD certified.',
     desc: 'Automated invoicing, inventory and accounting, IRD certified, for single users or networks.',
-    str: ['award|Nepal\'s No 1 software|Accounting, inventory and MIS', 'pin|15+ support offices in Nepal', 'cal|25+ years of experience', 'cloud|Cloud and desktop versions', 'db|SQL database back end', 'key|Unlimited user security rights', 'sync|Free upgrades and updates|Under AMC or warranty', 'layers|More than 30 editions|For different industries'],
+    str: ['award|Nepal\'s No 1 software|Accounting, inventory and MIS', `pin|${NBR} branches across Nepal`, 'cal|28+ years of experience', 'cloud|Cloud and desktop versions', 'db|SQL database back end', 'key|Unlimited user security rights', 'sync|Free upgrades and updates|Under AMC or warranty', 'layers|More than 30 editions|For different industries'],
     groups: [
       ['Simple to use', ['user|Staff-friendly', 'tag|Codeless short names', 'doc|Single-voucher day book', 'screen|Keyboard and mouse', 'search|Drill-down to voucher', 'layers|Multiple companies and periods']],
       ['Flexible', ['tag|Unlimited document numbering', 'layers|Document classes', 'sliders|User-defined fields', 'edit|Bill designer', 'cal|Nepali and English dates']],
@@ -143,7 +145,7 @@ const PRODUCTS = [
     ], extra: ['layers|Versions 9 to 20'], related: ['myswastikonline', 'pos', 'restaurant'] },
   { id: 'myswastikonline', f: 'acc', name: 'mySwastikonline', cat: 'Cloud accounting', badge: 'Cloud', tag: 'The simplest cloud accounting software.', home: 'The Swastik engine on the web, from any device.',
     desc: 'Web-based invoicing, inventory and accounting, from any location, on any device.',
-    str: ['award|Nepal\'s No 1 business solution provider', 'cal|25+ years of experience', 'cloud|Books anywhere, anytime, any device', 'network|Collaborate with branches and teams', 'lock|Fast, reliable and secured', 'user|User friendly and easy to use', 'clock|Control receivables and payables', 'box|Track your inventory', 'edit|Customisable forms and reports', 'headset|Free unlimited support'],
+    str: ['award|Nepal\'s No 1 business solution provider', 'cal|28+ years of experience', 'cloud|Books anywhere, anytime, any device', 'network|Collaborate with branches and teams', 'lock|Fast, reliable and secured', 'user|User friendly and easy to use', 'clock|Control receivables and payables', 'box|Track your inventory', 'edit|Customisable forms and reports', 'headset|Free unlimited support'],
     groups: [
       ['Real time', ['cloud|Online posting', 'book|Cash book and day book', 'trend|Profit and loss', 'table|Balance sheet', 'sync|Real-time sub-ledger']],
       ['Nepal ready', ['cal|Nepali or English dates', 'vat|VAT reports', 'download|Export to Word and Excel']],
@@ -192,7 +194,7 @@ const PRODUCTS = [
     ], related: ['pharmasoft'] },
   { id: 'bizant', f: 'field', name: 'Bizant', cat: 'Field sales', badge: 'Android', tag: 'Drive your business on the go.', home: 'Field sales teams on Android.',
     desc: 'Mobile CRM and sales force automation in four apps for owners, agents, customers and influencers.',
-    str: ['award|Nepal\'s No 1 business solution provider', 'cal|25+ years of experience', 'mobile|Android and iOS', 'eye|Complete view for management', 'target|Sales force automation', 'link|Integrated with Swastik, Swastik Restaurant and POS'],
+    str: ['award|Nepal\'s No 1 business solution provider', 'cal|28+ years of experience', 'mobile|Android and iOS', 'eye|Complete view for management', 'target|Sales force automation', 'link|Integrated with Swastik, Swastik Restaurant and POS'],
     store: 'https://play.google.com/store/apps/details?id=com.hitech.hitechcrm',
     groups: [['Four apps', ['smartsuite|Owner app|Sales and stock dashboard', 'route|Field agent app|Orders, GPS check-in', 'cart|Customer app|Ordering', 'star|Influencer app|Loyalty and rewards']],
       ['Field agent app (SFA)', ['cart|Order taking', 'card|Collection', 'edit|Feedback', 'users|Primary and secondary customer profiling', 'route|Customer check-in and check-out', 'table|Customer ledger, outstanding and ageing', 'pin|Activity tracking with GPS and time stamp', 'check|Task management', 'cal|Calendar', 'route|Beat management', 'cart|Secondary sales management', 'sms|Ledger sharing over WhatsApp and Viber', 'clip|Activity reports and DSR', 'idcard|Attendance']],
@@ -207,10 +209,10 @@ const EXTRA = [
 ];
 const TILES = [...PRODUCTS.map(p => ({ id: p.id, f: p.f, name: p.name, cat: p.cat, badge: p.badge, home: p.home, href: phref(p) })), ...EXTRA];
 const TIVORA_URL = 'https://www.tivoraerp.com';
-const TIVORA_TILE = { id: 'tivora', f: 'acc', name: 'Tivora ERP', cat: 'ERP', home: 'Sales, purchase, stock, production and accounts in one system.', href: TIVORA_URL, ext: true };
+const TIVORA_TILE = { id: 'tivora', f: 'acc', name: 'Tivora ERP', cat: 'ERP', home: 'The ERP that tells you what comes next. One database for the whole business.', href: TIVORA_URL, ext: true };
 const EZEE_TILE = { id: 'ezee', name: 'eZee', cat: 'Authorized dealer', href: 'products.html#ezee' };
-const HERO_LOGOS = ['swastik', 'myswastikonline', 'pos', 'restaurant', 'pharmasoft', 'avocare', 'bizant', 'payroll', 'smartsuite', 'ezee'];
-const TBY = Object.fromEntries([...TILES, EZEE_TILE].map(t => [t.id, t]));
+const HERO_LOGOS = ['tivora', 'swastik', 'myswastikonline', 'pos', 'restaurant', 'pharmasoft', 'avocare', 'bizant', 'payroll', 'smartsuite', 'ezee'];
+const TBY = Object.fromEntries([TIVORA_TILE, ...TILES, EZEE_TILE].map(t => [t.id, t]));
 
 /* 11 trades: id, name, icon, serving products, key points (chips), links ([label, href, external?]) */
 const TRADES = [
@@ -262,20 +264,23 @@ const video = (id = '') => `<video${id ? ` id="${id}"` : ''} src="assets/video/t
 const cur = h => (h === PAGE ? ' aria-current="page"' : '');
 const ml = (href, label, desc, ic) => `<a class="ml" href="${href}"${cur(href)}>${ic ? ico(ic, 's40') : ''}<span><b>${label}</b>${desc ? `<small>${desc}</small>` : ''}</span></a>`;
 const mbtn = (id, label, on) => `<button class="mb${on ? ' cur' : ''}" type="button" aria-expanded="false" aria-controls="${id}">${label}<svg viewBox="0 0 12 12" aria-hidden="true" focusable="false"><path d="M2.5 4.5L6 8l3.5-3.5"/></svg></button>`;
-const pfeat = (img, label, line) => `<a class="pfeat" href="${TIVORA_URL}" ${XA}><b>${label}${EXTI}${SRNEW}</b><span>${line}</span><div class="pf-img"><img src="${IMG}${img}" alt="Tivora ERP screen with modules listed on the home page" width="1903" height="925" loading="lazy" decoding="async"></div></a>`;
+const pfeat = (img, label, line) => `<a class="pfeat" href="${TIVORA_URL}" ${XA}><b>${label}${EXTI}${SRNEW}</b><span>${line}</span>${img ? `<div class="pf-img"><img src="${IMG}${img}" alt="Tivora ERP screen with modules listed on the home page" width="1903" height="925" loading="lazy" decoding="async"></div>` : `<span class="pf-logo">${logo('tivora', '', false)}</span>`}</a>`;
 const nl = (href, label) => `<li><a class="nl${PAGE === href ? ' cur' : ''}" href="${href}"${cur(href)}>${label}</a></li>`;
 
+const SOL_MENU = [['process', 'How we work', 'From first call to daily support.', 'search'], ['erp', 'ERP', 'Main business processes in one system.', 'tivora'], ['application', 'Application software', 'Accounting, billing, POS and payroll.', 'layers'], ['custom', 'Customized software', 'Contract and collaborative projects.', 'code'], ['ecommerce', 'E-commerce', 'B2B and B2C online stores.', 'cartplus'], ['mobile-apps', 'Mobile apps', 'Owner, sales and customer apps.', 'mobile']];
 const navMenus = () => {
-  const mp = ids => ids.map(i => { const t = TBY[i]; return ml(t.href, t.name, t.cat, i); }).join('');
+  const mlg = (id, href, name, cat, ext) => `<a class="ml" href="${href}"${ext ? ' target="_blank" rel="noopener"' : ''}${cur(href)}><span class="mlg${id === 'tivora' ? ' mlg-tv' : ''}">${logo(id, '', false)}</span><span><b>${name}</b><small>${cat}</small></span></a>`;
+  const mp = ids => ids.map(i => { const t = TBY[i]; return mlg(i, t.href, t.name, t.cat, t.ext); }).join('');
   return `<li><a class="nl nl-x" href="${TIVORA_URL}" ${XA}>Tivora ERP${EXTI}${SRNEW}</a></li>
       <li class="has-panel">${mbtn('p-products', 'Products', PAGE === 'products.html' || PAGE.startsWith('product-'))}
         <div class="panel wide" id="p-products"><div class="wrap pn-grid pn-4">
-          <div class="pn-col"><p class="mh">Accounting and ERP</p>${mp(['swastik', 'myswastikonline', 'payroll', 'smartsuite'])}</div>
-          <div class="pn-col"><p class="mh">Retail and hospitality</p>${mp(['pos', 'restaurant'])}${ml('products.html#ezee', 'eZee (authorized dealer)', 'Hospitality software', 'hospitality')}</div>
+          <div class="pn-col"><p class="mh">Accounting and ERP</p>${mp(['tivora', 'swastik', 'myswastikonline', 'payroll', 'smartsuite'])}</div>
+          <div class="pn-col"><p class="mh">Retail and hospitality</p>${mp(['pos', 'restaurant'])}${mlg('ezee', 'products.html#ezee', 'eZee (authorized dealer)', 'Hospitality software')}</div>
           <div class="pn-col"><p class="mh">Healthcare and field</p>${mp(['pharmasoft', 'avocare', 'bizant'])}</div>
-          ${pfeat('dashboards.jpg', 'Tivora ERP', 'Sales, purchase, stock, production and accounts.')}
+          ${PAGE === 'products.html' ? pfeat(null, 'Tivora ERP', 'The ERP that tells you what comes next.') : pfeat('dashboards.jpg', 'Tivora ERP', 'The ERP that tells you what comes next.')}
         </div><div class="wrap pn-all"><a href="products.html">All products ${ARROW}</a> <a href="products.html#trades">Find yours by trade ${ARROW}</a></div></div></li>
-      ${nl('solutions.html', 'Solutions')}
+      <li class="has-panel relpos"><span class="msplit"><a class="nl${PAGE === 'solutions.html' ? ' cur' : ''}" href="solutions.html"${cur('solutions.html')}>Solutions</a><button class="mb mb-ch" type="button" aria-expanded="false" aria-controls="p-solutions" aria-label="Solutions menu"><svg viewBox="0 0 12 12" aria-hidden="true" focusable="false"><path d="M2.5 4.5L6 8l3.5-3.5"/></svg></button></span>
+        <div class="panel small" id="p-solutions">${SOL_MENU.map(([id, l, d, ic]) => ml('solutions.html#' + id, l, d, ic)).join('')}</div></li>
       ${nl('partners.html', 'Partners')}
       <li class="has-panel relpos">${mbtn('p-company', 'Company', ['about.html', 'contact.html'].includes(PAGE))}
         <div class="panel small" id="p-company">${ml('about.html', 'About HiTech', 'Who we are')}${ml('contact.html', 'Contact', 'Talk to HiTech')}</div></li>
@@ -287,7 +292,7 @@ const mobileMenu = () => {
   return `<div class="mpanel" id="mpanel">
       <a class="mp-l" href="${TIVORA_URL}" ${XA}>Tivora ERP${EXTI}${SRNEW}</a>
       ${grp('Products', [...PRODUCTS.map(p => [phref(p), p.name]), ['contact.html', 'HiTech Payroll'], ['contact.html', 'HiTech Smartsuite'], ['products.html#ezee', 'eZee (authorized dealer)'], ['products.html#trades', 'Find yours by trade'], ['products.html', 'All products']])}
-      <a class="mp-l" href="solutions.html"${cur('solutions.html')}>Solutions</a>
+      ${grp('Solutions', [['solutions.html', 'All solutions'], ...SOL_MENU.map(([id, l]) => ['solutions.html#' + id, l])])}
       <a class="mp-l" href="partners.html"${cur('partners.html')}>Partners</a>
       ${grp('Company', [['about.html', 'About HiTech'], ['contact.html', 'Contact']])}
       <a class="mp-l" href="support.html"${cur('support.html')}>Support</a>
@@ -323,7 +328,7 @@ const foot = () => `<footer class="foot" data-tone="navy">
       </div>
       <div class="f-x"><h3><a href="${TIVORA_URL}" ${XA}>Tivora ERP${EXTI}${SRNEW}</a></h3></div>
       <div><h3>Products</h3><ul>${PRODUCTS.map(p => `<li><a href="${phref(p)}">${p.name}</a></li>`).join('')}<li><a href="products.html#ezee">eZee (authorized dealer)</a></li><li><a href="products.html#trades">Find by trade</a></li></ul></div>
-      <div><h3>Solutions</h3><ul><li><a href="solutions.html#erp">ERP</a></li><li><a href="solutions.html#application">Application software</a></li><li><a href="solutions.html#custom">Customized software</a></li><li><a href="solutions.html#ecommerce">E-commerce</a></li></ul></div>
+      <div><h3>Solutions</h3><ul><li><a href="solutions.html#erp">ERP</a></li><li><a href="solutions.html#application">Application software</a></li><li><a href="solutions.html#custom">Customized software</a></li><li><a href="solutions.html#ecommerce">E-commerce</a></li><li><a href="solutions.html#mobile-apps">Mobile apps</a></li></ul></div>
       <div><h3>Partners</h3><ul><li><a href="partners.html#ca">For CAs and auditors</a></li><li><a href="partners.html#partner">Partner Connect</a></li><li><a href="partners.html#network">Partner network</a></li></ul></div>
       <div><h3>Company</h3><ul><li><a href="about.html">About</a></li><li><a href="index.html#clients">Clients</a></li><li><a href="careers.html">Careers</a></li><li><a href="support.html">Support</a></li><li><a href="contact.html">Contact</a></li></ul></div>
     </div>
@@ -331,10 +336,24 @@ const foot = () => `<footer class="foot" data-tone="navy">
   </div>
 </footer>`;
 
-const ORG = '<script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"HiTech Solutions and Services Pvt. Ltd.","url":"https://www.hitechnepal.com.np","email":"info@hitechnepal.com.np","telephone":"+977-1-5389641","foundingDate":"1998","address":{"@type":"PostalAddress","streetAddress":"4th Floor, Divine Complex, Kalimati Chowk, Kalimati","addressLocality":"Kathmandu","addressCountry":"NP"}}</script>';
+const ld = o => `<script type="application/ld+json">${JSON.stringify({ '@context': 'https://schema.org', ...o }).replace(/</g, '\\u003c')}</script>`;
+const ORG_NAME = 'HiTech Solutions and Services Pvt. Ltd.';
+const ORG = {
+  '@type': 'Organization', '@id': `${SITE_URL}/#organization`, name: ORG_NAME, url: SITE_URL, logo: `${SITE_URL}/${IMG}logo-light.png`,
+  email: 'info@hitechnepal.com.np', telephone: '+977-1-5389641', foundingDate: '1998',
+  address: { '@type': 'PostalAddress', streetAddress: '4th Floor, Divine Complex, Kalimati Chowk, Kalimati', addressLocality: 'Kathmandu', addressCountry: 'NP' },
+  contactPoint: [
+    { '@type': 'ContactPoint', contactType: 'customer service', telephone: '+977-1-5389641', email: 'info@hitechnepal.com.np', areaServed: 'NP' },
+    { '@type': 'ContactPoint', contactType: 'sales', telephone: '+977-9803601598', areaServed: 'NP' },
+    { '@type': 'ContactPoint', contactType: 'technical support', telephone: '+977-9802345048', email: 'support@hitechnepal.com.np', areaServed: 'NP' },
+  ],
+  sameAs: ['https://www.facebook.com/hitechnepal/', 'https://www.linkedin.com/company/hitech-solutions-&-services-pvt.-ltd./'],
+};
+const WEBSITE = { '@type': 'WebSite', '@id': `${SITE_URL}/#website`, name: 'HiTech Solutions and Services', url: SITE_URL, inLanguage: 'en', publisher: { '@id': `${SITE_URL}/#organization` } };
+const LDX = {};
 
 const PROD = {};
-const render = ({ file, title, desc, body, org = false }) => {
+const render = ({ file, title, desc, body, org = false, noindex = false }) => {
   PAGE = file;
   const url = `${SITE_URL}/${file === 'index.html' ? '' : file}`;
   const html = `<!doctype html>
@@ -346,20 +365,25 @@ const render = ({ file, title, desc, body, org = false }) => {
 <meta name="description" content="${desc}">
 <meta name="theme-color" content="#000059">
 <link rel="canonical" href="${url}">
+${noindex ? '<meta name="robots" content="noindex">\n' : ''}<meta name="geo.region" content="NP">
 <meta property="og:type" content="website">
+<meta property="og:locale" content="en_NP">
 <meta property="og:site_name" content="HiTech Solutions and Services">
 <meta property="og:title" content="${title}">
 <meta property="og:description" content="${desc}">
 <meta property="og:url" content="${url}">
 <meta property="og:image" content="${SITE_URL}/${IMG}logo-light.png">
+<meta property="og:image:alt" content="HiTech Solutions and Services logo">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="${title}">
+<meta name="twitter:description" content="${desc}">
 <link rel="icon" type="image/png" href="${IMG}icon.png">
 <link rel="preload" as="font" type="font/woff2" href="assets/fonts/poppins-600-latin.woff2" crossorigin>
 <link rel="stylesheet" href="assets/fonts/fonts.css">
-<script>document.documentElement.className='js'</script>
+<script>document.documentElement.className='js${file === 'index.html' ? ' home onescr' : file === 'products.html' ? ' onescr' : ''}'</script>
 ${PRELOAD[file] ? `<link rel="preload" as="image" href="${BGD}${PRELOAD[file].src}.jpg">\n` : ''}<link rel="stylesheet" href="assets/css/site.css">
-${org ? ORG + '\n' : ''}</head>
-<body${PROD[file] ? ` data-product="${PROD[file]}"` : ''}>
+${[...(org ? [ORG] : []), ...(LDX[file] || [])].map(o => ld(o) + '\n').join('')}</head>
+<body${file === 'index.html' ? ' class="home onescr"' : file === 'products.html' ? ' class="onescr"' : ''}${PROD[file] ? ` data-product="${PROD[file]}"` : ''}>
 <a class="skip" href="#main">Skip to main content</a>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><linearGradient id="lineGrad" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="48" y2="0"><stop offset="0" stop-color="#009AD4"/><stop offset="1" stop-color="#0B20D6"/></linearGradient></defs></svg>
 ${nav()}
@@ -390,20 +414,22 @@ const WA_BTN = '<button class="btn" type="submit"><svg class="wa-ico" viewBox="0
 const WA_URL = 'https://wa.me/9779709117067';
 const WA_LINK = `<a href="${WA_URL}" ${XA}>WhatsApp +977 9709117067${SRNEW}</a>`;
 const WA_NOTE = `Prefer chat? ${WA_LINK}.`;
-const FORM = (inq = '') => `<form class="form" data-demo${inq ? ` data-inquiry="${inq}"` : ''}>
-        <div class="fld"><label for="f-name">Name</label><input id="f-name" name="name" type="text" autocomplete="name" required></div>
-        <div class="fld"><label for="f-biz">Company</label><input id="f-biz" name="company" type="text" autocomplete="organization" required></div>
-        <div class="fld"><label for="f-phone">Mobile</label><input id="f-phone" name="mobile" type="tel" autocomplete="tel" required></div>
-        <div class="fld"><label for="f-email">Email (optional)</label><input id="f-email" name="email" type="email" autocomplete="email"></div>
-        <div class="fld"><label for="f-city">City</label><input id="f-city" name="city" type="text" autocomplete="address-level2" required></div>
-        <div class="fld"><label for="f-inq">Inquiry for</label><select id="f-inq" name="inquiry"><option>Request a demo</option><option>Sales support</option><option>Channel partner query</option><option>CA / audit firm</option><option>Request a call</option><option>Training demo</option><option>Career</option></select></div>
-        <div class="fld full"><label for="f-int">Interested in</label><select id="f-int" name="interest">${interestOpts('')}</select></div>
-        <div class="fld full"><label for="f-msg">Message</label><textarea id="f-msg" name="message" rows="4"></textarea></div>
+/* the one lead form: contact page and demo bands (p 'f'), the call-back strip (p 'ls') and the popup (p 'lp') all render this */
+const leadForm = ({ p = 'f', source = 'demo', inq = '', interest = '', cls = 'form' } = {}) => `<form class="${cls}" data-lead data-source="${source}"${inq ? ` data-inquiry="${inq}"` : ''}>
+        <div class="fld"><label for="${p}-name">Name</label><input id="${p}-name" name="name" type="text" autocomplete="name" required></div>
+        <div class="fld"><label for="${p}-biz">Company</label><input id="${p}-biz" name="company" type="text" autocomplete="organization" required></div>
+        <div class="fld"><label for="${p}-phone">Mobile</label><input id="${p}-phone" name="mobile" type="tel" autocomplete="tel" required></div>
+        <div class="fld"><label for="${p}-email">Email (optional)</label><input id="${p}-email" name="email" type="email" autocomplete="email"></div>
+        <div class="fld"><label for="${p}-city">City</label><input id="${p}-city" name="city" type="text" autocomplete="address-level2" required></div>
+        <div class="fld"><label for="${p}-inq">Inquiry for</label><select id="${p}-inq" name="inquiry"><option>Request a demo</option><option>Sales support</option><option>Channel partner query</option><option>CA / audit firm</option><option>Request a call</option><option>Training demo</option><option>Career</option></select></div>
+        <div class="fld full"><label for="${p}-int">Interested in</label><select id="${p}-int" name="interest">${interestOpts(interest)}</select></div>
+        <div class="fld full"><label for="${p}-msg">Message</label><textarea id="${p}-msg" name="message" rows="4"></textarea></div>
         ${HPOT}
         <div class="fld full">${WA_BTN}</div>
         <p class="form-note full">${WA_NOTE}</p>
         <p class="form-ok full" role="status" hidden></p>
       </form>`;
+const FORM = (inq = '') => leadForm({ inq });
 const contactCard = (compact) => compact ? `<aside class="ccard">
       <div class="cc-r">${ico('pin', 's40')}<div><b>HiTech Solutions and Services</b><p>${ADDR}</p></div></div>
       <div class="cc-r">${ico('phone', 's40')}<div><p><a href="tel:+97715389641">01-5389641</a>, <a href="tel:+97715389642">01-5389642</a></p></div></div>
@@ -433,32 +459,27 @@ const faqSection = (e = 'HiTech FAQ', h = 'Straight answers before you call.', i
 const tile = t => {
   const tr = (TRADE_OF[t.id] || []).join(' ');
   if (t.id === 'tivora') return `<a class="tile tile-core" data-cat="${t.f}" data-trades="${tr}" href="${t.href}" ${XA} data-tone="navy">
-          <div class="tc-copy">${ico('tivora', 'dk')}<h3>${t.name}${SRNEW}</h3><p>${t.home}</p>${IRD('ird-dk')}<span class="go">Explore Tivora ERP ${EXTI}</span></div>
-          <div class="tc-img">${shot('dash')}</div>
+          <span class="tc-logo">${logo('tivora')}</span>
+          <div class="tc-copy"><h3>${t.name}${SRNEW}</h3><p>${t.home}</p></div>
+          <div class="tc-act">${IRD('ird-dk')}<span class="go">Explore Tivora ERP ${EXTI}</span></div>
         </a>`;
-  return `<a class="tile${t.badge === 'Ask us' ? ' tile-ask' : ''}${t.id === 'bizant' ? ' tile-wide' : ''}" data-cat="${t.f}" data-trades="${tr}" href="${t.href}">${lplate(t.id)}<span class="t-cat">${t.cat}</span><h3>${t.name}</h3><p>${t.home}</p><div class="trow">${t.badge ? `<span class="badge">${t.badge}</span>` : ''}${IRD()}</div></a>`;
+  return `<a class="tile${t.badge === 'Ask us' ? ' tile-ask' : ''}${t.id === 'bizant' ? ' tile-wide' : ''}" data-cat="${t.f}" data-trades="${tr}" href="${t.href}"><span class="t-top">${lplate(t.id)}${t.badge ? `<span class="badge">${t.badge}</span>` : ''}</span><span class="t-cat">${t.cat}</span><h3>${t.name}</h3><p>${t.home}</p><div class="trow">${IRD()}</div></a>`;
 };
-const bento = (pre = 'b', trade = false) => {
+const bento = (pre = 'b', trade = false, extra = '') => {
   const keys = ['all', ...Object.keys(CATS)];
   const lab = { all: 'All', ...CATS };
   return `<div data-filter>
-    <div class="tabs" role="tablist" aria-label="Product categories">${keys.map((k, i) => `<button class="tab" role="tab" type="button" id="${pre}-t-${k}" data-f="${k}" aria-selected="${i === 0}" aria-controls="${pre}-panel" tabindex="${i === 0 ? 0 : -1}">${lab[k]}</button>`).join('')}</div>
+    <div class="tabrow"><div class="tabs" role="tablist" aria-label="Product categories">${keys.map((k, i) => `<button class="tab" role="tab" type="button" id="${pre}-t-${k}" data-f="${k}" aria-selected="${i === 0}" aria-controls="${pre}-panel" tabindex="${i === 0 ? 0 : -1}">${lab[k]}</button>`).join('')}</div>${extra}</div>
     ${trade ? '<p class="trade-status" role="status" hidden><span class="ts-l"></span> <button type="button" class="ts-x">Show all products</button></p>' : ''}
-    <div class="bento" id="${pre}-panel" role="tabpanel" aria-labelledby="${pre}-t-all">
+    <div class="bento${trade ? ' bento-c' : ''}" id="${pre}-panel" role="tabpanel" aria-labelledby="${pre}-t-all">
         ${tile(TIVORA_TILE)}
         ${TILES.map(tile).join('\n        ')}
     </div>
   </div>`;
 };
 
-const PACKS = `<div class="packs stag">
-      <a class="pack" href="${TIVORA_URL}" ${XA}><h3>Alanza</h3><p>Jewellery</p><span class="go">See Alanza ${EXTI}${SRNEW}</span></a>
-      ${NP}<div class="pack"><h3>Paint</h3><p>Paint businesses</p></div>
-      ${NP}<div class="pack"><h3>Trading</h3><p>General trading</p></div>
-      <div class="pack later"><h3>FMCG</h3><p>Coming later</p></div>
-      <div class="pack later"><h3>Automobile</h3><p>Coming later</p></div>
-      <div class="pack later"><h3>Home appliances</h3><p>Coming later</p></div>
-      <div class="pack later"><h3>Pharma</h3><p>Coming later</p></div>
+const PACKS = () => `<div class="packs stag">
+      ${INDUSTRIES.map(([n, d], i) => `<a class="pack${i < 3 ? '' : ' pk4'}" href="${TIVORA_URL}" ${XA}><h3>${n}</h3><p>${d}</p><span class="go">Explore Tivora ERP ${EXTI}${SRNEW}</span></a>`).join('\n      ')}
     </div>`;
 
 const NEPAL_ITEMS = [
@@ -500,11 +521,28 @@ const pinIcon = '<svg viewBox="0 0 24 30" aria-hidden="true" focusable="false"><
 const MAP = JSON.parse(readFileSync(join(ROOT, 'assets/data/nepal-map.json'), 'utf8'));
 let NM = 0;
 const pc = v => { let t = v.toFixed(2); if (/50$/.test(t)) t = (v + .01).toFixed(2); return t + '%'; }; /* the literal 50% is a content-gate word */
+/* Numbered badges that would overlap are pushed apart; the pin stays on its true spot (a small dot) and a thin leader joins it to the badge.
+   Works in map units (1000 wide); 66 units covers the 22px badge on the narrowest two-column map (about 410px wide) and the 16px mobile badge on a 342px map, so it also holds at every wider size. */
+const nudge = pts => {
+  const D = 66, b = pts.map(([x, y], i) => [x + (i % 2 ? 0.01 : -0.01), y + (i % 3 ? 0.01 : -0.01)]);
+  for (let n = 0; n < 400; n++) {
+    let moved = false;
+    for (let i = 0; i < b.length; i++) for (let j = i + 1; j < b.length; j++) {
+      const dx = b[j][0] - b[i][0], dy = b[j][1] - b[i][1], d = Math.hypot(dx, dy);
+      if (d >= D) continue;
+      const k = (D - d) / 2 / (d || 1); moved = true;
+      b[i][0] -= dx * k; b[i][1] -= dy * k; b[j][0] += dx * k; b[j][1] += dy * k;
+    }
+    if (!moved) break;
+  }
+  return b.map(([x, y], i) => { const ox = Math.round(x - pts[i][0]), oy = Math.round(y - pts[i][1]); return Math.hypot(ox, oy) < 6 ? [0, 0] : [ox, oy]; });
+};
 const nepalMap = (items, cls = '') => {
   const id = ++NM, P = k => { if (!MAP.pins[k]) throw new Error('missing pin ' + k); return MAP.pins[k]; };
   const west = items.map((_, k) => k).sort((a, b) => P(items[a][0]).x - P(items[b][0]).x || a - b), drop = [];
   west.forEach((k, r) => { drop[k] = r; });
   const names = items.map(([k, t]) => t.replace(/&amp;/g, 'and'));
+  const off = nudge(items.map(([k]) => [P(k).x, P(k).y]));
   return `<div class="nmap dg${cls ? ' ' + cls : ''}" data-nmap>
       <div class="nm-fig">
         <svg class="nm-svg" viewBox="${MAP.viewBox}" role="img" aria-label="Map of Nepal with ${items.length} numbered pins: ${names.map((n, k) => `${k + 1} ${n}`).join(', ')}." focusable="false">
@@ -513,61 +551,64 @@ const nepalMap = (items, cls = '') => {
           <path class="nm-out" pathLength="1" d="${MAP.outline}"/>
           <rect class="nm-shim" clip-path="url(#nmc${id})" x="-220" y="0" width="200" height="${MAP.height}" fill="url(#nmg${id})"/>
         </svg>
-        ${items.map(([k], i) => { const p = P(k); return `<span class="nm-pin" data-i="${i}" style="left:${pc(p.x / 10)};top:${pc(p.y / 5.93)};--d:${drop[i]}" aria-hidden="true"><i class="nm-r"></i><b>${i + 1}</b></span>`; }).join('')}
+        ${items.map(([k], i) => { const p = P(k), [ox, oy] = off[i], o = ox || oy; return `<span class="nm-pin${o ? ' off' : ''}" data-i="${i}" style="left:${pc(p.x / 10)};top:${pc(p.y / 5.93)};--d:${drop[i]}${o ? `;--ox:${ox};--oy:${oy};--len:${Math.hypot(ox, oy).toFixed(1)};--ang:${(Math.atan2(-oy, -ox) * 180 / Math.PI).toFixed(1)}deg` : ''}" aria-hidden="true"><i class="nm-r"></i><b>${i + 1}</b></span>`; }).join('')}
         <span class="nm-tip" aria-hidden="true" hidden></span>
       </div>
       <ol class="nm-leg" style="--rows:${Math.ceil(items.length / 2)}">${items.map(([k, t, s], i) => `<li tabindex="0" data-i="${i}" data-name="${s || t}"><span class="nm-n">${i + 1}</span><span class="nm-t"><b>${t}</b>${s ? `<small>${s}</small>` : ''}</span>${pinIcon}</li>`).join('')}</ol>
     </div>`;
 };
-/* the 14 branch cities, numbered west to east (Nepalgunj, Surkhet and Dang first) */
-const BRANCH14 = ['nepalgunj', 'surkhet', 'dang', 'butwal', 'pokhara', 'chitwan', 'birgunj', 'rautahat', 'janakpur', 'siraha', 'katari', 'udayapur', 'biratnagar', 'birtamode'];
-const coverageSection = (paper = true, bg = false) => `<section class="sec${paper ? ' sec-paper' : ''}${bg ? ' has-bg' : ''}" id="coverage">${bg ? bgl('home-himalaya', { mode: 'lw', pos: '50% 45%' }) : ''}<div class="wrap"><div class="sec-head"><div><p class="eyebrow">Our branches</p><h2><span class="bignum">14</span> cities across Nepal.</h2></div></div>${nepalMap(BRANCH14.map(k => [k, MAP.pins[k].name]))}</div></section>`;
-const PARTNER_PINS = ['itahari', 'birgunj', 'butwal', 'bhairahawa', 'pokhara', 'nepalgunj', 'janakpur', 'narayanghat', 'siraha', 'jhapa', 'mahendranagar', 'dang'];
+/* the 22 branch cities, numbered west to east */
+const BRANCH_ORDER = [...BRANCH_KEYS].sort((a, b) => MAP.pins[a].x - MAP.pins[b].x);
+const coverageSection = (paper = true, bg = false) => `<section class="sec${paper ? ' sec-paper' : ''}${bg ? ' has-bg' : ''}" id="coverage">${bg ? bgl('home-himalaya', { mode: 'lw', pos: '50% 45%' }) : ''}<div class="wrap"><div class="sec-head"><div><p class="eyebrow">Our branches</p><h2><span class="bignum">${BRANCH_KEYS.length}</span> cities across Nepal.</h2></div></div>${nepalMap(BRANCH_ORDER.map(k => [k, MAP.pins[k].name]))}</div></section>`;
+const PARTNER_PINS = ['itahari', 'birgunj', 'butwal', 'bhairahawa', 'pokhara', 'nepalgunj', 'janakpur', 'narayanghat', 'lahan', 'jhapa', 'mahendranagar', 'dang'];
 
 /* ---------- HOME ---------- */
 
 /* Tivora ERP highlight (spec 14 P3): compact, not sticky, four real screens cross-fading */
 const TV_SHOTS = ['dash', 'paint', 'jewel', 'sales'];
-const TV_CHIPS = ['book|Books your auditor accepts', 'box|Stock that adds up', 'cal|Nepal built in', 'tools|Built one trade at a time'];
+const TV_CHIPS = ['target|Intelligent|Tells you what is next', 'trend|Plans your business in advance|Forecast, MRP and project budgets drive purchase, production and spending', 'user|Focused|Each role sees its own work', 'shield|Makes no mistakes|Warns before a wrong action: credit limit, low margin, near expiry, budget overrun'];
+const INDUSTRIES = [
+  ['Jewellery', 'Purity, making charges, old gold and karigar management.'],
+  ['Paint', 'Shades and tinting, dealer schemes, volume pricing, batch control.'],
+  ['FMCG', 'Distributor and retailer chain, schemes, route and beat.'],
+  ['Pharmaceutical', 'Batch and expiry, first expiry first out, near-expiry returns.'],
+  ['Automobile', 'Chassis and engine tracking, job cards, warranty and service.'],
+  ['Trading', 'Imports, landed cost, LC and trust receipts, credit control.'],
+  ['Manufacturing', 'BOM, production orders, yield, variance, machine efficiency.'],
+];
+const TV_YT = 'n_rTzRJFkqw';
+const TV_YT_WATCH = `https://www.youtube.com/watch?v=${TV_YT}`;
+const TV_YT_EMBED = `https://www.youtube-nocookie.com/embed/${TV_YT}?rel=0&amp;modestbranding=1&amp;playsinline=1`;
 const coreBand = () => `<section class="sec sec-navy tv-hl" id="core" data-tone="navy" aria-labelledby="core-h">
   <div class="wrap tv-grid">
     <div class="tv-l">
       <p class="eyebrow">Tivora ERP</p>
-      <h2 id="core-h">One platform. Every business.</h2>
-      <p class="lede">Billing, buying, stock, workshop and books in one system, made in Nepal for Nepal.</p>
-      ${chips(TV_CHIPS, 'tv-ch')}
-      <ul class="tv-packs" aria-label="Trade packs">
-        <li><a href="${TIVORA_URL}" ${XA}>Alanza${SRNEW}</a></li>
-        ${NP}<li>Paint</li>
-        ${NP}<li>Trading</li>
-        <li class="later">FMCG<small>Coming later</small></li><li class="later">Automobile<small>Coming later</small></li><li class="later">Home appliances<small>Coming later</small></li><li class="later">Pharma<small>Coming later</small></li>
+      <h2 id="core-h">The ERP that tells you what comes next.</h2>
+      <p class="lede">One database for the whole business, with My Work Desk and an Executive Dashboard.</p>
+      <ul class="tv-str">${TV_CHIPS.map(c => { const [, l, s] = c.split('|'); return `<li><b>${l}</b><span>${s}</span></li>`; }).join('')}</ul>
+      <p class="tv-pl">Industry-specific for</p>
+      <ul class="tv-packs" aria-label="Industry solutions">
+        ${INDUSTRIES.map(([n]) => `<li><a href="${TIVORA_URL}" ${XA}>${n}${SRNEW}</a></li>`).join('\n        ')}
       </ul>
       <div class="btns">${xbtn(TIVORA_URL, 'Explore Tivora ERP')}</div>
     </div>
-    <div class="tv-r" data-slides>
-      ${laptop(TV_SHOTS.map((k, i) => shot(k, { lazy: i > 0, cls: 'sl' + (i === 0 ? ' on' : '') })).join(''), 'tv-lap')}
-      <div class="tv-dots" role="group" aria-label="Tivora ERP screens">${TV_SHOTS.map((k, i) => `<button class="tv-dot${i === 0 ? ' on' : ''}" type="button" aria-label="Show screen ${i + 1} of ${TV_SHOTS.length}" aria-pressed="${i === 0}"></button>`).join('')}</div>
+    <div class="tv-r">
+      <div class="yt"><iframe src="${TV_YT_EMBED}" title="Tivora ERP video" width="560" height="315" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen" allowfullscreen></iframe></div>
+      <p class="yt-l"><a class="go" href="${TV_YT_WATCH}" ${XA}>Watch on YouTube${EXTI}${SRNEW}</a></p>
     </div>
   </div>
 </section>`;
 
 /* "Interested in" options, shared by the demo form, the call-back strip and the inquiry popup */
-const INTEREST = ['Not sure yet', 'Tivora ERP: Alanza (jewellery)', `Tivora ERP: Paint${NP}`, `Tivora ERP: Trading${NP}`, 'Swastik', 'mySwastikonline', 'Swastik POS', 'Swastik Restaurant', 'Pharmasoft', 'Avocare', 'Bizant', 'HiTech Payroll', 'HiTech Smartsuite', 'eZee hospitality software', 'Custom software, ERP or e-commerce'];
+const INTEREST = ['Not sure yet', 'Tivora ERP: Alanza (jewellery)', `Tivora ERP: Paint${NP}`, `Tivora ERP: Trading${NP}`, 'Swastik', 'mySwastikonline', 'Swastik POS', 'Swastik Restaurant', 'Pharmasoft', 'Avocare', 'Bizant', 'Mobile apps', 'HiTech Payroll', 'HiTech Smartsuite', 'eZee hospitality software', 'Custom software, ERP or e-commerce'];
 const interestOpts = sel => INTEREST.map(o => `<option${o.replace(NP, '') === sel ? ' selected' : ''}>${o}</option>`).join('');
 const HPOT = '<div class="hpot" aria-hidden="true"><label>Leave this field empty<input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>';
 
-/* call-back strip above the footer on every page except contact.html (spec 14 P23) */
+/* call-back strip above the footer on every page except contact.html (spec 14 P23): the shared lead form in a compact grid */
 const leadStrip = prod => `<section class="lead-strip" aria-labelledby="ls-h">
   <div class="wrap ls-in">
     <h2 id="ls-h">Get a call back.</h2>
-    <form class="ls-form" data-lead data-source="strip">
-      <div class="fld"><label for="ls-name">Name</label><input id="ls-name" name="name" type="text" autocomplete="name" required></div>
-      <div class="fld"><label for="ls-phone">Mobile</label><input id="ls-phone" name="mobile" type="tel" autocomplete="tel" required></div>
-      <div class="fld"><label for="ls-int">Interested in</label><select id="ls-int" name="interest">${interestOpts(prod)}</select></div>
-      ${HPOT}
-      <div class="fld ls-go">${WA_BTN}</div>
-      <p class="form-ok" role="status" hidden></p>
-    </form>
+    ${leadForm({ p: 'ls', source: 'strip', interest: prod, cls: 'form ls-form' })}
   </div>
 </section>`;
 
@@ -578,87 +619,140 @@ const leadPopup = () => `<div class="lead-pop" id="leadPop" role="dialog" aria-m
     <button class="lp-x" type="button" aria-label="Close" data-lp-close><svg viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path d="M4 4l12 12M16 4L4 16"/></svg></button>
     <h2 id="lp-h">Talk to HiTech.</h2>
     <p class="lede">Tell us what you run and we will call you.</p>
-    <form class="form lp-form" data-lead data-source="popup">
-      <div class="fld"><label for="lp-name">Name</label><input id="lp-name" name="name" type="text" autocomplete="name" required></div>
-      <div class="fld"><label for="lp-phone">Mobile</label><input id="lp-phone" name="mobile" type="tel" autocomplete="tel" required></div>
-      <div class="fld full"><label for="lp-email">Email (optional)</label><input id="lp-email" name="email" type="email" autocomplete="email"></div>
-      <div class="fld full"><label for="lp-int">Interested in</label><select id="lp-int" name="interest">${interestOpts('')}</select></div>
-      <div class="fld full"><label for="lp-msg">Message (optional)</label><textarea id="lp-msg" name="message" rows="3"></textarea></div>
-      ${HPOT}
-      <div class="fld full">${WA_BTN}</div>
-      <p class="form-note full">${WA_NOTE}</p>
-      <p class="form-ok full" role="status" hidden></p>
-    </form>
+    ${leadForm({ p: 'lp', source: 'popup', cls: 'form lp-form' })}
   </div>
 </div>`;
 
 const tradeIcs = prods => prods.map(x => ico(x, 's32')).join('');
-const tradeHome = () => `<section class="sec sec-paper" id="trades-home" data-sol>
-  <div class="wrap sol-grid">
-    <div class="sol-l">
-      <p class="eyebrow">By trade</p>
-      <h2>Find the software for your trade.</h2>
-      <p class="lede">Point at a trade to see its products.</p>
-      <div class="sol-ics" aria-hidden="true">${['tivora', 'swastik', 'myswastikonline', 'pos', 'restaurant', 'pharmasoft', 'avocare', 'bizant', 'hospitality'].map(i => `<span data-i="${i}">${ico(i, 's48')}</span>`).join('')}</div>
-      <p>${btn('products.html#trades', 'Find yours by trade', 'btn-line')}</p>
+const TRADE_PRODUCTS = prods => prods.map(p => (p === 'hospitality' ? 'eZee' : TBY[p].name)).join(', ');
+const tradeHome = () => `<section class="sec sec-paper" id="trades-home">
+  <div class="wrap">
+    <div class="th-head">
+      <div><h2>Find the software for your trade.</h2><p class="lede">Pick your trade to see the products that serve it.</p></div>
+      ${btn('products.html#trades', 'Find yours by trade', 'btn-line')}
     </div>
-    <ul class="tgrid stag">
-      ${TRADES.map(([id, name, ic, prods]) => `<li data-p="${prods.join(' ')}"><a href="products.html#trade-${id}">${ico(ic, 's48')}<b>${name}${id === 'paint' ? NP : ''}</b><span class="ics" aria-hidden="true">${tradeIcs(prods)}</span></a></li>`).join('\n      ')}
+    <ul class="th-list stag">
+      ${TRADES.map(([id, name, , prods]) => `<li><a href="products.html#trade-${id}"><b>${name}${id === 'paint' ? NP : ''}</b><span>${TRADE_PRODUCTS(prods)}</span>${ARROW}</a></li>`).join('\n      ')}
     </ul>
   </div>
 </section>`;
 
-const WHY5 = [['award', 'No.1', 'Business Solution Provider of Nepal', 0], ['cal', '25+', 'Years of experience', 25], ['store', '10,000+', 'Clients', 10000], ['handshake', '20+', 'Partners', 20], ['users', '100+', 'Dynamic team members', 100]];
+const WHY5 = [['28+', 'Years of experience', 28], ['10,000+', 'Clients', 10000], ['20+', 'Partners', 20], ['100+', 'Dynamic team members', 100]];
 const WHY_SUP = [['sms', 'Live chat support'], ['pin', 'Onsite support'], ['factory', 'Industry-specific implementations'], ['grad', 'Software training']];
-const whyBand = () => `<section class="sec has-bg" id="why">${bgl('street-morning', { mode: 'lw', pos: '50% 58%' })}
-  <div class="wrap">
-    ${head2('Why HiTech', 'Accounting software since 1998.', 'We are HiTech Solutions &amp; Services Pvt. Ltd., a premier business software solution provider in Nepal.')}
-    <div class="why5 stag">${WHY5.map(([i, v, l, n], k) => `<div class="w5${k === 0 ? ' w5-a' : ''}"${k === 0 ? ' data-tone="navy"' : ''}>${ico(i, 's48' + (k === 0 ? ' dk' : ''))}<b class="w5v"${n ? ` data-count="${n}" data-suffix="+"` : ''}>${v}</b><span>${l}</span></div>`).join('')}</div>
-    <p class="why-ird"><span class="ird-i">${IRDSVG}</span>All HiTech products are IRD certified.</p>
-    <h3 class="gh">Support service</h3>
-    <div class="icards sm stag">${WHY_SUP.map(([i, l]) => `<div class="icard">${ico(i, 's48')}<h3>${l}</h3></div>`).join('')}</div>
-    <p class="why-close">At HiTech, we believe in the intrinsic value of human resources. Our team is up and ready to offer professional support and solutions to ease your operation.</p>
+const draw = h => h.replace(/<(path|circle|rect|line|ellipse|polyline|polygon)/g, '<$1 pathLength="1"');
+const strengths = () => `<section class="sec" id="strengths">
+  <div class="wrap st-grid">
+    <div class="st-main">
+      <p class="eyebrow">Our strengths</p>
+      <h2>Managing business in Nepal since 1998.</h2>
+      <p class="lede">We are HiTech Solutions &amp; Services Pvt. Ltd., a premier business software solution provider in Nepal.</p>
+      <div class="st-no1 rv"><b>No.1</b><span>Business Solution Provider of Nepal</span><p class="st-ird"><span class="ird-i">${IRDSVG}</span>All HiTech products are IRD certified.</p></div>
+      <dl class="st-nums stag">${WHY5.map(([v, l, n]) => `<div><dd data-count="${n}" data-suffix="+">${v}</dd><dt>${l}</dt></div>`).join('')}</dl>
+    </div>
+    <div class="st-photo" aria-hidden="true"><img src="${BGD}street-morning.jpg" alt="" loading="lazy" decoding="async"></div>
+  </div>
+  <div class="wrap st-np">
+    <div class="np-i"><h3>Made for the way Nepal does business.</h3><p>Every document is numbered by fiscal year.</p><p class="np-dn"><span class="dn-l">Sales invoice number</span><span class="dn-v" data-type="SI-2083/84-00001"><span class="sr">SI-2083/84-00001</span><span aria-hidden="true">SI-2083/84-00001</span></span></p></div>
+    <ul class="np-f stag">${NEPAL_ITEMS.map(([, t, d]) => `<li><b>${t}</b><span>${d}</span></li>`).join('')}</ul>
   </div>
 </section>`;
 
-const svcCards = () => `<div class="svc stag">
-      <a class="sv sv-big" href="solutions.html#erp" data-tone="navy">${ico('tivora', 's48 dk')}<h3>ERP implementation</h3><p>One system, on Tivora ERP.</p><span class="go">Learn more ${ARROW}</span></a>
-      <a class="sv" href="solutions.html#application">${ico('layers', 's40')}<h3>Application software</h3><p>Accounting, billing, POS and payroll.</p><span class="go">Learn more ${ARROW}</span></a>
-      <a class="sv" href="solutions.html#custom">${ico('code', 's40')}<h3>Customized software</h3><p>Contract and collaborative projects.</p><span class="go">Learn more ${ARROW}</span></a>
-      <a class="sv" href="solutions.html#ecommerce">${ico('cartplus', 's40')}<h3>E-commerce</h3><p>B2B and B2C online stores.</p><span class="go">Learn more ${ARROW}</span></a>
-    </div>`;
-const svcSection = () => `<section class="sec" id="solutions-teaser"><div class="wrap">${head2('Solutions', 'Software, built your way.', 'We also build software to your brief.')}${svcCards()}</div></section>`;
-
-const clientsSection = () => `<section class="sec" id="clients">
-  <div class="wrap">
-    <div class="sec-head"><div><h2>Our clients</h2></div></div>
-    <ul class="ctiles stag">${CLIENTS.map(c => `<li>${c}</li>`).join('')}</ul>
-    <div class="cvo">
-      <div class="fbv rv">
-        <iframe class="fbf" title="HiTech client testimonial video" data-src="${FB_SRC}" width="340" height="604" frameborder="0" scrolling="no" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" allowfullscreen loading="lazy"></iframe>
-        <p><a class="go" href="${FB_REEL}" ${XA}>Watch on Facebook${EXTI}${SRNEW}</a></p>
-      </div>
-      <div class="vq stag">
-        ${quote(...QUOTE_DATA[1], true)}
-        ${quote(...QUOTE_DATA[0])}
-        ${quote(...QUOTE_DATA[2])}
-      </div>
+const supportSection = () => `<section class="sec" id="support-services">
+  <div class="wrap sp-grid">
+    <div class="sp-photo" aria-hidden="true"><img src="${BGD}support-desk.jpg" alt="" loading="lazy" decoding="async"></div>
+    <div class="sp-copy">
+      <h2>Support services</h2>
+      <ul class="sp-list stag">${WHY_SUP.map(([i, l]) => `<li>${draw(ico(i, 's32 bare'))}<h3>${l}</h3></li>`).join('')}</ul>
+      <p class="sp-close">At HiTech, we believe in the intrinsic value of human resources. Our team is up and ready to offer professional support and solutions to ease your operation.</p>
     </div>
   </div>
 </section>`;
 
-const partnersBand = () => `<section class="sec sec-paper" id="partners-band">
+const homeCoverage = () => `<section class="sec sec-paper" id="coverage">
   <div class="wrap">
-    ${head2('Partners', 'Grow with HiTech.')}
-    <div class="pb stag">
-      <a class="pbt" href="partners.html#ca">${ico('calc', 's48')}<h3>For CAs and auditors</h3><p>For people who check the books.</p><span class="go">Learn more ${ARROW}</span></a>
-      <a class="pbt" href="partners.html#partner">${ico('handshake', 's48')}<h3>Partner Connect</h3><p>Training, support and rewards.</p><span class="go">Learn more ${ARROW}</span></a>
-      <a class="pbt" href="partners.html#network">${ico('network', 's48')}<h3>Partner network</h3><p>12 partners across Nepal.</p><span class="go">Learn more ${ARROW}</span></a>
+    <h2 class="cv-h"><span class="bignum">${BRANCH_KEYS.length}</span> cities across Nepal.</h2>
+    ${nepalMap(BRANCH_ORDER.map(k => [k, MAP.pins[k].name]))}
+  </div>
+</section>`;
+
+const solRow = (href, t, p) => `<li><a href="${href}"><span><b>${t}</b><small>${p}</small></span>${ARROW}</a></li>`;
+const solPartners = () => `<section class="sec" id="solutions-teaser">
+  <div class="wrap sx-grid">
+    <div class="sx-sol">
+      <h2>Software, built your way.</h2>
+      <p class="lede">We also build software to your brief.</p>
+      <ul class="sx-list stag">
+        ${solRow('solutions.html#erp', 'ERP implementation', 'Tivora ERP: one database for the whole business.')}
+        ${solRow('solutions.html#application', 'Application software', 'Accounting, billing, POS and payroll.')}
+        ${solRow('solutions.html#custom', 'Customized software', 'Contract and collaborative projects.')}
+        ${solRow('solutions.html#ecommerce', 'E-commerce', 'B2B and B2C online stores.')}
+      </ul>
+    </div>
+    <div class="sx-par" id="partners-band">
+      <h2>Grow with HiTech.</h2>
+      <ul class="sx-list stag">
+        ${solRow('partners.html#ca', 'For CAs and auditors', 'For people who check the books.')}
+        ${solRow('partners.html#partner', 'Partner Connect', 'Training, support and rewards.')}
+        ${solRow('partners.html#network', 'Partner network', 'Partners across 12 cities.')}
+      </ul>
+      <div class="sx-photo" aria-hidden="true"><img src="${BGD}handshake.jpg" alt="" loading="lazy" decoding="async"></div>
     </div>
   </div>
 </section>`;
 
-const hchips = HERO_LOGOS.map(id => { const t = TBY[id]; return `<li><a class="hlogo" href="${t.href}" aria-label="${t.name}, ${t.cat}">${logo(id, '', false)}<span class="tip" aria-hidden="true"><b>${t.name}</b><small>${t.cat}</small></span></a></li>`; }).join('');
+const CLIENT_LIST = [['cg-group', 'CG Group'], ['jagdamba-steel', 'Jagdamba Steel'], ['pashupati-paints', 'Pashupati Paints'], ['shikhar', 'Shikhar'], ['triveni-group', 'Triveni Group'], ['qfx-cinemas', 'QFX Cinemas'], ['mc-group', 'M. C. Group'], ['goenka-group', 'Goenka Group'], ['rajesh-metal-crafts', 'Rajesh Metal Crafts'], ['asian-pharmaceuticals', 'Asian Pharmaceuticals'], ['ctl-pharmaceuticals', 'CTL Pharmaceuticals']];
+let CMAN = {};
+try { CMAN = JSON.parse(readFileSync(join(ROOT, 'assets/img/clients/manifest.json'), 'utf8')); } catch { /* no logos saved yet: text tiles */ }
+const clientTile = ([slug, name]) => {
+  const f = CMAN[slug] && CMAN[slug].file;
+  return f && existsSync(join(ROOT, 'assets/img/clients', f)) ? `<li><img src="assets/img/clients/${f}" alt="${name}" loading="lazy" decoding="async"></li>` : `<li class="ct-t"><span>${name}</span></li>`;
+};
+const qcar = () => {
+  const qs = [QUOTE_DATA[1], QUOTE_DATA[0], QUOTE_DATA[2]];
+  return `<div class="qcar" data-qcar role="group" aria-roledescription="carousel" aria-label="Client testimonials">
+        <div class="qc-track">${qs.map((q, i) => `<figure class="quote${i === 0 ? ' on' : ''}"><blockquote><p>&ldquo;${q[0]}&rdquo;</p></blockquote><figcaption><b>${q[1]}</b>${q[2]}</figcaption></figure>`).join('')}</div>
+        <div class="qc-ctl"><button class="qc-b" type="button" data-dir="-1" aria-label="Previous testimonial"><svg viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path d="M16 10H5M9 5l-5 5 5 5"/></svg></button><div class="qc-dots" role="group" aria-label="Choose a testimonial">${qs.map((q, i) => `<button class="qc-dot${i === 0 ? ' on' : ''}" type="button" aria-label="Show testimonial ${i + 1} of ${qs.length}" aria-pressed="${i === 0}"></button>`).join('')}</div><button class="qc-b" type="button" data-dir="1" aria-label="Next testimonial"><svg viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path d="M4 10h11M11 5l5 5-5 5"/></svg></button></div>
+      </div>`;
+};
+const clientsSection = () => `<section class="sec sec-paper" id="clients">
+  <div class="wrap cl-grid">
+    <div class="fbv rv">
+      <div class="fb-frame"><iframe class="fbf" title="HiTech client testimonial video" data-src="${FB_SRC}" width="340" height="604" frameborder="0" scrolling="no" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" allowfullscreen loading="lazy"></iframe></div>
+      <p><a class="go" href="${FB_REEL}" ${XA}>Watch on Facebook${EXTI}${SRNEW}</a></p>
+    </div>
+    <div class="cl-main">
+      <h2>Our clients</h2>
+      <ul class="cwall stag">${CLIENT_LIST.map(clientTile).join('')}</ul>
+      ${qcar()}
+    </div>
+  </div>
+</section>`;
+
+const suiteTile = t => {
+  const tr = (TRADE_OF[t.id] || []).join(' ');
+  if (t.id === 'tivora') return `<a class="sg-tv" data-trades="${tr}" href="${t.href}" ${XA} data-tone="navy">
+        <span class="sg-tvl">${logo('tivora')}</span>
+        <span class="sg-tvc"><h3>${t.name}${SRNEW}</h3><p>${t.home}</p>${IRD('ird-dk')}<span class="go">Explore Tivora ERP ${EXTI}</span></span>
+      </a>`;
+  return `<a class="sg-t" data-trades="${tr}" href="${t.href}"><span class="sg-top">${logo(t.id)}${t.badge ? `<small class="sg-b">${t.badge}</small>` : ''}</span><span class="sg-cat">${t.cat}</span><h3>${t.name}</h3><p>${t.home}</p></a>`;
+};
+const suiteSection = () => `<section class="sec" id="suite">
+  <div class="wrap">
+    <div class="su-head">
+      <div><h2>One vendor. Every part of the business.</h2><p class="lede">Tivora ERP leads a suite for every part of your business.</p></div>
+      ${btn('products.html', 'All products', 'btn-line')}
+    </div>
+    <div class="sg stag">
+      ${suiteTile(TIVORA_TILE)}
+      ${TILES.map(suiteTile).join('\n      ')}
+    </div>
+  </div>
+</section>`;
+
+const faqCols = () => `<div class="faq-2">${faq([0, 1, 2, 3])}${faq([4, 5, 6, 7])}</div>`;
+const faqHome = () => `<section class="sec sec-paper" id="faq"><div class="wrap"><h2>Straight answers before you call.</h2>${faqCols()}</div></section>`;
+
+const hchips = HERO_LOGOS.map(id => { const t = TBY[id]; return `<li><a class="hlogo${id === 'tivora' ? ' hlogo-tv' : ''}" href="${t.href}"${t.ext ? ' target="_blank" rel="noopener"' : ''} aria-label="${t.name}, ${t.cat}">${logo(id, '', false)}<span class="tip" aria-hidden="true"><b>${t.name}</b><small>${t.cat}</small></span></a></li>`; }).join('');
 const home = () => `<section class="hero has-bg" id="top" data-tone="navy">
   <!-- hero-office.jpg: generated corporate-office photo; the real Tivora ERP video plays on the laptop screen -->
   <div class="hero-photo">
@@ -671,74 +765,57 @@ const home = () => `<section class="hero has-bg" id="top" data-tone="navy">
   </div>
   <div class="hero-in">
     <div class="hero-copy stag">
-      <p class="eyebrow">Accounting software since 1998</p>
+      <p class="eyebrow">Managing business in Nepal since 1998</p>
       <h1>The software Nepal's businesses run on.</h1>
       <p class="lede">Accounting, billing, POS, restaurant, pharmaceutical and enterprise software for Nepal's businesses.</p>
       <div class="btns">${btn('contact.html#demo', 'Request a demo')}${btn('products.html', 'Explore products', 'btn-line')}</div>
-      <dl class="proof"><div><dt>Clients</dt><dd data-count="10000" data-suffix="+">10,000+</dd></div><div><dt>Years</dt><dd data-count="25" data-suffix="+">25+</dd></div><div><dt>Branches</dt><dd data-count="15" data-suffix="+">15+</dd></div></dl>
-      <div class="suite"><p class="suite-l">Also from HiTech</p><ul class="hchips stag">${hchips}</ul></div>
+      <dl class="proof"><div><dt>Clients</dt><dd data-count="10000" data-suffix="+">10,000+</dd></div><div><dt>Years</dt><dd data-count="28" data-suffix="+">28+</dd></div><div><dt>Branches</dt><dd data-count="${NBR}">${NBR}</dd></div></dl>
+      <div class="suite"><p class="suite-l">HiTech products</p><ul class="hchips stag">${hchips}</ul></div>
     </div>
   </div>
 </section>
+${strengths()}
 ${clientsSection()}
-<section class="sec has-bg" id="suite">${bgl('bazaar', { mode: 'lwb', band: 520, pos: '50% 62%', flip: true })}
-  <div class="wrap">
-    ${head2('The HiTech suite', 'One vendor. Every part of the business.', 'Tivora ERP leads a suite for every part of your business.')}
-    ${bento('h')}
-    <p class="more">${btn('products.html', 'All products', 'btn-line')}</p>
-  </div>
-</section>
+${suiteSection()}
 ${coreBand()}
-${nepalStrip(undefined, false, true)}
 ${tradeHome()}
-${whyBand()}
-${coverageSection(true, true)}
-${svcSection()}
-${partnersBand()}
-${faqSection()}
+${supportSection()}
+${homeCoverage()}
+${solPartners()}
+${faqHome()}
 ${demo({ compact: true, white: true, bg: { src: 'kathmandu-street', pos: '50% 55%', flip: true } })}`;
 
 /* ---------- TIVORA ---------- */
-const MODULES = [
-  ['cart', 'Sales', ['doc|Quotations', 'doc|Orders', 'doc|Invoices', 'repeat|Returns', 'lock|Credit limits', 'clock|Outstanding and ageing']],
-  ['truck', 'Purchase', ['doc|Requisition', 'sliders|Quotation comparison', 'doc|Purchase orders', 'box|Goods receipt', 'doc|Invoices', 'repeat|Returns']],
-  ['box', 'Stock', ['warehouse|Godowns', 'cal|Batches and lots', 'truck|Transfers', 'check|Stock audit', 'bell|Reorder report', 'scale|FIFO, LIFO, board rate']],
-  ['calc', 'Accounts', ['book|Double-entry ledger', 'table|Trial balance', 'trend|Profit and loss', 'table|Balance sheet', 'smartsuite|Cash flow', 'check|Bank reconciliation', 'card|Cheque (PDC) register', 'box|Fixed assets', 'target|Budgets', 'layers|Cost centres']],
-  ['bank', 'Import and trade finance', ['doc|LCs', 'bank|Import loans', 'truck|Landed cost', 'globe|Foreign-currency payments']],
-  ['smartsuite', 'Reports', ['table|Report centre', 'vat|Statutory layouts', 'sliders|Pivot report builder']],
+const PILLARS = [
+  ['Intelligent', 'Knows every open item and tells you what to do next.'],
+  ['Plans your business in advance', 'Forecast, MRP and project budgets drive purchase, production and spending.'],
+  ['Focused', 'Each person sees only what matters to their role.'],
+  ['Makes no mistakes', 'Guardrails warn before a wrong action: credit limit, low margin, near expiry, budget overrun.'],
 ];
-const REASONS = [
-  ['Books your auditor accepts', 'A voucher that does not balance cannot be saved.'],
-  ['Stock that adds up', 'Count your stock against the system whenever you want.'],
-  ['Nepal built in', 'Bikram Sambat, VAT, TDS and CBMS e-invoicing are part of the product.'],
+const MODS14 = ['check|Work Desk', 'pie|Dashboards', 'cart|Sales and Receivable', 'truck|Purchase and Payable', 'box|Store and Inventory', 'target|Material Planning', 'factory|Production', 'tools|Maintenance', 'route|Transport and Delivery', 'headset|Customer Services', 'calc|Finance and Accounts', 'warehouse|Fixed Assets', 'bank|Trade and Finance', 'vat|Tax and IRD'];
+const TV_FEATURES = [
+  ['check', 'My Work Desk', ['check|Tasks built from live transactions', 'bell|Reminders and escalation', 'lock|Warnings before a wrong action']],
+  ['pie', 'Executive Dashboard', ['eye|Live view of all branches', 'search|Every number drills to its voucher', 'target|Exceptions first']],
+  ['users', 'Role KPIs', ['user|A KPI for every person', 'table|A KPI library by department', 'trend|Scored from real transactions']],
+  ['doc', 'Single entry flows', ['doc|Quotation to receipt, nothing retyped', 'sync|Stock and ledgers update at save', 'mail|Invoice sent by email and WhatsApp']],
+  ['lock', 'Approval and rule engine', ['layers|Multi-level approvals', 'bell|Reminders and auto-escalation', 'shield|Approval PIN and multi-factor login']],
+  ['factory', 'MRP workbench', ['trend|Forecast and confirmed orders', 'box|Net of stock and open orders', 'doc|Purchase requests and work orders']],
+  ['calc', 'Planned vs actual costing', ['factory|Batch costing against standard', 'truck|Landed cost on imports', 'trend|Variance and yield, the same day']],
+  ['vat', 'IRD connected', ['vat|VAT on every line and document', 'doc|Annex 9 and 13 reports', 'cal|Bikram Sambat and AD dates', 'lock|Issued bills locked']],
 ];
-const cdPos = (a, r) => [400 + r * Math.cos(a * Math.PI / 180), 320 + r * Math.sin(a * Math.PI / 180)];
-const coreDiagram = () => {
-  const mods = [['Sales', 'cart'], ['Purchase', 'truck'], ['Stock', 'box'], ['Accounts', 'calc'], ['Trade finance', 'bank'], ['Reports', 'smartsuite']].map(([n, i], k) => [n, i, ...cdPos(-90 + 60 * k, 215)]);
-  const packs = [['Alanza', 'gem', 0, 1], ['Paint', 'roller', 120, 0], ['Trading', 'truck', 240, 0]].map(([n, i, a, np]) => [n, i, ...cdPos(a, 320), np]);
-  const pc = v => (v / 8).toFixed(2) + '%', pv = v => (v / 6.4).toFixed(2) + '%';
-  return `<div class="cdg dg" role="img" aria-label="Tivora ERP at the centre, with six modules around it: Sales, Purchase, Stock, Accounts, Trade finance and Reports, and three trade packs: Alanza, Paint and Trading.">
-      <svg viewBox="0 0 800 640" aria-hidden="true" focusable="false">
-        ${mods.map(([, , x, y], k) => `<line class="ln" pathLength="1" style="--k:${k}" x1="400" y1="320" x2="${x.toFixed(1)}" y2="${y.toFixed(1)}"/>`).join('')}
-        ${packs.map(([, , x, y], k) => `<line class="ln ln-p" pathLength="1" style="--k:${k + 8}" x1="400" y1="320" x2="${x.toFixed(1)}" y2="${y.toFixed(1)}"/>`).join('')}
-      </svg>
-      <span class="nd nd-core" style="left:50.00%;top:50.00%">${ico('tivora', 's48 dk')}<b>Tivora ERP</b></span>
-      ${mods.map(([n, i, x, y], k) => `<span class="nd nd-m" style="left:${pc(x)};top:${pv(y)};--k:${k + 2}">${ico(i, 's32')}<b>${n}</b></span>`).join('')}
-      ${packs.map(([n, i, x, y, np], k) => `${np ? '' : NP}<span class="nd nd-p" style="left:${pc(x)};top:${pv(y)};--k:${k + 8}">${ico(i, 's32')}<b>${n}</b></span>`).join('')}
-    </div>`;
-};
-const tivoraPage = () => `${phero({ dark: true, eyebrow: 'Tivora ERP', h1: 'One platform. Every business.', lede: 'Billing, buying, stock, workshop and books in one system, made in Nepal for Nepal.', ctas: btn('contact.html#demo', 'See it on your own numbers') + btn('#modules', 'Explore the features', 'btn-line-w'), extra: `\n  <div class="wrap hero-media">${laptop(video(), 'lp-xl')}</div>` })}
+const tivoraPage = () => `${phero({ dark: true, eyebrow: 'Tivora ERP', h1: 'The ERP that tells you what comes next.', lede: 'Intelligent and focused, on one database. It plans ahead and makes no mistakes.', ctas: btn('contact.html#demo', 'See it on your own numbers') + btn('#modules', 'Explore the features', 'btn-line-w'), extra: `\n  <div class="wrap hero-media">${laptop(video(), 'lp-xl')}</div>` })}
 <section class="sec" id="what">
   <div class="wrap">
-    ${head2('The platform', 'One core, six modules, every trade.', 'Every Tivora product shares one accounting core and one stock engine.')}
-    ${coreDiagram()}
-    <div class="cards3 stag">${REASONS.map(([h, p], i) => `<div class="card"><span class="num">0${i + 1}</span><h3>${h}</h3><p>${p}</p></div>`).join('')}</div>
+    ${head2('The platform', 'What sets Tivora apart.', 'One system that knows your business, guides your people and measures the result.')}
+    <div class="cards4 stag">${PILLARS.map(([h, p], i) => `<div class="card"><span class="num">0${i + 1}</span><h3>${h}</h3><p>${p}</p></div>`).join('')}</div>
+    <h3 class="gh">One database for every module.</h3>
+    ${chips(MODS14, 'tv14')}
   </div>
 </section>
 <section class="sec sec-paper" id="modules">
   <div class="wrap">
-    ${head2('Features', 'Sales, purchase, stock and accounts.', 'A sale at the counter updates the stock and the ledger at once.')}
-    <div class="mods stag">${MODULES.map(([i, n, c]) => `<div class="mod">${ico(i, 's48')}<h3>${n}</h3>${chips(c)}</div>`).join('')}</div>
+    ${head2('Features', 'Built to run the day.', 'Every entry updates stock, ledgers, dashboards and KPIs the moment it is saved.')}
+    <div class="mods stag">${TV_FEATURES.map(([i, n, c]) => `<div class="mod">${ico(i, 's48')}<h3>${n}</h3>${chips(c)}</div>`).join('')}</div>
   </div>
 </section>
 <section class="sec" id="screens">
@@ -754,10 +831,10 @@ const tivoraPage = () => `${phero({ dark: true, eyebrow: 'Tivora ERP', h1: 'One 
   </div>
 </section>
 ${nepalStrip('Bikram Sambat dates, fiscal-year numbers, VAT, TDS and CBMS.', true)}
-<section class="sec sec-navy has-bg" data-tone="navy" id="trades">${bgl('paint', { mode: 'dk', pos: '50% 50%' })}
+<section class="sec sec-navy has-bg" data-tone="navy" id="trades">${bgl('jewelry', { mode: 'dk', pos: '50% 50%' })}
   <div class="wrap">
-    ${head2('Trade packs', 'One platform, one trade at a time.')}
-    ${PACKS}
+    ${head2('Industry solutions', 'Customised for your industry.', 'Start from a complete platform, add your industry solution, then customise it.')}
+    ${PACKS()}
   </div>
 </section>
 ${demo()}`;
@@ -765,7 +842,7 @@ ${demo()}`;
 /* ---------- PRODUCTS (directory + by trade) ---------- */
 const tradeDetail = ([id, name, ic, prods, pts, links]) => {
   const has = prods.some(p => TBY[p] || p === 'tivora');
-  return `<details class="trade" id="trade-${id}"><summary>${ico(ic, 's48')}<b>${name}${id === 'paint' ? NP : ''}</b><span class="ics" aria-hidden="true">${tradeIcs(prods)}</span><span class="pm" aria-hidden="true"></span></summary>
+  return `<details class="trade" name="trades" id="trade-${id}"><summary>${ico(ic, 's48')}<b>${name}${id === 'paint' ? NP : ''}</b><span class="ics" aria-hidden="true">${tradeIcs(prods)}</span><span class="pm" aria-hidden="true"></span></summary>
         <div class="tb">${chips(pts)}<div class="btns">${links.map(([n, h, x]) => `<a class="btn btn-sm btn-line" href="${h}"${x ? ` ${XA}` : ''}>${n}${x ? EXTI + SRNEW : ''}</a>`).join('')}${has ? `<button class="btn btn-sm" type="button" data-trade="${id}" data-label="${name}">Show products</button>` : ''}</div></div></details>`;
 };
 const EZEE_CARDS = [['hospitality', 'FrontDesk', 'Hotel management system'], ['chef', 'BurrP!', 'Restaurant software'], ['globe', 'Absolute', 'Hotel booking software'], ['cal', 'Reservation', 'Booking engine'], ['link', 'Centrix', 'Channel manager'], ['book', 'iMenu', 'Restaurant menu software'], ['star', 'iFeedback', 'Feedback system']];
@@ -775,7 +852,7 @@ const ezeeSection = () => `<section class="sec" id="ezee">
       <div class="ez-h">
         <div class="ez-t">
           <p class="eyebrow">Authorized dealer</p>
-          <h2>eZee hospitality software.</h2>
+          <h2>eZee hotel management software.</h2>
           <p class="lede">HiTech is the authorized dealer of eZee in Nepal.</p>
           <div class="btns"><a class="btn" href="contact.html?interest=eZee%20hospitality%20software#demo" data-interest="eZee hospitality software">Ask about eZee</a></div>
         </div>
@@ -786,10 +863,9 @@ const ezeeSection = () => `<section class="sec" id="ezee">
   </div>
 </section>`;
 const productsPage = () => `${phero({ bg: HB.products, eyebrow: 'HiTech products', h1: 'Software for how your business runs.', lede: 'Accounting, retail, restaurants, healthcare and field sales from one Nepali vendor.', ctas: btn('contact.html#demo', 'Request a demo') + btn('#trades', 'Find yours by trade', 'btn-line') })}
-<section class="sec" style="padding-top:0" id="directory">
+<section class="sec" id="directory">
   <div class="wrap">
-    ${bento('p', true)}
-    <p class="more">${btn('#ezee', 'eZee (authorized dealer)', 'btn-line')}</p>
+    ${bento('p', true, btn('#ezee', 'eZee (authorized dealer)', 'btn-line btn-sm'))}
   </div>
 </section>
 ${ezeeSection()}
@@ -801,6 +877,7 @@ ${ezeeSection()}
 </section>
 ${demo({ white: true })}`;
 
+const P_H1 = { swastik: 'Swastik accounting software', myswastikonline: 'mySwastikonline cloud accounting', pos: 'Swastik POS software', restaurant: 'Swastik Restaurant POS', pharmasoft: 'Pharmasoft pharmaceutical software', avocare: 'Avocare hospital management software', bizant: 'Bizant field sales app' };
 const productPage = p => {
   const rel = p.related.map(id => TBY[id]);
   const plate = `<div class="plate plate-w">${logo(p.id, `${p.name} logo`, false)}</div>`;
@@ -809,7 +886,7 @@ const productPage = p => {
   <div class="wrap hp-grid">
     <div>
       <p class="eyebrow">${p.cat}</p>
-      <h1>${p.name}</h1>
+      <h1>${P_H1[p.id]}</h1>
       <p class="tagline">${p.tag}</p>
       <p class="lede">${p.desc}</p>
       <div class="btns">${p.badge ? `<span class="badge badge-dk">${p.badge}</span>` : ''}${IRD('ird-dk')}${btn('contact.html#demo', 'Request a demo')}</div>
@@ -847,14 +924,38 @@ const SOLS = [
   ['custom', 'code', 'Customized software', 'Contract projects and collaborative development for internet and client-server applications.', ['layers|Information systems', 'link|Client-server technologies', 'db|Database design and administration', 'pie|Data modeling and visualization', 'globe|Internet technologies', 'table|Online and offline reporting', 'check|Integration and testing', 'shield|Network security', 'code|ASP', 'code|VB', 'code|Java', 'code|C and C++', 'code|Windows applications', 'award|MCSD', 'award|MCSE', 'award|MCP', 'award|OCP'], ''],
   ['ecommerce', 'cartplus', 'E-commerce', 'B2B and B2C online stores built to your requirements and budget.', ['cart|B2B stores', 'cart|B2C stores', 'sliders|Built to requirements', 'calc|Within your budget'], ''],
 ];
+const banner = (src, pos = '50% 50%') => `<div class="pband" aria-hidden="true">${bgl(src, { mode: 'pb', pos })}</div>`;
+const PHONE_TILES = [['cart', 'Sales'], ['card', 'Collection'], ['clock', 'Outstanding'], ['box', 'Stock']];
+const phone = () => `<div class="phone" aria-hidden="true"><i class="ph-notch"></i><div class="ph-screen"><div class="ph-top">${logo('bizant')}</div><div class="ph-grid">${PHONE_TILES.map(([i, l]) => `<span>${ico(i, 's32')}<b>${l}</b></span>`).join('')}</div><div class="ph-bar"><i></i><i></i><i></i></div></div></div>`;
+const APPS = [
+  ['eye', 'Owner app', 'Bizant', 'Key reports on one screen. Authorise vouchers from your phone.'],
+  ['route', 'Sales app', 'Bizant', 'Take orders, record collections and check in with GPS.'],
+  ['cart', 'Customer app', 'Bizant', 'Order from your phone and see your outstanding.'],
+  ['tivora', 'Work Desk', 'Tivora ERP', 'Approve and finish tasks wherever you are.'],
+];
+const mobileApps = () => `<section class="sec sec-paper" id="mobile-apps">
+  <div class="wrap">
+    ${head2('Mobile apps', 'Run your business from your phone.', 'Owner, sales and customer apps from Bizant, and the Tivora ERP Work Desk.')}
+    <div class="apps">
+      <div class="phone-wrap rv">${phone()}</div>
+      <div class="app-cards stag">${APPS.map(([i, t, by, d]) => `<div class="app">${ico(i, 's48')}<p class="t-cat">${by}</p><h3>${t}</h3><p>${d}</p></div>`).join('')}</div>
+    </div>
+    <div class="btns">${xbtn(PBY.bizant.store, 'Get Bizant on Google Play')}<a class="btn btn-line" href="contact.html?interest=Mobile%20apps#demo" data-interest="Mobile apps">Request a demo</a></div>
+    <p class="fine">mySwastikonline runs in the browser, on any device.</p>
+  </div>
+</section>`;
+const SOL_NAV = SOL_MENU.map(([id, l]) => [id, l]);
 const solutionsPage = () => `${phero({ bg: HB.solutions, eyebrow: 'Solutions', h1: 'Software, built your way.', lede: 'HiTech builds, customises and integrates software for businesses of every kind.', ctas: btn('contact.html#demo', 'Talk to HiTech') })}
+<nav class="subnav" aria-label="On this page"><div class="wrap"><ul>${SOL_NAV.map(([id, l]) => `<li><a href="#${id}">${l}</a></li>`).join('')}</ul></div></nav>
 ${processSection()}
+${banner('cafe-tablet', '50% 50%')}
 ${SOLS.map(([id, ic, t, l, c, b], i) => `<section class="sec${i % 2 ? '' : ' sec-paper'}" id="${id}">
   <div class="wrap sol-b">
     <div class="rv">${ico(ic, 's64')}<h2>${t}</h2><p class="lede">${l}</p>${b ? `<div class="btns">${b}</div>` : ''}</div>
     <div class="rv">${chips(c)}</div>
   </div>
 </section>`).join('\n')}
+${mobileApps()}
 ${demo({ e: 'Talk to HiTech', h: 'Got a new challenge for us?', l: 'Let\'s work together and create the next big thing.' })}`;
 
 const servicesRedirect = () => `<!doctype html>
@@ -862,13 +963,18 @@ const servicesRedirect = () => `<!doctype html>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Moved to Solutions | HiTech Solutions and Services</title>
+<title>${SEO['services.html'][0]}</title>
+<meta name="description" content="${SEO['services.html'][1]}">
 <meta name="robots" content="noindex">
+<meta name="geo.region" content="NP">
+<meta property="og:locale" content="en_NP">
+<meta property="og:title" content="${SEO['services.html'][0]}">
+<meta property="og:description" content="${SEO['services.html'][1]}">
 <meta http-equiv="refresh" content="0; url=solutions.html">
 <link rel="canonical" href="${SITE_URL}/solutions.html">
 </head>
 <body>
-<p>This page has moved to <a href="solutions.html">Solutions</a>.</p>
+<h1>This page has moved to <a href="solutions.html">Solutions</a>.</h1>
 </body>
 </html>
 `;
@@ -879,70 +985,114 @@ const CA_CHIPS2 = ['layers|Multiple companies', 'layers|Merged reporting', 'lock
 const EDITIONS = [['swastik', 'Swastik'], ['gem', 'Swastik Gold'], ['pin', 'Swastik Nepal'], ['truck', 'Swastik Automobile'], ['layers', 'Swastik Textiles'], ['box', 'Swastik Wovensacks'], ['factory', 'Swastik Manufacturing'], ['box', 'Swastik Dairy'], ['tools', 'Swastik Service'], ['pharmasoft', 'Pharmasoft']];
 const BENEFITS = [['target', 'Exclusive opportunity registration'], ['award', 'Partner recognition'], ['grad', 'Technical training'], ['headset', 'Technical support'], ['gift', 'Sales incentives'], ['star', 'Sales rewards'], ['link', 'Technical collaboration']];
 const RESP = ['doc|Sign an MOU with HiTech', 'star|Recommend HiTech products', 'grad|Keep your team trained', 'users|Share prospects with HiTech early', 'sync|Share HiTech product updates'];
-const VALUES = [['check', 'Simplicity', 'Clear paths to profitability.'], ['layers', 'Choice', 'Extend services across our portfolio.'], ['target', 'Innovation', 'New ways to grow your business.']];
-const NETWORK = [['HiTech Solution', 'Itahari / Biratnagar'], ['HiTech Solutions & Services', 'Birgunj'], ['CSE Enterprises', 'Butwal'], ['HiTech Solutions & Services', 'Bhairahawa'], ['Kaas Business Solutions and Services Pvt. Ltd.', 'Pokhara'], ['Swastik Solutions & Service Center', 'Nepalgunj'], ['Amar & Company', 'Janakpur'], ['CSE Trade Link', 'Narayanghat'], ['Family Computer', 'Siraha'], ['Rahul Sahewal', 'Jhapa'], ['Creative Concern', 'Mahendranagar'], ['Global Trading & Suppliers', 'Dang']];
-const pnode = (i, l, k) => `<span class="pn2" style="--i:${k}">${ico(i, 's32')}<b>${l}</b></span>`;
+const PARTNER_HREF = 'partners.html#become-a-partner';
+const PTYPES = ['Reseller', 'Distributor', 'Contractor'];
+const partnerForm = () => `<section class="sec sec-paper" id="become-a-partner">
+  <div class="wrap demo-grid">
+    <div class="rv">
+      <p class="eyebrow">Partner application</p>
+      <h2>Become a partner.</h2>
+      <p class="lede">Tell us about your business and the partnership you want.</p>
+      <form class="form" data-lead data-source="partner">
+        <div class="fld"><label for="pa-name">Full name</label><input id="pa-name" name="name" type="text" autocomplete="name" required></div>
+        <div class="fld"><label for="pa-co">Business or company name</label><input id="pa-co" name="company" type="text" autocomplete="organization" required></div>
+        <div class="fld"><label for="pa-phone">Phone</label><input id="pa-phone" name="mobile" type="tel" autocomplete="tel" required></div>
+        <div class="fld"><label for="pa-email">Email (optional)</label><input id="pa-email" name="email" type="email" autocomplete="email"></div>
+        <div class="fld"><label for="pa-city">City</label><input id="pa-city" name="city" type="text" autocomplete="address-level2" required></div>
+        <fieldset class="fld rads"><legend>Type of partnership</legend><div>${PTYPES.map((t, i) => `<label class="rad"><input type="radio" name="partnerType" value="${t}"${i === 0 ? ' required' : ''}><span>${t}</span></label>`).join('')}</div></fieldset>
+        <div class="fld full"><label for="pa-biz">Your current line of business</label><input id="pa-biz" name="business" type="text" required></div>
+        <div class="fld full"><label for="pa-msg">Message (optional)</label><textarea id="pa-msg" name="message" rows="3"></textarea></div>
+        <input type="hidden" name="inquiry" value="Partner application">
+        ${HPOT}
+        <div class="fld full">${WA_BTN}</div>
+        <p class="form-note full">${WA_NOTE}</p>
+        <p class="form-ok full" role="status" hidden></p>
+      </form>
+    </div>
+    <aside class="rv ppitch" data-tone="navy">${ico("lock", "s48")}<h3>Partner terms are shared after a conversation.</h3><p>HiTech contacts you after you apply, and we talk on WhatsApp or phone.</p></aside>
+  </div>
+</section>`;
+const PT = [['Reseller', 'Apply as a reseller of HiTech products.', 'Apply as a reseller'], ['Distributor', 'Apply as a distributor of HiTech products.', 'Apply as a distributor'], ['Contractor', 'Apply as a contractor with HiTech.', 'Apply as a contractor']];
+const PBEN = ['Exclusive opportunity registration', 'Technical training', 'Technical support', 'Sales incentives'];
+const PSTATS = [[28, '+', 'Years'], [10000, '+', 'Clients'], [NBR, '', 'Branches'], [100, '+', 'Team members'], [PARTNER_PINS.length, '', 'Partner cities']];
+const PSTEPS = [['doc', 'Fill the application', 'Type, business and contact.'], ['headset', 'HiTech contacts you', ''], ['phone', 'Discussion on WhatsApp or phone', '']];
+const ptabs = () => `<div class="ptabs" data-ptabs>
+        <div class="pt-list" role="tablist" aria-label="Type of partnership">${PT.map(([t], i) => `<button type="button" role="tab" id="pt-t${i}" aria-controls="pt-p${i}" aria-selected="${i === 0}" tabindex="${i === 0 ? 0 : -1}">${t}</button>`).join('')}<i class="pt-ind" aria-hidden="true"></i></div>
+        ${PT.map(([t, s, b], i) => `<div class="pt-panel" role="tabpanel" id="pt-p${i}" aria-labelledby="pt-t${i}"><p class="pt-h">${t}</p><p class="pt-s">${s}</p><a class="btn" href="${PARTNER_HREF}" data-ptype="${t}">${b}</a></div>`).join('')}
+      </div>`;
+const pflow = () => `<div class="pflow dg wrap">
+    <div class="pf-row">
+      <div class="pf-n pf-you" style="--k:0">${ico('users', 's48')}<span><b>You</b><small data-pf-label>Reseller, Distributor or Contractor</small></span></div><i class="pf-l" aria-hidden="true"></i>
+      <div class="pf-n" style="--k:1"><span class="pf-lg"><img src="${IMG}icon.png" alt="" width="234" height="226"></span><span><b>HiTech products</b></span></div><i class="pf-l" aria-hidden="true"></i>
+      <div class="pf-n" style="--k:2">${ico('store', 's48')}<span><b>Customers across Nepal</b></span></div>
+    </div>
+    <ul class="pf-cities" aria-label="Partner cities">${PARTNER_PINS.map((k, i) => `<li style="--k:${i + 3}">${MAP.pins[k].name}</li>`).join('')}</ul>
+  </div>`;
 const partnersPage = () => `<header class="phero phero-dk has-bg" data-tone="navy">${bgl(HB.partners.src, { mode: 'dl', pos: HB.partners.pos, hero: true })}
   <div class="wrap hp-grid">
     <div>
       <p class="eyebrow">Partners</p>
       <h1>Let's connect and grow together.</h1>
-      <p class="lede">For chartered accountants, auditors and resellers who work with Nepali businesses every day.</p>
-      <div class="btns">${btn('#ca', 'For CAs and auditors')}${btn('#partner', 'Become a partner', 'btn-line-w')}</div>
+      <p class="lede">For chartered accountants, auditors, resellers and distributors who work with Nepali businesses every day.</p>
+      <div class="btns">${btn('#ca', 'For CAs and auditors')}${btn(PARTNER_HREF, 'Become a partner', 'btn-line-w')}</div>
     </div>
-    <div class="pstage" role="img" aria-label="HiTech at the centre, with CAs, Auditors and Resellers around it">
-      <i class="ring" aria-hidden="true"></i>
-      <span class="pcore"><img src="${IMG}icon.png" alt="" width="234" height="226"></span>
-      <div class="porbit">${pnode('calc', 'CAs', 0)}${pnode('clip', 'Auditors', 1)}${pnode('handshake', 'Resellers', 2)}</div>
-    </div>
+    ${ptabs()}
   </div>
+  ${pflow()}
 </header>
-<section class="sec has-bg" id="ca">${bgl('ca-desk', { mode: 'lwb', band: 480, pos: '50% 50%', flip: true })}
+<section class="sec" id="partner">
   <div class="wrap">
-    ${head2('For CAs and auditors', 'Built for the people who check the books.', 'These are Swastik features, and Swastik is IRD certified.')}
-    <h3 class="gh">For auditors and IRD</h3>${chips(CA_CHIPS)}
-    <h3 class="gh">Books and audit</h3>${chips(CA_CHIPS2)}
-    <h3 class="gh">Editions of Swastik for different industries.</h3>
-    <ul class="ichips ed stag">${EDITIONS.map(([i, l]) => `<li class="ic">${ico(i, 's40')}<span class="l">${l}</span></li>`).join('')}</ul>
-    <p class="more">${btn('partners.html?inquiry=CA%20%2F%20audit%20firm&interest=Swastik#form', 'Book a CA walkthrough')}</p>
-  </div>
-</section>
-<section class="sec sec-paper has-bg" id="partner">${bgl('handshake', { mode: 'lwp', band: 600, pos: '50% 50%' })}
-  <div class="wrap">
-    ${head2('Partner program', 'Partner Connect.', 'Resell HiTech software with training, support and rewards behind you.')}
-    <div class="tiers dg" aria-label="Customer, then Channel partner, then Priority partner">
-      <div class="tier t1" style="--k:0">${ico('users', 's48')}<b>Customer</b></div><i class="tarr" aria-hidden="true">${ARROW}</i>
-      <div class="tier t2" style="--k:1">${ico('network', 's48')}<b>Channel partner</b></div><i class="tarr" aria-hidden="true">${ARROW}</i>
-      <div class="tier t3" style="--k:2">${ico('award', 's48 dk')}<b>Priority partner</b></div>
-    </div>
+    ${head2('Partner Connect', 'Why partner with HiTech.', 'Resell HiTech software with training, support and rewards behind you.')}
     <h3 class="gh">Priority partner benefits</h3>
-    <div class="icards sm stag">${BENEFITS.map(([i, l]) => `<div class="icard">${ico(i, 's48')}<h3>${l}</h3></div>`).join('')}</div>
-    <h3 class="gh">Partner responsibilities</h3>${chips(RESP)}
-    <div class="values stag">${VALUES.map(([i, t, l]) => `<div>${ico(i, 's40')}<h3>${t}</h3><p>${l}</p></div>`).join('')}</div>
-    <!-- COMMERCIAL TERMS WITHHELD: confirm with management before publishing -->
-    <p class="terms">${ico('lock', 's32')}<span>Partner terms are shared after a conversation.</span></p>
-    <p class="more">${btn('#form', 'Become a partner')}</p>
+    <div class="icards sm stag">${PBEN.map(l => { const [i] = BENEFITS.find(b => b[1] === l); return `<div class="icard">${ico(i, 's48')}<h3>${l}</h3></div>`; }).join('')}</div>
   </div>
 </section>
-<section class="sec" id="network">
+<section class="sec sec-navy pst-band" data-tone="navy" aria-label="HiTech at a glance">
+  <div class="wrap"><dl class="pst stag">${PSTATS.map(([n, s, l]) => `<div><dd data-count="${n}"${s ? ` data-suffix="${s}"` : ''}>${n.toLocaleString('en-US')}${s}</dd><dt>${l}</dt></div>`).join('')}</dl></div>
+</section>
+<section class="sec sec-paper">
   <div class="wrap">
-    <div class="sec-head"><div><p class="eyebrow">Channel partners</p><h2>Partners across Nepal.</h2></div><p class="lede"><span class="bignum">12</span> partners</p></div>
-    <!-- PARTNER NAMES: confirm each partner agrees to be listed publicly -->
-    ${nepalMap(NETWORK.map(([n, c], i) => [PARTNER_PINS[i], n, c]), 'nm-p')}
+    ${head2('Partner responsibilities', 'What you bring.')}
+    ${chips(RESP, 'stag')}
   </div>
 </section>
-${demo({ e: 'Partner inquiry', h: 'Start a conversation.', l: 'Tell us who you are and how you work with Nepali businesses.', inq: 'Channel partner query', id: 'form', white: true })}`;
+<section class="sec" id="ca">
+  <div class="wrap">
+    ${head2('For CAs and auditors', 'Products you will offer.')}
+    <ul class="plogos stag">${PRODUCTS.map(p => `<li><a href="${phref(p)}">${logo(p.id)}<b>${p.name}</b></a></li>`).join('')}</ul>
+    <h3 class="gh">Built for the people who check the books.</h3>
+    <p class="gl">These are Swastik features, and Swastik is IRD certified.</p>
+    ${chips(CA_CHIPS, 'stag')}
+  </div>
+</section>
+<section class="sec sec-paper" id="network">
+  <div class="wrap">
+    <div class="sec-head"><div><p class="eyebrow">Channel partners</p><h2>Partners across 12 cities.</h2></div><p class="lede"><span class="bignum">12</span> cities</p></div>
+    ${nepalMap(PARTNER_PINS.map(k => [k, MAP.pins[k].name]), 'nm-p')}
+  </div>
+</section>
+<section class="sec" id="how-to-apply">
+  <div class="wrap">
+    ${head2('How to apply', 'Three simple steps.')}
+    <ol class="psteps dg">${PSTEPS.map(([i, t, s], k) => `<li class="ps" style="--k:${k}">${ico(i, 's48')}<small>Step ${k + 1}</small><h3>${t}</h3>${s ? `<p>${s}</p>` : ''}</li>`).join('')}</ol>
+  </div>
+</section>
+${partnerForm()}
+<section class="sec">
+  <div class="wrap"><div class="pcta" data-tone="navy"><h2>Talk to HiTech on WhatsApp.</h2><a class="btn btn-wh" href="${WA_URL}" ${XA}>Chat on WhatsApp${SRNEW}</a></div></div>
+</section>`;
 
 /* ---------- ABOUT ---------- */
-const aboutPage = () => `${phero({ bg: HB.about, eyebrow: 'About HiTech', h1: 'Accounting software since 1998.', lede: 'HiTech serves small businesses, chartered accountants, retailers, corporates, stores, restaurants and cafes across Nepal.', ctas: btn('contact.html#demo', 'Request a demo') })}
+const aboutPage = () => `${phero({ bg: HB.about, eyebrow: 'About HiTech', h1: 'Managing business in Nepal since 1998.', lede: 'HiTech serves small businesses, chartered accountants, retailers, corporates, stores, restaurants and cafes across Nepal.', ctas: btn('contact.html#demo', 'Request a demo') })}
 <section class="sec sec-navy" data-tone="navy" aria-label="HiTech at a glance" style="padding-block:clamp(48px,6vw,80px)">
   <div class="wrap stats stag">
     <div><b data-count="10000" data-suffix="+">10,000+</b><span>Clients</span></div>
-    <div><b data-count="25" data-suffix="+">25+</b><span>Years</span></div>
+    <div><b data-count="28" data-suffix="+">28+</b><span>Years</span></div>
     <div><b data-count="100" data-suffix="+">100+</b><span>Professionals</span></div>
-    <div><b data-count="15" data-suffix="+">15+</b><span>Branches</span></div>
+    <div><b data-count="${NBR}">${NBR}</b><span>Branches</span></div>
   </div>
 </section>
+${banner('kathmandu-street', '50% 58%')}
 <section class="sec" id="who">
   <div class="wrap">
     ${head2('Our aims', 'What we aim for.', 'Qualified software and hardware professionals, working from Kalimati, Kathmandu.')}
@@ -965,7 +1115,6 @@ const aboutPage = () => `${phero({ bg: HB.about, eyebrow: 'About HiTech', h1: 'A
 ${demo()}`;
 
 /* ---------- SUPPORT ---------- */
-const BRANCHES = [['Kathmandu', '01-5389641, 01-5389642, 01-5389643, 01-5389644'], ['Pokhara', '9856020194, 9801164616'], ['Biratnagar', '9852047215'], ['Dang', '9868610761'], ['Surkhet', '9858051773'], ['Narayanghat', '9855059386'], ['Janakpur', '9854020932'], ['Birgunj', '9855021911'], ['Bhairahawa', '9857024092'], ['Butwal', '9867760479'], ['Mahottari', '9814861926'], ['Nepalgunj', '9858048230'], ['Lahan', '9852830977']];
 const supportPage = () => `${phero({ bg: HB.support, eyebrow: 'Support', h1: 'Help from a team that works in Nepal.', lede: 'Reach support by phone or email, or ask for a remote session.', ctas: btn('contact.html#demo', 'Request a call') })}
 <section class="sec" id="ways">
   <div class="wrap">
@@ -978,29 +1127,32 @@ const supportPage = () => `${phero({ bg: HB.support, eyebrow: 'Support', h1: 'He
   </div>
 </section>
 ${coverageSection()}
-<section class="sec" id="branches">
-  <div class="wrap">
-    <details class="trade btab"><summary>${ico('phone', 's48')}<b>Branch phone numbers</b><span class="pm" aria-hidden="true"></span></summary>
-      <div class="tb"><div class="btable"><table><thead><tr><th scope="col">Branch</th><th scope="col">Phone</th></tr></thead><tbody>${BRANCHES.map(([b, p]) => `<tr><th scope="row">${b}</th><td>${p}</td></tr>`).join('')}</tbody></table></div></div></details>
-  </div>
-</section>
 ${demo({ e: 'Request a call', h: 'Tell us what you need.', l: 'Choose Request a call or Training demo and the right team will reply.' })}`;
 
 /* ---------- CAREERS ---------- */
-const ROLES = [
-  ['Team Leader, .NET C# project', '2 placements, full time', ['.NET C#', 'Web services', 'SQL Server T-SQL', 'Leads 10+ programmers', 'Bachelor\'s degree', '2+ years as team leader', '.NET Framework 4.0', 'Strong English', 'Banking experience preferred']],
-  ['Senior .NET C# Engineer', '4 placements, full time', ['.NET C#', 'Web services', 'SQL Server T-SQL', 'Bachelor\'s degree', '.NET Framework 4.0', 'Strong English']],
-  ['System Support Officer', '4 placements, full time', ['Documentation', 'Troubleshooting', 'System upgrades', 'Database maintenance', 'Financial accounting', '+2 qualification', '1+ year of experience']],
-  ['Technical Writer', '1 placement, full time', ['User manuals', 'Help files', 'Requirement documents', 'Data flow diagrams', 'Website content', 'Written English', '1+ year of experience']],
+/* one entry per open position: add a line here and the list and the chooser both pick it up */
+const POSITIONS = [
+  ['Technical Product Engineer', 'https://recruit.tradeila.com/jobs/Careers/204337000001066014/Technical-Product-Engineer?source=CareerSite'],
+  ['Full Stack Developer', 'https://recruit.tradeila.com/jobs/Careers/204337000001017280/Full-Stack-Developer?source=CareerSite'],
 ];
-const careersPage = () => `${phero({ bg: HB.careers, eyebrow: 'Careers', h1: 'Build business software in Nepal.', lede: 'Send your CV to career@hitechnepal.com.np.', ctas: btn('mailto:career@hitechnepal.com.np', 'Apply by email') })}
-<section class="sec" id="roles">
+const cvChooser = () => `<div class="lead-pop cv-pop" id="cvPop" role="dialog" aria-modal="true" aria-labelledby="cv-h" hidden>
+  <div class="lp-ov" data-cv-close></div>
+  <div class="lp-card cv-card" tabindex="-1">
+    <button class="lp-x" type="button" aria-label="Close" data-cv-close><svg viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path d="M4 4l12 12M16 4L4 16"/></svg></button>
+    <h2 id="cv-h">Which position are you applying for?</h2>
+    <ul class="cv-list">${POSITIONS.map(([t, u]) => `<li><a class="cv-opt" href="${u}" ${XA}><b>${t}</b><span>Open the application form${EXTI}${SRNEW}</span></a></li>`).join('')}</ul>
+  </div>
+</div>`;
+const careersPage = () => `${phero({ bg: HB.careers, eyebrow: 'Careers', h1: 'Build business software in Nepal.', lede: 'See our open positions and apply online.', ctas: btn('#positions', 'Send your CV').replace('<a ', '<a data-cv ') })}
+${banner('devspace', '50% 45%')}
+<section class="sec" id="positions">
   <div class="wrap">
     ${head2('Open positions', 'Roles at HiTech.')}
-    <div class="cards2 stag">${ROLES.map(([t, m, tags]) => `<div class="card"><h3>${t}</h3><p class="meta">${m}</p><ul class="tags">${tags.map(x => `<li>${x}</li>`).join('')}</ul></div>`).join('')}</div>
-    <p class="more">${btn('mailto:career@hitechnepal.com.np', 'Send your CV')}</p>
+    <ul class="pos-list stag">${POSITIONS.map(([t, u]) => `<li><h3>${t}</h3>${xbtn(u, 'Apply', 'btn-sm')}</li>`).join('')}</ul>
+    <p class="more">${btn('#positions', 'Send your CV').replace('<a ', '<a data-cv ')}</p>
   </div>
-</section>`;
+</section>
+${cvChooser()}`;
 
 /* ---------- CONTACT / 404 ---------- */
 const contactPage = () => `${phero({ bg: HB.contact, eyebrow: 'Contact', h1: 'Talk to HiTech.', lede: 'Ask for a demo, a quote or a call back.' })}
@@ -1008,23 +1160,60 @@ ${demo({ e: 'Contact HiTech', h: 'Tell us about your business.', l: 'Or tell us 
 const p404 = () => `${phero({ eyebrow: 'Page not found', h1: 'That page is not here.', lede: 'These pages will get you back on track.', ctas: btn('index.html', 'Go to the home page') + btn('contact.html', 'Contact us', 'btn-line') })}
 <section class="sec" style="padding-top:0"><div class="wrap"><ul class="wall">${[[TIVORA_URL, 'Tivora ERP', 1], ['products.html', 'Products'], ['solutions.html', 'Solutions'], ['partners.html', 'Partners'], ['about.html', 'About HiTech'], ['support.html', 'Support']].map(([h, t, x]) => `<li><a href="${h}"${x ? ` ${XA}` : ''}>${t}${x ? SRNEW : ''}</a></li>`).join('')}</ul></div></section>`;
 
+/* ---------- SEO: one title (max 60) and description (max 155) per page, checked below ---------- */
+const SEO = {
+  'index.html': ['Accounting Software Nepal | IRD Certified Billing | HiTech', 'Business software company in Kathmandu with 28+ years of experience: IRD certified accounting, VAT billing and ERP software for Nepal.'],
+  'tivora.html': ['Tivora ERP | ERP Software Nepal | HiTech', 'Tivora ERP tells you what comes next: one database, My Work Desk, Executive Dashboard and IRD connected billing.'],
+  'products.html': ['Business Software Nepal | Accounting, POS, ERP | HiTech', 'Accounting, inventory management, POS, restaurant, pharmaceutical and hospital software from HiTech, plus eZee hotel management software.'],
+  'product-swastik.html': ['Swastik Accounting Software Nepal | IRD Certified | HiTech', 'Swastik accounting software for Nepal: IRD certified VAT billing, inventory, Bikram Sambat (BS) dates and 500+ reports. By HiTech, Kathmandu.'],
+  'product-myswastikonline.html': ['Cloud Accounting Software Nepal | mySwastikonline | HiTech', 'mySwastikonline is IRD certified cloud accounting software for Nepal: invoicing, inventory and VAT reports from any device. By HiTech, Kathmandu.'],
+  'product-pos.html': ['POS Software Nepal | Swastik POS Billing | HiTech', 'Swastik POS is IRD certified POS software for Nepal: fast counter billing, barcode, VAT reports and accounting for departmental stores.'],
+  'product-restaurant.html': ['Restaurant POS Software Nepal | Swastik Restaurant | HiTech', 'Swastik Restaurant is touch-screen restaurant POS software for Nepal: live table status, kitchen display, takeaway and delivery, with accounting.'],
+  'product-pharmasoft.html': ['Pharmaceutical Software Nepal | Pharmasoft | HiTech', 'Pharmasoft is pharmaceutical management software for Nepal: batch and expiry, invoicing, inventory and accounting, in single-user and network versions.'],
+  'product-avocare.html': ['Hospital Management Software Nepal | Avocare | HiTech', 'Avocare is web-based hospital management software for Nepal: online registration, appointments, OP and IP, lab, blood bank and mobile apps.'],
+  'product-bizant.html': ['Bizant Field Sales App | Sales and Distribution | HiTech', 'Bizant is a mobile sales force automation app for Nepal: orders, collection and GPS check-in for field agents, plus owner and customer apps.'],
+  'solutions.html': ['Custom Software and Mobile Apps Nepal | HiTech Solutions', 'HiTech builds ERP, custom software, mobile apps and B2B and B2C e-commerce for businesses in Nepal, as contract or collaborative projects.'],
+  'partners.html': ['Reseller and Distributor Partner Program Nepal | HiTech', 'Become a HiTech reseller, distributor or contractor partner in Nepal, or use Swastik as a chartered accountant. Apply online.'],
+  'about.html': ['About HiTech | Managing Business in Nepal Since 1998', `HiTech, a business software company in Kathmandu, has served Nepal since 1998: 28+ years of experience, 100+ professionals and ${NBR} branches.`],
+  'support.html': ['Software Support Nepal | Phone, Remote, Branches | HiTech', 'Phone, email and remote support for HiTech software, with branch cities across Nepal. Call Kathmandu support or request a call back.'],
+  'careers.html': ['Software Jobs in Kathmandu | Careers at HiTech', 'Software jobs in Kathmandu: Technical Product Engineer and Full Stack Developer openings at HiTech. Choose a position and apply online.'],
+  'contact.html': ['Contact HiTech | Business Software Company in Kathmandu', 'Contact HiTech in Kalimati, Kathmandu for a demo, quote or call back. Office, sales and support numbers, email and WhatsApp.'],
+  '404.html': ['Page Not Found | HiTech Solutions and Services', 'This page could not be found. Go back to the HiTech home page or browse products, solutions, partners and support.'],
+  'services.html': ['Moved to Solutions | HiTech Solutions and Services', 'This page has moved to Solutions: ERP, custom software, mobile apps and e-commerce from HiTech.'],
+};
+{
+  const seen = new Set();
+  for (const [f, [t, d]] of Object.entries(SEO)) {
+    if (t.length > 60) throw new Error(`title too long (${t.length}) ${f}`);
+    if (d.length > 155) throw new Error(`description too long (${d.length}) ${f}`);
+    if (seen.has(t) || seen.has(d)) throw new Error('duplicate title or description ' + f);
+    seen.add(t); seen.add(d);
+  }
+}
+const OS = { swastik: 'Windows', myswastikonline: 'Web browser', pos: 'Windows', restaurant: 'Windows', pharmasoft: 'Windows', avocare: 'Web browser', bizant: 'Android' };
+const softApp = (p, file) => ({ '@type': 'SoftwareApplication', name: p.name, description: p.desc, url: `${SITE_URL}/${file}`, image: `${SITE_URL}/${IMG}logos/${p.id}.png`, applicationCategory: 'BusinessApplication', operatingSystem: OS[p.id], ...(p.store ? { installUrl: p.store } : {}), publisher: { '@id': `${SITE_URL}/#organization` } });
+
 /* ---------- write everything ---------- */
 const pages = [];
-const add = (file, title, desc, body, org, inMap = true) => { render({ file, title, desc, body, org }); if (inMap) pages.push(file); };
-add('index.html', 'HiTech Solutions and Services | Accounting and business software for Nepal', 'HiTech has built accounting and business software in Nepal since 1998. Swastik, Tivora ERP, POS, restaurant, pharmaceutical and mobile software.', home(), true);
-add('tivora.html', 'Tivora ERP | One platform for every business | HiTech', 'Tivora ERP brings sales, purchase, stock, production and accounts into one system, built to IRD\'s current formats.', tivoraPage(), false, false);
-add('products.html', 'Products | Swastik, POS, Pharmasoft, Avocare and more | HiTech', 'Swastik accounting, mySwastikonline, Swastik POS and Restaurant, Pharmasoft, Avocare and Bizant from HiTech, with a finder by trade.', productsPage());
+const add = (file, body, org, inMap = true) => { render({ file, title: SEO[file][0], desc: SEO[file][1], body, org }); if (inMap) pages.push(file); };
+LDX['index.html'] = [WEBSITE, { '@type': 'FAQPage', mainEntity: FAQS.map(([q, a]) => ({ '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: a } })) }];
+LDX['tivora.html'] = [{ '@type': 'SoftwareApplication', name: 'Tivora ERP', description: SEO['tivora.html'][1], url: TIVORA_URL, applicationCategory: 'BusinessApplication', operatingSystem: 'Web browser', publisher: { '@id': `${SITE_URL}/#organization` } }];
+for (const p of PRODUCTS) LDX[phref(p)] = [softApp(p, phref(p))];
+add('index.html', home(), true);
+add('tivora.html', tivoraPage(), false, false);
+add('products.html', productsPage());
 for (const p of PRODUCTS) PROD[phref(p)] = p.name;
-for (const p of PRODUCTS) add(phref(p), `${p.name} | ${p.cat} | HiTech`, `${p.tag} ${p.name} from HiTech, Kathmandu.`, productPage(p));
-add('solutions.html', 'Solutions | ERP, custom software and e-commerce | HiTech', 'HiTech builds ERP, application software, customized software and B2B and B2C e-commerce for businesses in Nepal.', solutionsPage());
-add('partners.html', 'Partners | CAs, auditors and Partner Connect | HiTech', 'Swastik for chartered accountants and auditors, the Partner Connect reseller program, and HiTech\'s partner network across Nepal.', partnersPage());
-add('about.html', 'About HiTech | Accounting software since 1998', 'HiTech has built business software in Nepal for more than 25 years, with 100+ professionals across 15+ branches.', aboutPage(), true);
-add('support.html', 'Support | HiTech Solutions and Services', 'Phone, email and remote support from HiTech, with branch numbers across Nepal.', supportPage());
-add('careers.html', 'Careers | Work at HiTech Solutions and Services', 'Open roles at HiTech in .NET development, system support and technical writing. Send your CV to career@hitechnepal.com.np.', careersPage());
-add('contact.html', 'Contact HiTech | Request a demo, quote or call', 'Contact HiTech in Kalimati, Kathmandu: office, sales and support numbers, email and an inquiry form.', contactPage(), true);
-render({ file: '404.html', title: 'Page not found | HiTech Solutions and Services', desc: 'This page could not be found. Go back to the HiTech home page.', body: p404() });
+for (const p of PRODUCTS) add(phref(p), productPage(p));
+add('solutions.html', solutionsPage());
+add('partners.html', partnersPage());
+add('about.html', aboutPage(), true);
+add('support.html', supportPage());
+add('careers.html', careersPage());
+add('contact.html', contactPage(), true);
+render({ file: '404.html', title: SEO['404.html'][0], desc: SEO['404.html'][1], body: p404(), noindex: true });
 out('services.html', servicesRedirect());
 
-out('sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${pages.map(p => `  <url><loc>${SITE_URL}/${p === 'index.html' ? '' : p}</loc></url>`).join('\n')}\n</urlset>\n`);
+const LASTMOD = process.env.LASTMOD || new Date().toISOString().slice(0, 10);
+out('sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${pages.map(p => `  <url><loc>${SITE_URL}/${p === 'index.html' ? '' : p}</loc><lastmod>${LASTMOD}</lastmod></url>`).join('\n')}\n</urlset>\n`);
 out('robots.txt', `User-agent: *\nAllow: /\n\nSitemap: ${SITE_URL}/sitemap.xml\n`);
 console.log(`built ${pages.length + 2} pages`);

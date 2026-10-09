@@ -38,9 +38,9 @@ const WHATSAPP_NUMBER = '9779709117067';
   const upd = [];
   const onScroll = () => {
     tick = false; upd.forEach(f => f());
-    const y = scrollY, hide = y > ly && y > 240 && !nav.classList.contains('mopen') && !$('.panel.open', nav);
+    const y = scrollY, hide = y > ly && y > 240 && !nav.classList.contains('mopen') && !$('.panel.open', nav) && !(h.classList.contains('onescr') && innerWidth >= 900 && !rm);
     nav.classList.toggle('hide', hide); h.style.setProperty('--st', hide ? '0px' : '72px'); ly = y;
-    const m = (ann ? Math.max(ann.getBoundingClientRect().bottom, 0) : 0) + 36;
+    const m = (ann ? Math.max(ann.getBoundingClientRect().bottom, 0) : 0) + (h.classList.contains('onescr') && innerWidth >= 900 ? 80 : 36);
     nav.classList.toggle('dark', darks.some(s => { const r = s.getBoundingClientRect(); return r.top <= m && r.bottom >= m; }));
   };
   addEventListener('scroll', () => { if (!tick) { tick = true; requestAnimationFrame(onScroll); } }, { passive: true });
@@ -132,6 +132,25 @@ const WHATSAPP_NUMBER = '9779709117067';
     new IntersectionObserver(es => es.forEach(e => { seen = e.isIntersecting; if (seen) start(); else stop(); })).observe(box);
   });
 
+  /* testimonials: one at a time, rotate every 7 seconds, pause on hover and focus, no auto-rotation under reduced motion */
+  $$('[data-qcar]').forEach(box => {
+    const qs = $$('.quote', box), dots = $$('.qc-dot', box); let i = 0, t = 0, hold = false, seen = false;
+    const show = n => {
+      i = (n + qs.length) % qs.length;
+      qs.forEach((x, k) => { x.classList.toggle('on', k === i); x.setAttribute('aria-hidden', k !== i); });
+      dots.forEach((x, k) => { x.classList.toggle('on', k === i); x.setAttribute('aria-pressed', k === i); });
+    };
+    const stop = () => { clearInterval(t); t = 0; };
+    const start = () => { if (!rm && seen && !hold && !d.hidden && !t) t = setInterval(() => show(i + 1), 7000); };
+    show(0);
+    dots.forEach((b, k) => b.addEventListener('click', () => { show(k); stop(); start(); }));
+    $$('.qc-b', box).forEach(b => b.addEventListener('click', () => { show(i + +b.dataset.dir); stop(); start(); }));
+    ['mouseenter', 'focusin'].forEach(e => box.addEventListener(e, () => { hold = true; stop(); }));
+    ['mouseleave', 'focusout'].forEach(e => box.addEventListener(e, () => { hold = false; start(); }));
+    d.addEventListener('visibilitychange', () => { if (d.hidden) stop(); else start(); });
+    new IntersectionObserver(es => es.forEach(e => { seen = e.isIntersecting; if (seen) start(); else stop(); })).observe(box);
+  });
+
   /* Nepal map: legend row and pin highlight each other; the pulse runs only while the map is on screen */
   $$('[data-nmap]').forEach(m => {
     const pins = $$('.nm-pin', m), rows = $$('.nm-leg li', m), tip = $('.nm-tip', m);
@@ -159,20 +178,20 @@ const WHATSAPP_NUMBER = '9779709117067';
 
   /* demo form: Interested in and Inquiry for can be preset from the link */
   const qp = new URLSearchParams(location.search);
-  const pick = (sel, v) => { if (!v) return; const o = [...sel.options].find(x => x.text === v); if (o) sel.value = o.value; };
-  $$('form[data-demo]').forEach(f => { pick(f.elements.inquiry, f.dataset.inquiry); pick(f.elements.inquiry, qp.get('inquiry')); pick(f.elements.interest, qp.get('interest')); });
+  const pick = (sel, v) => { if (!v || !sel) return; const o = [...sel.options].find(x => x.text === v); if (o) sel.value = o.value; };
+  $$('form[data-lead]').forEach(f => { pick(f.elements.inquiry, f.dataset.inquiry); pick(f.elements.inquiry, qp.get('inquiry')); pick(f.elements.interest, qp.get('interest')); });
 
   /* lead capture: one pipeline for the demo form, the contact form, the call-back strip and the inquiry popup */
   const page = () => location.pathname.split('/').pop() || 'index.html';
   const waUrl = data => 'https://wa.me/' + WHATSAPP_NUMBER + '?text=' + encodeURIComponent(
-    Object.entries({ Name: data.name, Email: data.email, Phone: data.phone, City: data.city, Company: data.company, 'Inquiry for': data.inquiry, 'Interested in': data.interest, Message: data.message, Page: location.href })
+    Object.entries({ Name: data.name, Email: data.email, Phone: data.phone, City: data.city, Company: data.company, 'Partnership type': data.partnerType, 'Line of business': data.business, 'Inquiry for': data.inquiry, 'Interested in': data.interest, Message: data.message, Page: location.href })
       .filter(x => x[1]).map(x => x[0] + ': ' + x[1]).join('\n'));
   const waLink = (url, label, cls) => {
     const l = d.createElement('a'); l.href = url; l.target = '_blank'; l.rel = 'noopener noreferrer'; l.textContent = label; if (cls) l.className = cls; return l;
   };
   const say = (ok, msg, bad, link) => { ok.textContent = msg; ok.classList.toggle('bad', !!bad); if (link) ok.append(d.createElement('br'), link); ok.hidden = false; };
   let leadDone = () => {};
-  $$('form[data-demo], form[data-lead]').forEach(f => f.addEventListener('submit', async e => {
+  $$('form[data-lead]').forEach(f => f.addEventListener('submit', async e => {
     e.preventDefault();
     const ok = $('.form-ok', f), fd = new FormData(f);
     if (fd.get('website')) { say(ok, 'Thank you. We have received your inquiry.'); return; }
@@ -198,6 +217,25 @@ const WHATSAPP_NUMBER = '9779709117067';
     } else say(ok, 'We could not send your message. Please call 01-5389641 or message us on WhatsApp +977 9709117067.', 1, waLink(url, 'Open WhatsApp', 'btn'));
   }));
 
+  /* careers: every Send CV or Apply entry (data-cv) opens one chooser, then the position's own form opens in a new tab.
+     Without JavaScript the entries are plain links to #positions and the chooser stays hidden. */
+  const cv = $('#cvPop');
+  if (cv) {
+    const card = $('.cv-card', cv); let prev = null;
+    const close = () => { cv.hidden = true; d.body.classList.remove('cv-open'); if (prev && d.contains(prev)) prev.focus(); };
+    $$('[data-cv]').forEach(b => b.addEventListener('click', e => { e.preventDefault(); prev = d.activeElement; cv.hidden = false; d.body.classList.add('cv-open'); $('.cv-opt', card).focus(); }));
+    $$('[data-cv-close]', cv).forEach(b => b.addEventListener('click', close));
+    $$('.cv-opt', cv).forEach(a => a.addEventListener('click', () => setTimeout(close, 0)));
+    d.addEventListener('keydown', e => {
+      if (cv.hidden) return;
+      if (e.key === 'Escape') { e.preventDefault(); close(); return; }
+      if (e.key !== 'Tab') return;
+      const f = $$('button, a[href]', card), a = d.activeElement;
+      if (e.shiftKey && (a === f[0] || !card.contains(a))) { e.preventDefault(); f[f.length - 1].focus(); }
+      else if (!e.shiftKey && (a === f[f.length - 1] || !card.contains(a))) { e.preventDefault(); f[0].focus(); }
+    });
+  }
+
   /* inquiry popup: 10 s after landing, then 15 s after each of the first three dismissals, then every 3 minutes until a request is sent.
      State lives in sessionStorage so the sequence continues across pages. Tests may shorten the timings through window.__leadPopupTest. */
   const pop = $('#leadPop');
@@ -210,7 +248,7 @@ const WHATSAPP_NUMBER = '9779709117067';
     const due = () => st.shown === 0 ? st.t0 + FIRST : st.last + (st.shown <= 3 ? AGAIN : LONG);
     const card = $('.lp-card', pop), sel = $('[name=interest]', pop), nameF = $('[name=name]', pop), okMsg = $('.form-ok', pop);
     let timer = 0, isOpen = false, prev = null;
-    const blocked = () => { const a = d.activeElement; return d.hidden || (a && /^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName)) || !!$('.panel.open', nav) || nav.classList.contains('mopen'); };
+    const blocked = () => { const a = d.activeElement; return d.hidden || (a && /^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName)) || !!$('.panel.open', nav) || nav.classList.contains('mopen') || d.body.classList.contains('cv-open'); };
     const arm = (min = 0) => { clearTimeout(timer); if (st.done || isOpen || d.hidden) return; timer = setTimeout(tryShow, Math.max(min, due() - Date.now())); };
     const tryShow = () => { if (blocked()) { timer = setTimeout(tryShow, DEFER); return; } openPop(); };
     const openPop = interest => {
@@ -243,6 +281,37 @@ const WHATSAPP_NUMBER = '9779709117067';
     $$('a[href="contact.html#demo"], a[data-interest]').forEach(a => a.addEventListener('click', e => { e.preventDefault(); openPop(a.dataset.interest || ''); }));
     d.addEventListener('visibilitychange', () => { if (d.hidden) clearTimeout(timer); else arm(1500); });
     arm();
+  }
+
+  /* partners page: type tabs (arrows, Home, End), diagram label, pre-select the form's partnership type */
+  const pt = $('[data-ptabs]');
+  if (pt) {
+    const tabs = $$('[role=tab]', pt), panels = $$('[role=tabpanel]', pt), ind = $('.pt-ind', pt), lab = $('[data-pf-label]'), you = lab && lab.closest('.pf-you');
+    const setForm = t => { const r = $('input[name=partnerType][value="' + t + '"]'); if (r) r.checked = true; };
+    const mark = () => { const a = tabs.find(t => t.getAttribute('aria-selected') === 'true'); if (a && ind) { ind.style.setProperty('--x', a.offsetLeft + 'px'); ind.style.setProperty('--w', a.offsetWidth + 'px'); } };
+    const pick = (i, focus, form) => {
+      tabs.forEach((t, k) => { t.setAttribute('aria-selected', k === i); t.tabIndex = k === i ? 0 : -1; panels[k].hidden = k !== i; });
+      if (lab) lab.textContent = tabs[i].textContent;
+      if (focus) tabs[i].focus();
+      if (form) setForm(tabs[i].textContent);
+      mark();
+    };
+    pt.classList.add('on'); if (you) you.classList.add('hl'); pick(0);
+    tabs.forEach((t, i) => t.addEventListener('click', () => pick(i, false, true)));
+    pt.addEventListener('keydown', e => {
+      const i = tabs.indexOf(d.activeElement); if (i < 0) return;
+      const n = { ArrowRight: (i + 1) % tabs.length, ArrowLeft: (i + tabs.length - 1) % tabs.length, Home: 0, End: tabs.length - 1 }[e.key];
+      if (n === undefined) return; e.preventDefault(); pick(n, true, true);
+    });
+    $$('[data-ptype]', pt).forEach(a => a.addEventListener('click', e => { e.preventDefault(); setForm(a.dataset.ptype); location.hash = 'become-a-partner'; }));
+    addEventListener('resize', mark);
+    if (d.fonts) d.fonts.ready.then(mark);
+    const fromHash = () => {
+      const m = /^#become-a-partner\?type=(reseller|distributor|contractor)$/i.exec(location.hash); if (!m) return;
+      pick(tabs.findIndex(t => t.textContent.toLowerCase() === m[1].toLowerCase()), false, true);
+      const f = $('#become-a-partner'); if (f) f.scrollIntoView({ behavior: rm ? 'auto' : 'smooth' });
+    };
+    addEventListener('hashchange', fromHash); fromHash();
   }
 
   if (rm) return;
@@ -279,7 +348,7 @@ const WHATSAPP_NUMBER = '9779709117067';
     walk(el); el.classList.add('hw');
   };
   $$('h1, h2').forEach(split);
-  $$('.stag').forEach(p => [...p.children].forEach((c, i) => { c.classList.add('rv'); c.style.setProperty('--d', i * 60 + 'ms'); }));
+  $$('.stag').forEach(p => [...p.children].forEach((c, i) => { c.classList.add('rv'); c.style.setProperty('--d', Math.min(i, 8) * 70 + 'ms'); }));
   const count = el => {
     const n = +el.dataset.count, s = el.dataset.suffix || '', t0 = performance.now();
     const f = t => { const p = Math.min((t - t0) / 1400, 1); el.textContent = Math.round(n * (1 - (1 - p) ** 3)).toLocaleString('en-US') + s; if (p < 1) requestAnimationFrame(f); };

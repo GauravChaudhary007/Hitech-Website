@@ -54,12 +54,12 @@
    "lon": 84.4333,
    "lat": 27.6833
   },
-  "siraha": {
-   "name": "Siraha",
-   "x": 744.4,
-   "y": 524,
-   "lon": 86.2064,
-   "lat": 26.6552
+  "lahan": {
+   "name": "Lahan",
+   "x": 777.8,
+   "y": 515,
+   "lon": 86.4944,
+   "lat": 26.7236
   },
   "dang": {
    "name": "Dang",
@@ -103,13 +103,6 @@
    "lon": 87.9833,
    "lat": 26.65
   },
-  "itahari": {
-   "name": "Itahari",
-   "x": 868.2,
-   "y": 522.8,
-   "lon": 87.2741,
-   "lat": 26.6647
-  },
   "bhairahawa": {
    "name": "Bhairahawa",
    "x": 424.6,
@@ -117,12 +110,54 @@
    "lon": 83.45,
    "lat": 27.5
   },
+  "simara": {
+   "name": "Simara",
+   "x": 602.5,
+   "y": 456.6,
+   "lon": 84.9833,
+   "lat": 27.1667
+  },
+  "hetauda": {
+   "name": "Hetauda",
+   "x": 608.3,
+   "y": 423.6,
+   "lon": 85.0333,
+   "lat": 27.4167
+  },
   "narayanghat": {
    "name": "Narayanghat",
    "x": 536.8,
    "y": 386.2,
    "lon": 84.4167,
    "lat": 27.7
+  },
+  "dharan": {
+   "name": "Dharan",
+   "x": 869.3,
+   "y": 503.3,
+   "lon": 87.2833,
+   "lat": 26.8125
+  },
+  "itahari": {
+   "name": "Itahari",
+   "x": 868.2,
+   "y": 522.8,
+   "lon": 87.2741,
+   "lat": 26.6647
+  },
+  "nuwakot": {
+   "name": "Nuwakot",
+   "x": 623.8,
+   "y": 357.7,
+   "lon": 85.1667,
+   "lat": 27.9167
+  },
+  "damak": {
+   "name": "Damak",
+   "x": 917.6,
+   "y": 522.5,
+   "lon": 87.7,
+   "lat": 26.6667
   },
   "jhapa": {
    "name": "Jhapa",
