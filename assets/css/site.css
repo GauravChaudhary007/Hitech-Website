@@ -1482,3 +1482,9 @@ details.trade .tb { padding: 4px 0 28px; }
 .pack, .pack.later { background: none; border: 0; border-top: 1px solid var(--navy-line); border-radius: 0; padding: 20px 0 0; }
 .ez-c, .pf-n { background: none; border: 0; border-top: 1px solid var(--navy-line); border-radius: 0; padding: 16px 0 0; }
 .pfig { border-radius: var(--r); }
+
+/* floating WhatsApp button, bottom left */
+.wa-fab { position: fixed; left: 20px; bottom: 20px; z-index: 40; width: 56px; height: 56px; border-radius: 50%; display: grid; place-items: center; background: #1a8d4a; color: #fff; box-shadow: 0 6px 18px rgba(0, 0, 89, .28); transition: transform .2s var(--ease), background .2s; }
+.wa-fab:hover { background: #147a3f; transform: translateY(-2px); }
+.wa-fab:focus-visible { outline: 3px solid var(--cyan); outline-offset: 3px; }
+@media (max-width: 639px) { .wa-fab { left: 14px; bottom: 14px; width: 52px; height: 52px; } }
