@@ -8,3 +8,4 @@ Thumbs.db
 
 # internal marketing assets (not part of the website)
 Marketing Content/
+.boost/
