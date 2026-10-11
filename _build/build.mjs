@@ -285,7 +285,6 @@ const navMenus = () => {
       <li class="has-panel relpos">${mbtn('p-company', 'Company', ['about.html', 'contact.html'].includes(PAGE))}
         <div class="panel small" id="p-company">${ml('about.html', 'About HiTech', 'Who we are')}${ml('contact.html', 'Contact', 'Talk to HiTech')}</div></li>
       ${nl('support.html', 'Support')}
-      ${nl('live-support.html', 'Live support')}
       ${nl('careers.html', 'Careers')}`;
 };
 const mobileMenu = () => {
@@ -311,6 +310,7 @@ const nav = () => `<header class="nav" id="nav">
     </ul></nav>
     <div class="nav-r">
       <a class="nl nl-c" href="contact.html"${cur('contact.html')}>Contact</a>
+      <a class="btn btn-sm btn-line d-only" href="live-support.html">Live support</a>
       <a class="btn btn-sm" href="contact.html#demo"><span class="d-only">Request a demo</span><span class="m-only">Demo</span></a>
       <button class="burger" id="burger" type="button" aria-expanded="false" aria-controls="mpanel" aria-label="Menu"><i></i><i></i><i></i></button>
     </div>
