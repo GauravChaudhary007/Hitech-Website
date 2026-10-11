@@ -379,6 +379,6 @@ QA: `npm run build`, `npm run check:site` and `npm run check` pass; headless Chr
 
 ## Round 10: HiTech explainer video in the home hero (11 Oct 2026)
 
-- The home hero laptop now plays the 112-second HiTech explainer (`assets/videos/hitech-explainer-hero.mp4`, 720p, poster `assets/img/hitech-explainer-poster.jpg`) instead of the Tivora clip. It starts muted and loops; the sound button in the hero turns the music on. The 1080p copy is `assets/videos/hitech-explainer-1080p.mp4`.
+- The home hero laptop now plays the 112-second HiTech explainer (`assets/video/hitech-explainer-hero.mp4`, 720p, poster `assets/img/hitech-explainer-poster.jpg`) instead of the Tivora clip. It starts muted and loops; the sound button in the hero turns the music on. The 1080p copy is `assets/video/hitech-explainer-1080p.mp4`.
 - The caption under the laptop reads "HiTech". The video's source animation and music generator live outside this folder in `motion/` (not deployed).
 - Open: a 112 s video as the hero loop is long for visitors who only glance at the hero; consider a shorter cut for the hero and the full film behind a "Watch the full video" link.

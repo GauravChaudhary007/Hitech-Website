@@ -5,3 +5,6 @@ Thumbs.db
 *.bak
 .env
 .env.*
+
+# internal marketing assets (not part of the website)
+Marketing Content/
