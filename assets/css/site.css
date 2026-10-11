@@ -1489,3 +1489,12 @@ details.trade .tb { padding: 4px 0 28px; }
 .wa-fab:hover { background: #147a3f; transform: translateY(-2px); }
 .wa-fab:focus-visible { outline: 3px solid var(--cyan); outline-offset: 3px; }
 @media (max-width: 639px) { .wa-fab { left: 14px; bottom: 14px; width: 52px; height: 52px; } }
+
+/* live support page */
+.ls-grid { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(32px, 6vw, 80px); }
+.ls-grid > * { min-width: 0; }
+.ls-grid .lede { margin: 12px 0 24px; }
+.ls-dl, .ls-ct { list-style: none; display: grid; gap: 14px; margin-top: 20px; }
+.ls-ct b { display: block; font-size: 14px; line-height: 20px; color: var(--caption); font-weight: 600; }
+.ls-dl a, .ls-ct a { color: var(--indigo); text-decoration: underline; text-underline-offset: 3px; font-weight: 600; }
+@media (max-width: 899px) { .ls-grid { grid-template-columns: 1fr; } }

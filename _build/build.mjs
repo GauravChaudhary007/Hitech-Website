@@ -285,6 +285,7 @@ const navMenus = () => {
       <li class="has-panel relpos">${mbtn('p-company', 'Company', ['about.html', 'contact.html'].includes(PAGE))}
         <div class="panel small" id="p-company">${ml('about.html', 'About HiTech', 'Who we are')}${ml('contact.html', 'Contact', 'Talk to HiTech')}</div></li>
       ${nl('support.html', 'Support')}
+      ${nl('live-support.html', 'Live support')}
       ${nl('careers.html', 'Careers')}`;
 };
 const mobileMenu = () => {
@@ -296,6 +297,7 @@ const mobileMenu = () => {
       <a class="mp-l" href="partners.html"${cur('partners.html')}>Partners</a>
       ${grp('Company', [['about.html', 'About HiTech'], ['contact.html', 'Contact']])}
       <a class="mp-l" href="support.html"${cur('support.html')}>Support</a>
+      <a class="mp-l" href="live-support.html"${cur('live-support.html')}>Live support</a>
       <a class="mp-l" href="careers.html"${cur('careers.html')}>Careers</a>
       <a class="mp-l" href="contact.html"${cur('contact.html')}>Contact</a>
       <a class="btn mp-cta" href="contact.html#demo">Request a demo</a>
@@ -323,14 +325,14 @@ const foot = () => `<footer class="foot" data-tone="navy">
       <div class="f-brand">
         <img src="${IMG}logo-dark.png" alt="HiTech Solutions and Services" width="137" height="50" loading="lazy">
         <p>${ADDR}</p>
-        <p class="f-ct"><a href="tel:+97715389641">01-5389641</a> <a href="tel:+97715389642">01-5389642</a> <a href="tel:+97715389643">01-5389643</a><br><a href="mailto:info@hitechnepal.com.np">info@hitechnepal.com.np</a><br><a href="mailto:support@hitechnepal.com.np">support@hitechnepal.com.np</a><br>${WA_LINK}</p>
+        <p class="f-ct">${PHONE_LINK}<br><a href="mailto:info@hitechnepal.com.np">info@hitechnepal.com.np</a><br><a href="mailto:support@hitechnepal.com.np">support@hitechnepal.com.np</a><br>${WA_LINK}</p>
         <p class="f-soc"><a href="https://www.facebook.com/hitechnepal/" target="_blank" rel="noopener noreferrer">Facebook</a><a href="https://www.linkedin.com/company/hitech-solutions-&amp;-services-pvt.-ltd./" target="_blank" rel="noopener noreferrer">LinkedIn</a><a href="https://wa.me/9779810133468" target="_blank" rel="noopener noreferrer">WhatsApp</a></p>
       </div>
       <div class="f-x"><h3><a href="${TIVORA_URL}" ${XA}>Tivora ERP${EXTI}${SRNEW}</a></h3></div>
       <div><h3>Products</h3><ul>${PRODUCTS.map(p => `<li><a href="${phref(p)}">${p.name}</a></li>`).join('')}<li><a href="products.html#ezee">eZee (authorized dealer)</a></li><li><a href="products.html#trades">Find by trade</a></li></ul></div>
       <div><h3>Solutions</h3><ul><li><a href="solutions.html#erp">ERP</a></li><li><a href="solutions.html#application">Application software</a></li><li><a href="solutions.html#custom">Customized software</a></li><li><a href="solutions.html#ecommerce">E-commerce</a></li><li><a href="solutions.html#mobile-apps">Mobile apps</a></li></ul></div>
       <div><h3>Partners</h3><ul><li><a href="partners.html#ca">For CAs and auditors</a></li><li><a href="partners.html#partner">Partner Connect</a></li><li><a href="partners.html#network">Partner network</a></li></ul></div>
-      <div><h3>Company</h3><ul><li><a href="about.html">About</a></li><li><a href="index.html#clients">Clients</a></li><li><a href="careers.html">Careers</a></li><li><a href="support.html">Support</a></li><li><a href="contact.html">Contact</a></li></ul></div>
+      <div><h3>Company</h3><ul><li><a href="about.html">About</a></li><li><a href="index.html#clients">Clients</a></li><li><a href="careers.html">Careers</a></li><li><a href="support.html">Support</a></li><li><a href="live-support.html">Live support</a></li><li><a href="contact.html">Contact</a></li></ul></div>
     </div>
     <div class="foot-bar"><span>&copy; <span id="yr">2026</span> HiTech Solutions and Services Pvt. Ltd. All rights reserved.</span><span>Tivora ERP screens use a demo company. Section photography is generated artwork.</span></div>
   </div>
@@ -340,12 +342,11 @@ const ld = o => `<script type="application/ld+json">${JSON.stringify({ '@context
 const ORG_NAME = 'HiTech Solutions and Services Pvt. Ltd.';
 const ORG = {
   '@type': 'Organization', '@id': `${SITE_URL}/#organization`, name: ORG_NAME, url: SITE_URL, logo: `${SITE_URL}/${IMG}logo-light.png`,
-  email: 'info@hitechnepal.com.np', telephone: '+977-1-5389641', foundingDate: '1998',
+  email: 'info@hitechnepal.com.np', telephone: '+977-1-5971935', foundingDate: '1998',
   address: { '@type': 'PostalAddress', streetAddress: '4th Floor, Divine Complex, Kalimati Chowk, Kalimati', addressLocality: 'Kathmandu', addressCountry: 'NP' },
   contactPoint: [
-    { '@type': 'ContactPoint', contactType: 'customer service', telephone: '+977-1-5389641', email: 'info@hitechnepal.com.np', areaServed: 'NP' },
-    { '@type': 'ContactPoint', contactType: 'sales', telephone: '+977-9803601598', areaServed: 'NP' },
-    { '@type': 'ContactPoint', contactType: 'technical support', telephone: '+977-9802345048', email: 'support@hitechnepal.com.np', areaServed: 'NP' },
+    { '@type': 'ContactPoint', contactType: 'customer service', telephone: '+977-1-5971935', email: 'info@hitechnepal.com.np', areaServed: 'NP' },
+    { '@type': 'ContactPoint', contactType: 'technical support', telephone: '+977-1-5971935', email: 'support@hitechnepal.com.np', areaServed: 'NP' },
   ],
   sameAs: ['https://www.facebook.com/hitechnepal/', 'https://www.linkedin.com/company/hitech-solutions-&-services-pvt.-ltd./'],
 };
@@ -390,10 +391,10 @@ ${nav()}
 <main id="main" tabindex="-1">
 ${body}
 </main>
-${file === 'contact.html' ? '' : leadStrip(PROD[file] || '')}
+${['contact.html', 'live-support.html'].includes(file) ? '' : leadStrip(PROD[file] || '')}
 ${foot()}
 ${WA_FAB}
-${file === 'contact.html' ? '' : leadPopup()}
+${['contact.html', 'live-support.html'].includes(file) ? '' : leadPopup()}
 <script src="assets/js/site.js"></script>
 </body>
 </html>
@@ -412,6 +413,8 @@ const btn = (href, label, cls = '') => `<a class="btn${cls ? ' ' + cls : ''}" hr
 const xbtn = (href, label, cls = '') => `<a class="btn${cls ? ' ' + cls : ''}" href="${href}" ${XA}>${label}${EXTI}${SRNEW}</a>`;
 
 const WA_BTN = '<button class="btn" type="submit"><svg class="wa-ico" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false"><path fill="currentColor" d="M17.47 14.38c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.65.07-.3-.15-1.27-.47-2.42-1.49-.9-.8-1.5-1.78-1.67-2.08-.17-.3-.02-.46.13-.61.14-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.08-.15-.67-1.61-.92-2.2-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.8.37-.27.3-1.04 1.02-1.04 2.48 0 1.46 1.07 2.88 1.21 3.07.15.2 2.1 3.2 5.08 4.49.71.31 1.26.49 1.69.63.71.23 1.36.2 1.87.12.57-.09 1.76-.72 2-1.41.25-.7.25-1.29.17-1.41-.07-.13-.27-.2-.57-.35zM12.05 21.8h-.01a9.9 9.9 0 0 1-5.03-1.38l-.36-.21-3.74.98 1-3.65-.24-.37a9.86 9.86 0 0 1-1.51-5.26c0-5.45 4.44-9.89 9.89-9.89 2.64 0 5.12 1.03 6.99 2.9a9.82 9.82 0 0 1 2.9 6.99c0 5.45-4.44 9.89-9.89 9.89z"/></svg>Send on WhatsApp</button>';
+const PHONE = '01-5971935', PHONE_TEL = '+97715971935';
+const PHONE_LINK = `<a href="tel:${PHONE_TEL}">${PHONE}</a>`;
 const WA_URL = 'https://wa.me/9779709117067';
 const WA_FAB = `<a class="wa-fab" href="${WA_URL}" ${XA} aria-label="Chat with HiTech on WhatsApp"><svg viewBox="0 0 24 24" width="30" height="30" aria-hidden="true" focusable="false"><path fill="currentColor" d="${/d="([^"]+)"/.exec(WA_BTN)[1]}"/></svg>${SRNEW}</a>`;
 const WA_LINK = `<a href="${WA_URL}" ${XA}>WhatsApp +977 9709117067${SRNEW}</a>`;
@@ -434,12 +437,12 @@ const leadForm = ({ p = 'f', source = 'demo', inq = '', interest = '', cls = 'fo
 const FORM = (inq = '') => leadForm({ inq });
 const contactCard = (compact) => compact ? `<aside class="ccard">
       <div class="cc-r">${ico('pin', 's40')}<div><b>HiTech Solutions and Services</b><p>${ADDR}</p></div></div>
-      <div class="cc-r">${ico('phone', 's40')}<div><p><a href="tel:+97715389641">01-5389641</a>, <a href="tel:+97715389642">01-5389642</a></p></div></div>
+      <div class="cc-r">${ico('phone', 's40')}<div><p>${PHONE_LINK}</p></div></div>
       <div class="cc-r">${ico('mail', 's40')}<div><p><a href="mailto:info@hitechnepal.com.np">info@hitechnepal.com.np</a></p></div></div>
       <div class="cc-r">${ico('phone', 's40')}<div><p>${WA_LINK}</p></div></div>
     </aside>` : `<aside class="ccard">
       <div class="cc-r">${ico('pin', 's40')}<div><b>HiTech Solutions and Services</b><p>${ADDR}</p></div></div>
-      <div class="cc-r">${ico('phone', 's40')}<div><b>Office</b><p><a href="tel:+97715389641">01-5389641</a>, <a href="tel:+97715389642">01-5389642</a>, <a href="tel:+97715389643">01-5389643</a></p><b class="gap">Sales</b><p><a href="tel:+9779803601598">9803601598</a>, <a href="tel:+9779802031377">9802031377</a></p><b class="gap">Support</b><p><a href="tel:+9779802345048">9802345048</a>, <a href="tel:+9779802345049">9802345049</a></p></div></div>
+      <div class="cc-r">${ico('phone', 's40')}<div><b>Phone</b><p>${PHONE_LINK}</p></div></div>
       <div class="cc-r">${ico('mail', 's40')}<div><b>Email</b><p><a href="mailto:info@hitechnepal.com.np">info@hitechnepal.com.np</a></p><p><a href="mailto:support@hitechnepal.com.np">support@hitechnepal.com.np</a></p></div></div>
       <div class="cc-r">${ico('phone', 's40')}<div><b>WhatsApp</b><p>${WA_LINK}</p></div></div>
     </aside>`;
@@ -1100,12 +1103,35 @@ ${banner('kathmandu-street', '50% 58%')}
 ${demo()}`;
 
 /* ---------- SUPPORT ---------- */
-const supportPage = () => `${phero({ bg: HB.support, eyebrow: 'Support', h1: 'Help from a team that works in Nepal.', lede: 'Reach support by phone or email, or ask for a remote session.', ctas: btn('contact.html#demo', 'Request a call') })}
+/* Tawk.to live chat: set TAWK_PROPERTY and TAWK_WIDGET (Tawk.to > Administration > Channels > Chat Widget > Direct Chat Link: tawk.to/chat/<property>/<widget>). Empty = chat is left out. */
+const TAWK = { property: process.env.TAWK_PROPERTY || '577f8c91027935641b3081a8', widget: process.env.TAWK_WIDGET || '1h1btglh2' };
+const REMOTE = [['TeamViewer', 'https://www.teamviewer.com/en/download/'], ['AnyAdmin', 'https://www.ammyy.com/en/downloads.html'], ['AnyDesk', 'https://anydesk.com/en/downloads'], ['UltraViewer', 'https://www.ultraviewer.net/en/download.html']];
+const tawkScript = () => TAWK.property && TAWK.widget ? `<script>var Tawk_API=Tawk_API||{};Tawk_API.onLoad=function(){Tawk_API.maximize()};(function(){var s=document.createElement('script');s.async=true;s.src='https://embed.tawk.to/${TAWK.property}/${TAWK.widget}';s.charset='UTF-8';s.setAttribute('crossorigin','*');document.head.appendChild(s)})()</script>` : '';
+const liveSupportPage = () => `${phero({ bg: HB.support, eyebrow: 'Live support', h1: 'Talk to HiTech support now.', lede: 'Chat with our team, or let us connect to your computer to fix it.', ctas: TAWK.property ? '<button class="btn" type="button" data-tawk-open>Start live chat</button>' : btn(WA_URL, 'Chat on WhatsApp') })}
+<section class="sec" id="remote">
+  <div class="wrap ls-grid">
+    <div class="rv">
+      <h2>For remote access</h2>
+      <p class="lede">Download one of these tools, open it and share the ID with our support engineer.</p>
+      <ul class="ls-dl">${REMOTE.map(([n, u]) => `<li><a href="${u}" ${XA}>Download ${n}${EXTI}${SRNEW}</a></li>`).join('')}</ul>
+    </div>
+    <div class="rv">
+      <h2>Contact support</h2>
+      <ul class="ls-ct">
+        <li><b>Phone</b>${PHONE_LINK}</li>
+        <li><b>Email</b><a href="mailto:support@hitechnepal.com.np">support@hitechnepal.com.np</a></li>
+        <li><b>WhatsApp</b>${WA_LINK}</li>
+      </ul>
+    </div>
+  </div>
+</section>
+${tawkScript()}`;
+const supportPage = () => `${phero({ bg: HB.support, eyebrow: 'Support', h1: 'Help from a team that works in Nepal.', lede: 'Reach support by phone, email or live chat, or ask for a remote session.', ctas: btn('live-support.html', 'Live support') + btn('contact.html#demo', 'Request a call', 'btn-line-w') })}
 <section class="sec" id="ways">
   <div class="wrap">
     <div class="cards4 stag">
-      <div class="card">${ico('headset', 's48')}<h3>Kathmandu support</h3><p><a href="tel:+9779802345048">9802345048</a>, <a href="tel:+9779802345049">9802345049</a> or <a href="mailto:support@hitechnepal.com.np">email</a>.</p></div>
-      <div class="card">${ico('phone', 's48')}<h3>Sales</h3><p><a href="tel:+9779803601598">9803601598</a>, <a href="tel:+9779802031377">9802031377</a>, <a href="tel:+9779802031373">9802031373</a>.</p></div>
+      <div class="card">${ico('headset', 's48')}<h3>Phone and email</h3><p>${PHONE_LINK} or <a href="mailto:support@hitechnepal.com.np">email</a>.</p></div>
+      <div class="card">${ico('sms', 's48')}<h3>Live support</h3><p><a href="live-support.html">Chat with us</a> or get remote access.</p></div>
       <div class="card">${ico('screen', 's48')}<h3>Remote support</h3><p>TeamViewer, AnyAdmin, AnyDesk or UltraViewer.</p></div>
       <div class="card">${ico('grad', 's48')}<h3>Training</h3><p>Choose "Training demo" in the form.</p></div>
     </div>
@@ -1160,6 +1186,7 @@ const SEO = {
   'solutions.html': ['Custom Software and Mobile Apps Nepal | HiTech Solutions', 'HiTech builds ERP, custom software, mobile apps and B2B and B2C e-commerce for businesses in Nepal, as contract or collaborative projects.'],
   'partners.html': ['Reseller and Distributor Partner Program Nepal | HiTech', 'Become a HiTech reseller, distributor or channel partner in Nepal, or join Partner Connect as a chartered accountant. Apply online.'],
   'about.html': ['About HiTech | Managing Business in Nepal Since 1998', `HiTech, a business software company in Kathmandu, has served Nepal since 1998: 28+ years of experience, 100+ professionals and ${NBR} branches.`],
+  'live-support.html': ['Live Support | Chat and Remote Access | HiTech', 'Chat with HiTech support, get remote access to your software, or call and email our Kathmandu support team.'],
   'support.html': ['Software Support Nepal | Phone, Remote, Branches | HiTech', 'Phone, email and remote support for HiTech software, with branch cities across Nepal. Call Kathmandu support or request a call back.'],
   'careers.html': ['Software Jobs in Kathmandu | Careers at HiTech', 'Software jobs in Kathmandu: Technical Product Engineer and Full Stack Developer openings at HiTech. Choose a position and apply online.'],
   'contact.html': ['Contact HiTech | Business Software Company in Kathmandu', 'Contact HiTech in Kalimati, Kathmandu for a demo, quote or call back. Office, sales and support numbers, email and WhatsApp.'],
@@ -1193,6 +1220,7 @@ add('solutions.html', solutionsPage());
 add('partners.html', partnersPage());
 add('about.html', aboutPage(), true);
 add('support.html', supportPage());
+add('live-support.html', liveSupportPage());
 add('careers.html', careersPage());
 add('contact.html', contactPage(), true);
 render({ file: '404.html', title: SEO['404.html'][0], desc: SEO['404.html'][1], body: p404(), noindex: true });

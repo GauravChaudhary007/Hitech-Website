@@ -214,7 +214,7 @@ const WHATSAPP_NUMBER = '9779709117067';
     if (posted || w) {
       say(ok, posted ? 'Thank you. We have received your inquiry and HiTech will call you back.' : 'Thank you. Your message is ready in WhatsApp: press send there and HiTech will call you back.', 0, waLink(url, 'Open WhatsApp again', 'btn'));
       f.reset(); leadDone();
-    } else say(ok, 'We could not send your message. Please call 01-5389641 or message us on WhatsApp +977 9709117067.', 1, waLink(url, 'Open WhatsApp', 'btn'));
+    } else say(ok, 'We could not send your message. Please call 01-5971935 or message us on WhatsApp +977 9709117067.', 1, waLink(url, 'Open WhatsApp', 'btn'));
   }));
 
   /* careers: every Send CV or Apply entry (data-cv) opens one chooser, then the position's own form opens in a new tab.
@@ -369,3 +369,6 @@ const WHATSAPP_NUMBER = '9779709117067';
   const cio = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { cio.unobserve(e.target); count(e.target); } }), { threshold: 0 });
   $$('[data-count]').forEach(el => cio.observe(el));
 })();
+
+/* Tawk.to: "Start live chat" button opens the widget */
+document.querySelectorAll('[data-tawk-open]').forEach(b => b.addEventListener('click', () => window.Tawk_API && window.Tawk_API.maximize && window.Tawk_API.maximize()));
