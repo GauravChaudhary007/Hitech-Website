@@ -1045,6 +1045,7 @@ body.lp-open, body.cv-open { overflow: hidden; }
 .ph-bar { display: flex; justify-content: center; gap: 20px; }
 .ph-bar i { width: 6px; height: 6px; border-radius: 50%; background: var(--line-2); }
 .app-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.app-cards .app:last-child:nth-child(odd) { grid-column: 1 / -1; }
 .app { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; padding: 24px; border-radius: var(--r-lg); background: #fff; border: 1px solid var(--line); }
 .app h3 { font-size: 22px; line-height: 30px; }
 .app p:last-child { font-size: 15px; line-height: 24px; }

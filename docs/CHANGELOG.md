@@ -376,3 +376,9 @@ QA: `npm run build`, `npm run check:site` and `npm run check` pass; headless Chr
 20. **"Coming later" packs** are small dashed chips in the highlight (one chip each, with the words "Coming later") instead of cards.
 21. **`.announce`, marquee, scroll-story, why-tiles, voices and old coverage CSS** is still in `site.css` unused.
 22. **Pin overlap on phones**: at 390px and below the south-east pins (9 to 13) overlap a little because they are 12 to 15px apart on the map. The numbered legend lists every city; pin size is 16px on phones.
+
+## Round 10: HiTech explainer video in the home hero (11 Oct 2026)
+
+- The home hero laptop now plays the 112-second HiTech explainer (`assets/videos/hitech-explainer-hero.mp4`, 720p, poster `assets/img/hitech-explainer-poster.jpg`) instead of the Tivora clip. It starts muted and loops; the sound button in the hero turns the music on. The 1080p copy is `assets/videos/hitech-explainer-1080p.mp4`.
+- The caption under the laptop reads "HiTech". The video's source animation and music generator live outside this folder in `motion/` (not deployed).
+- Open: a 112 s video as the hero loop is long for visitors who only glance at the hero; consider a shorter cut for the hero and the full film behind a "Watch the full video" link.
