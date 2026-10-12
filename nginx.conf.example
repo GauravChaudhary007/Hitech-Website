@@ -23,6 +23,32 @@ server {
     location ~ ^/(package\.json|README\.md|nginx\.conf\.example)$ { return 404; }
     location ~ ^/lead-endpoint/(README\.md|check\.mjs)$ { return 404; }
 
+
+    # Old site (PHP) links: 301 to the matching new page. Keep lead.php working (exact match below wins).
+    location ~* ^/chat/ { return 301 /live-support.html; }
+    location ~* ^/swastik-accounting-software(/|$) { return 301 /product-swastik.html; }
+    location ~* ^/files/[^/]*swastik[^/]*\.pdf$ { return 301 /product-swastik.html; }
+    location ~* ^/files/ { return 301 /products.html; }
+    location ~* ^/(?:.*/)?[^/]*(?:live-?support|helpdesk|ticket)[^/]*\.php$ { return 301 /live-support.html; }
+    location ~* ^/(?:.*/)?[^/]*(?:myswastik|swastik-?online)[^/]*\.php$ { return 301 /product-myswastikonline.html; }
+    location ~* ^/(?:.*/)?[^/]*(?:swastik-?pos|pos-?software|point-of-sale|retail)[^/]*\.php$ { return 301 /product-pos.html; }
+    location ~* ^/(?:.*/)?[^/]*(?:restaurant|cafe|hotel-?pos)[^/]*\.php$ { return 301 /product-restaurant.html; }
+    location ~* ^/(?:.*/)?[^/]*(?:pharma)[^/]*\.php$ { return 301 /product-pharmasoft.html; }
+    location ~* ^/(?:.*/)?[^/]*(?:hospitality|ezee|frontdesk|hotel)[^/]*\.php$ { return 301 /products.html#ezee; }
+    location ~* ^/(?:.*/)?[^/]*(?:avocare|hospital|clinic|health)[^/]*\.php$ { return 301 /product-avocare.html; }
+    location ~* ^/(?:.*/)?[^/]*(?:bizant|mobile|sfa|sales-?force|field)[^/]*\.php$ { return 301 /product-bizant.html; }
+    location ~* ^/(?:.*/)?[^/]*(?:swastik|accounting|billing|inventory)[^/]*\.php$ { return 301 /product-swastik.html; }
+    location ~* ^/(?:.*/)?[^/]*(?:tivora|erp)[^/]*\.php$ { return 301 /tivora.html; }
+    location ~* ^/(?:.*/)?[^/]*(?:partner|dealer|reseller|distributor|channel)[^/]*\.php$ { return 301 /partners.html; }
+    location ~* ^/(?:.*/)?[^/]*(?:client|customer|testimonial)[^/]*\.php$ { return 301 /index.html#clients; }
+    location ~* ^/(?:.*/)?[^/]*(?:about|company|profile|team)[^/]*\.php$ { return 301 /about.html; }
+    location ~* ^/(?:.*/)?[^/]*(?:career|job|vacanc|recruit)[^/]*\.php$ { return 301 /careers.html; }
+    location ~* ^/(?:.*/)?[^/]*(?:contact|enquiry|inquiry|demo)[^/]*\.php$ { return 301 /contact.html; }
+    location ~* ^/(?:.*/)?[^/]*(?:support|download|training)[^/]*\.php$ { return 301 /support.html; }
+    location ~* ^/(?:.*/)?[^/]*(?:service|solution|custom|software-?dev|web-?dev|ecommerce|e-commerce|mobile-?app)[^/]*\.php$ { return 301 /solutions.html; }
+    location ~* ^/(?:.*/)?[^/]*(?:product)[^/]*\.php$ { return 301 /products.html; }
+    location ~* \.php$ { return 301 /; }
+
     location / {
         try_files $uri $uri/ =404;
     }

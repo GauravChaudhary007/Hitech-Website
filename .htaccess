@@ -39,3 +39,33 @@ ErrorDocument 404 /404.html
   ExpiresByType image/svg+xml "access plus 30 days"
   ExpiresByType video/mp4 "access plus 30 days"
 </IfModule>
+
+# Old site (PHP) links: send visitors and search engines to the matching new page (301).
+# Matches on words in the old file name; anything else ending in .php goes to the home page.
+<IfModule mod_rewrite.c>
+  RewriteRule ^lead-endpoint/ - [L]
+  RewriteRule ^chat/ /live-support.html [NC,R=301,QSD,L]
+  RewriteRule ^swastik-accounting-software(/|$) /product-swastik.html [NC,R=301,L]
+  RewriteRule ^files/[^/]*swastik[^/]*\.pdf$ /product-swastik.html [NC,R=301,L]
+  RewriteRule ^files/ /products.html [NC,R=301,L]
+  RewriteRule ^(.*/)?[^/]*(live-?support|helpdesk|ticket)[^/]*\.php$ /live-support.html [NC,R=301,NE,L]
+  RewriteRule ^(.*/)?[^/]*(myswastik|swastik-?online)[^/]*\.php$ /product-myswastikonline.html [NC,R=301,NE,L]
+  RewriteRule ^(.*/)?[^/]*(swastik-?pos|pos-?software|point-of-sale|retail)[^/]*\.php$ /product-pos.html [NC,R=301,NE,L]
+  RewriteRule ^(.*/)?[^/]*(restaurant|cafe|hotel-?pos)[^/]*\.php$ /product-restaurant.html [NC,R=301,NE,L]
+  RewriteRule ^(.*/)?[^/]*(pharma)[^/]*\.php$ /product-pharmasoft.html [NC,R=301,NE,L]
+  RewriteRule ^(.*/)?[^/]*(hospitality|ezee|frontdesk|hotel)[^/]*\.php$ /products.html#ezee [NC,R=301,NE,L]
+  RewriteRule ^(.*/)?[^/]*(avocare|hospital|clinic|health)[^/]*\.php$ /product-avocare.html [NC,R=301,NE,L]
+  RewriteRule ^(.*/)?[^/]*(bizant|mobile|sfa|sales-?force|field)[^/]*\.php$ /product-bizant.html [NC,R=301,NE,L]
+  RewriteRule ^(.*/)?[^/]*(swastik|accounting|billing|inventory)[^/]*\.php$ /product-swastik.html [NC,R=301,NE,L]
+  RewriteRule ^(.*/)?[^/]*(tivora|erp)[^/]*\.php$ /tivora.html [NC,R=301,NE,L]
+  RewriteRule ^(.*/)?[^/]*(partner|dealer|reseller|distributor|channel)[^/]*\.php$ /partners.html [NC,R=301,NE,L]
+  RewriteRule ^(.*/)?[^/]*(client|customer|testimonial)[^/]*\.php$ /index.html#clients [NC,R=301,NE,L]
+  RewriteRule ^(.*/)?[^/]*(about|company|profile|team)[^/]*\.php$ /about.html [NC,R=301,NE,L]
+  RewriteRule ^(.*/)?[^/]*(career|job|vacanc|recruit)[^/]*\.php$ /careers.html [NC,R=301,NE,L]
+  RewriteRule ^(.*/)?[^/]*(contact|enquiry|inquiry|demo)[^/]*\.php$ /contact.html [NC,R=301,NE,L]
+  RewriteRule ^(.*/)?[^/]*(support|download|training)[^/]*\.php$ /support.html [NC,R=301,NE,L]
+  RewriteRule ^(.*/)?[^/]*(service|solution|custom|software-?dev|web-?dev|ecommerce|e-commerce|mobile-?app)[^/]*\.php$ /solutions.html [NC,R=301,NE,L]
+  RewriteRule ^(.*/)?[^/]*(product)[^/]*\.php$ /products.html [NC,R=301,NE,L]
+  RewriteRule ^(.*/)?index\.php$ / [NC,R=301,L]
+  RewriteRule \.php$ / [NC,R=301,L]
+</IfModule>
