@@ -310,7 +310,7 @@ const nav = () => `<header class="nav" id="nav">
     </ul></nav>
     <div class="nav-r">
       <a class="nl nl-c" href="contact.html"${cur('contact.html')}>Contact</a>
-      <a class="btn btn-sm btn-line d-only" href="live-support.html">Live support</a>
+      <a class="btn btn-sm btn-line" href="live-support.html"><span class="d-only">Live support</span><span class="m-only">Live chat</span></a>
       <a class="btn btn-sm" href="contact.html#demo"><span class="d-only">Request a demo</span><span class="m-only">Demo</span></a>
       <button class="burger" id="burger" type="button" aria-expanded="false" aria-controls="mpanel" aria-label="Menu"><i></i><i></i><i></i></button>
     </div>
@@ -396,6 +396,7 @@ ${foot()}
 ${WA_FAB}
 ${['contact.html', 'live-support.html'].includes(file) ? '' : leadPopup()}
 <script src="assets/js/site.js"></script>
+${tawkScript(file === 'live-support.html')}
 </body>
 </html>
 `;
@@ -1106,7 +1107,7 @@ ${demo()}`;
 /* Tawk.to live chat: set TAWK_PROPERTY and TAWK_WIDGET (Tawk.to > Administration > Channels > Chat Widget > Direct Chat Link: tawk.to/chat/<property>/<widget>). Empty = chat is left out. */
 const TAWK = { property: process.env.TAWK_PROPERTY || '577f8c91027935641b3081a8', widget: process.env.TAWK_WIDGET || '1h1btglh2' };
 const REMOTE = [['TeamViewer', 'https://www.teamviewer.com/en/download/'], ['AnyAdmin', 'https://www.ammyy.com/en/downloads.html'], ['AnyDesk', 'https://anydesk.com/en/downloads'], ['UltraViewer', 'https://www.ultraviewer.net/en/download.html']];
-const tawkScript = () => TAWK.property && TAWK.widget ? `<script>var Tawk_API=Tawk_API||{};Tawk_API.onLoad=function(){Tawk_API.maximize()};(function(){var s=document.createElement('script');s.async=true;s.src='https://embed.tawk.to/${TAWK.property}/${TAWK.widget}';s.charset='UTF-8';s.setAttribute('crossorigin','*');document.head.appendChild(s)})()</script>` : '';
+const tawkScript = (open = false) => TAWK.property && TAWK.widget ? `<script>var Tawk_API=Tawk_API||{};${open ? 'Tawk_API.onLoad=function(){Tawk_API.maximize()};' : ''}addEventListener('load',function(){var s=document.createElement('script');s.async=true;s.src='https://embed.tawk.to/${TAWK.property}/${TAWK.widget}';s.charset='UTF-8';s.setAttribute('crossorigin','*');document.head.appendChild(s)})</script>` : '';
 const liveSupportPage = () => `${phero({ bg: HB.support, eyebrow: 'Live support', h1: 'Talk to HiTech support now.', lede: 'Chat with our team, or let us connect to your computer to fix it.', ctas: TAWK.property ? '<button class="btn" type="button" data-tawk-open>Start live chat</button>' : btn(WA_URL, 'Chat on WhatsApp') })}
 <section class="sec" id="remote">
   <div class="wrap ls-grid">
@@ -1124,8 +1125,7 @@ const liveSupportPage = () => `${phero({ bg: HB.support, eyebrow: 'Live support'
       </ul>
     </div>
   </div>
-</section>
-${tawkScript()}`;
+</section>`;
 const supportPage = () => `${phero({ bg: HB.support, eyebrow: 'Support', h1: 'Help from a team that works in Nepal.', lede: 'Reach support by phone, email or live chat, or ask for a remote session.', ctas: btn('live-support.html', 'Live support') + btn('contact.html#demo', 'Request a call', 'btn-line-w') })}
 <section class="sec" id="ways">
   <div class="wrap">

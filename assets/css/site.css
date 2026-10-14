@@ -836,7 +836,7 @@ details.trade .btn-sm { white-space: normal; height: auto; min-height: 40px; pad
   .hero-photo { inset: auto 0 0 0; height: var(--pz); }
   .hero-grad { background: linear-gradient(180deg, rgba(0, 0, 89, 1) 0%, rgba(0, 0, 89, .4) 14%, rgba(0, 0, 89, .12) 45%, rgba(0, 0, 89, .3) 100%); }
   .vcap { display: none; }
-  .hero-under { left: auto; right: 12px; top: auto; bottom: 10px; }
+  .hero-under { left: auto; right: 84px; top: auto; bottom: 10px; }
   .tip { display: none; }
   .proof { gap: 24px; }
 }
@@ -1498,3 +1498,10 @@ details.trade .tb { padding: 4px 0 28px; }
 .ls-ct b { display: block; font-size: 14px; line-height: 20px; color: var(--caption); font-weight: 600; }
 .ls-dl a, .ls-ct a { color: var(--indigo); text-decoration: underline; text-underline-offset: 3px; font-weight: 600; }
 @media (max-width: 899px) { .ls-grid { grid-template-columns: 1fr; } }
+
+/* header "Live support" button on the dark (home) nav: white outline so it stays visible */
+.nav.dark:not(.mopen) .btn-line { color: #fff; border-color: #fff; }
+.nav.dark:not(.mopen) .btn-line:hover { background: #fff; color: var(--navy); }
+
+/* keep the hero sound button clear of the Tawk.to chat bubble (bottom right) */
+@media (min-width: 900px) and (max-width: 1250px) { .hero-under { left: auto; right: 240px; top: auto; bottom: 10px; } }
