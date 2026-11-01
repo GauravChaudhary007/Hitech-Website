@@ -107,7 +107,7 @@ a:hover > .arr { translate: 3px 0; }
 .mlg { box-sizing: border-box; flex: none; width: 72px; height: 44px; padding: 5px; border-radius: 8px; background: #fff; border: 1px solid #E4E4E9; display: grid; place-items: center; }
 .mlg img { max-width: 60px; max-height: 32px; width: auto; height: auto; }
 .mlg-tv img { max-width: 66px; max-height: 38px; }
-.mlg-tv { background: #2a2117; border-color: #2a2117; padding: 2px; }
+.mlg-tv { padding: 2px; } /* white tile like the other product logos (tivora-light.png) */
 .ml b { display: block; font-size: 15px; line-height: 20px; font-weight: 600; }
 .ml small { display: block; font-size: 13px; line-height: 18px; color: var(--caption); }
 .pfeat { display: flex; flex-direction: column; gap: 8px; padding: 20px; border-radius: var(--r); background: var(--navy); color: #fff; text-decoration: none; overflow: hidden; }
@@ -796,7 +796,6 @@ details.trade .btn-sm { white-space: normal; height: auto; min-height: 40px; pad
 .suite-l { margin-bottom: 12px; font-size: 12px; line-height: 16px; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; color: var(--on-navy); }
 .hchips { list-style: none; display: grid; grid-template-columns: repeat(6, minmax(0, 80px)); gap: 8px; }
 .hchips li:first-child { grid-column: span 2; }
-.hlogo.hlogo-tv { background: #2a2117; }
 .hlogo { position: relative; display: block; height: 56px; border-radius: 10px; background: #fff; text-decoration: none; transition: translate .2s var(--ease), box-shadow .2s; }
 .hlogo img { position: absolute; inset: 8px; width: calc(100% - 16px); height: calc(100% - 16px); object-fit: contain; }
 .hlogo:hover, .hlogo:focus-visible { translate: 0 -2px; box-shadow: 0 8px 20px -8px rgba(0, 0, 0, .5); }

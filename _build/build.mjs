@@ -118,7 +118,7 @@ const SRNEW = '<span class="sr"> (opens in a new tab)</span>';
 const XA = 'target="_blank" rel="noopener"';
 const IRDSVG = '<svg viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path d="M10 2l6.5 2.5v5c0 4.2-2.8 7.2-6.5 8.5C6.3 16.7 3.5 13.7 3.5 9.5v-5z"/><path d="M7 10l2.2 2.2L13.2 8"/></svg>';
 const IRD = (cls = '') => `<span class="ird${cls ? ' ' + cls : ''}">${IRDSVG}IRD certified</span>`;
-const LOGO_DIM = { swastik: [640, 585], myswastikonline: [640, 162], pos: [640, 213], restaurant: [640, 510], pharmasoft: [640, 496], avocare: [640, 247], bizant: [640, 472], payroll: [640, 611], smartsuite: [640, 157], ezee: [640, 464], tivora: [640, 134] };
+const LOGO_DIM = { 'tivora-light': [640, 134], swastik: [640, 585], myswastikonline: [640, 162], pos: [640, 213], restaurant: [640, 510], pharmasoft: [640, 496], avocare: [640, 247], bizant: [640, 472], payroll: [640, 611], smartsuite: [640, 157], ezee: [640, 464], tivora: [640, 134] };
 const logo = (id, alt = '', lazy = true) => `<img src="${IMG}logos/${id}.png" alt="${alt}" width="${LOGO_DIM[id][0]}" height="${LOGO_DIM[id][1]}"${lazy ? ' loading="lazy" decoding="async"' : ''}>`;
 const lplate = (id, cls = '', alt = '') => `<span class="lplate${cls ? ' ' + cls : ''}">${logo(id, alt)}</span>`;
 /* icon + short label chips: 'icon|label|sub' */
@@ -269,7 +269,7 @@ const nl = (href, label) => `<li><a class="nl${PAGE === href ? ' cur' : ''}" hre
 
 const SOL_MENU = [['process', 'How we work', 'From first call to daily support.', 'search'], ['erp', 'ERP', 'Main business processes in one system.', 'tivora'], ['application', 'Application software', 'Accounting, billing, POS and payroll.', 'layers'], ['custom', 'Customized software', 'Contract and collaborative projects.', 'code'], ['ecommerce', 'E-commerce', 'B2B and B2C online stores.', 'cartplus'], ['mobile-apps', 'Custom mobile apps', 'Built around your workflow.', 'mobile']];
 const navMenus = () => {
-  const mlg = (id, href, name, cat, ext) => `<a class="ml" href="${href}"${ext ? ' target="_blank" rel="noopener"' : ''}${cur(href)}><span class="mlg${id === 'tivora' ? ' mlg-tv' : ''}">${logo(id, '', false)}</span><span><b>${name}</b><small>${cat}</small></span></a>`;
+  const mlg = (id, href, name, cat, ext) => `<a class="ml" href="${href}"${ext ? ' target="_blank" rel="noopener"' : ''}${cur(href)}><span class="mlg${id === 'tivora' ? ' mlg-tv' : ''}">${logo(id === 'tivora' ? 'tivora-light' : id, '', false)}</span><span><b>${name}</b><small>${cat}</small></span></a>`;
   const mp = ids => ids.map(i => { const t = TBY[i]; return mlg(i, t.href, t.name, t.cat, t.ext); }).join('');
   return `<li><a class="nl nl-x" href="${TIVORA_URL}" ${XA}>Tivora ERP${EXTI}${SRNEW}</a></li>
       <li class="has-panel">${mbtn('p-products', 'Products', PAGE === 'products.html' || PAGE.startsWith('product-'))}
@@ -756,7 +756,7 @@ const suiteSection = () => `<section class="sec" id="suite">
 const faqCols = () => `<div class="faq-2">${faq([0, 1, 2, 3])}${faq([4, 5, 6, 7])}</div>`;
 const faqHome = () => `<section class="sec sec-paper" id="faq"><div class="wrap"><h2>Straight answers before you call.</h2>${faqCols()}</div></section>`;
 
-const hchips = HERO_LOGOS.map(id => { const t = TBY[id]; return `<li><a class="hlogo${id === 'tivora' ? ' hlogo-tv' : ''}" href="${t.href}"${t.ext ? ' target="_blank" rel="noopener"' : ''} aria-label="${t.name}, ${t.cat}">${logo(id, '', false)}<span class="tip" aria-hidden="true"><b>${t.name}</b><small>${t.cat}</small></span></a></li>`; }).join('');
+const hchips = HERO_LOGOS.map(id => { const t = TBY[id]; return `<li><a class="hlogo${id === 'tivora' ? ' hlogo-tv' : ''}" href="${t.href}"${t.ext ? ' target="_blank" rel="noopener"' : ''} aria-label="${t.name}, ${t.cat}">${logo(id === 'tivora' ? 'tivora-light' : id, '', false)}<span class="tip" aria-hidden="true"><b>${t.name}</b><small>${t.cat}</small></span></a></li>`; }).join('');
 const home = () => `<section class="hero has-bg" id="top" data-tone="navy">
   <!-- hero-office.jpg: generated corporate-office photo; the real Tivora ERP video plays on the laptop screen -->
   <div class="hero-photo">
