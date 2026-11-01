@@ -1,0 +1,142 @@
+# Website checks on every pull request, and a by-hand deploy to HiTech's own web server.
+#
+# Deploy: Actions -> "Website server deploy" -> Run workflow.
+#   mode = dry-run (default): shows what would change on the server. Writes nothing.
+#   mode = deploy: also type DEPLOY in "confirm". Backs up the live site, uploads, checks the live site,
+#                  and puts the backup back by itself if a check fails.
+#   ref  = main (default), or an older commit of main to roll back to.
+# Nothing here runs on its own against the server: pushes and pull requests only run the checks.
+# Setup (once): README.md -> "Deploy to HiTech's server with GitHub Actions".
+name: Website server deploy
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "dry-run shows the changes only; deploy uploads them"
+        type: choice
+        options: [dry-run, deploy]
+        default: dry-run
+      confirm:
+        description: "For mode = deploy, type DEPLOY"
+        type: string
+        default: ""
+      ref:
+        description: "What to deploy: main, or an older commit SHA of main to roll back"
+        type: string
+        default: main
+      allow_config_changes:
+        description: "Allow overwriting a server-edited .htaccess or lead.php (read the dry-run diff first)"
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    name: Check site and server bundle
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event_name == 'workflow_dispatch' && inputs.ref || '' }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm ci
+      - name: Lead endpoint check
+        run: npm run check
+      - name: Page check
+        run: npm run check:site
+      - name: Vercel setup check
+        run: npm run check:vercel
+      - name: Server bundle check (includes running lead.php with PHP)
+        run: |
+          php -v | head -1
+          npm run check:server
+
+  deploy:
+    name: Deploy to HiTech server (${{ inputs.mode }})
+    needs: check
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    environment: website-server
+    concurrency:
+      group: website-server-deploy
+      cancel-in-progress: false
+    steps:
+      - name: "Lock: confirm and settings"
+        env:
+          MODE: ${{ inputs.mode }}
+          CONFIRM: ${{ inputs.confirm }}
+          HAS_HOST: ${{ secrets.DEPLOY_HOST != '' }}
+          HAS_USER: ${{ secrets.DEPLOY_USER != '' }}
+          HAS_PATH: ${{ secrets.DEPLOY_PATH != '' }}
+          HAS_KEY: ${{ secrets.DEPLOY_SSH_KEY != '' }}
+          HAS_KNOWN: ${{ secrets.DEPLOY_KNOWN_HOSTS != '' }}
+        run: |
+          if [ "$MODE" = "deploy" ] && [ "$CONFIRM" != "DEPLOY" ]; then
+            echo "::error::mode is deploy but confirm is not DEPLOY. Nothing was changed."; exit 1
+          fi
+          missing=""
+          [ "$HAS_HOST" = true ] || missing="$missing DEPLOY_HOST"
+          [ "$HAS_USER" = true ] || missing="$missing DEPLOY_USER"
+          [ "$HAS_PATH" = true ] || missing="$missing DEPLOY_PATH"
+          [ "$HAS_KEY" = true ] || missing="$missing DEPLOY_SSH_KEY"
+          [ "$HAS_KNOWN" = true ] || missing="$missing DEPLOY_KNOWN_HOSTS"
+          if [ -n "$missing" ]; then
+            echo "::error::Missing secrets in the website-server environment:$missing (see README)."; exit 1
+          fi
+
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.ref }}
+          fetch-depth: 0
+
+      - name: "Lock: only code that is merged into main"
+        run: |
+          git fetch --no-tags origin main
+          if ! git merge-base --is-ancestor HEAD origin/main; then
+            echo "::error::$(git rev-parse --short HEAD) is not part of main. Merge the pull request first, then deploy main."; exit 1
+          fi
+          echo "Deploying $(git log -1 --format='%h %s (%ci)')"
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Build the server bundle
+        run: npm run server-build
+
+      - name: SSH key
+        env:
+          DEPLOY_SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+          DEPLOY_KNOWN_HOSTS: ${{ secrets.DEPLOY_KNOWN_HOSTS }}
+        run: |
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "$DEPLOY_SSH_KEY" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          printf '%s\n' "$DEPLOY_KNOWN_HOSTS" > ~/.ssh/known_hosts
+          chmod 644 ~/.ssh/known_hosts
+
+      - name: ${{ inputs.mode == 'deploy' && 'Back up, upload and check the live site' || 'Dry run (shows what would change)' }}
+        env:
+          MODE: ${{ inputs.mode }}
+          ALLOW_CONFIG_CHANGES: ${{ inputs.allow_config_changes }}
+          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+          DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
+          DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
+          DEPLOY_PORT: ${{ vars.DEPLOY_PORT || '22' }}
+          SMOKE_URL: ${{ vars.SMOKE_URL || 'https://www.hitechnepal.com.np' }}
+          SKIP_SMOKE: ${{ vars.SKIP_SMOKE || 'false' }}
+        run: |
+          export SSH_KEY_FILE="$HOME/.ssh/deploy_key"
+          bash _build/deploy-server.sh
+
+      - name: Remove the SSH key
+        if: always()
+        run: rm -f ~/.ssh/deploy_key

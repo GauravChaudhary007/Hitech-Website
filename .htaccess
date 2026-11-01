@@ -1,5 +1,6 @@
 # HiTech website: Apache config (shared hosting / cPanel / any Apache with .htaccess allowed).
-# Upload the whole folder contents to the web root (public_html). No build step is needed.
+# Deploy with the "Website server deploy" GitHub Action, or upload the contents of server-dist/ (npm run server-build)
+# to the web root (public_html). Do not upload the whole repo. No page build step is needed.
 
 Options -Indexes
 DirectoryIndex index.html
@@ -10,12 +11,16 @@ ErrorDocument 404 /404.html
 # RewriteCond %{HTTPS} off
 # RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L]
 
-# Never serve build tooling, docs or config files
+# Never serve build tooling, docs, Vercel files, git data or config files.
+# The deploy workflow only uploads the public site (see _build/server-dist.mjs); these rules are the
+# second line of defence if someone copies the whole repo or runs git pull in the web root.
 <IfModule mod_rewrite.c>
   RewriteEngine On
-  RewriteRule ^(_build|docs|api|node_modules)(/|$) - [F,L]
-  RewriteRule ^(package\.json|package-lock\.json|vercel\.json|README\.md|\.gitignore)$ - [F,L]
-  RewriteRule ^lead-endpoint/(README\.md|check\.mjs)$ - [F,L]
+  RewriteRule ^\.well-known/ - [L]
+  RewriteRule (^|/)\. - [F,L]
+  RewriteRule ^(_build|docs|api|node_modules|dist|server-dist|lead-endpoint/node_modules)(/|$) - [F,L]
+  RewriteRule ^(package\.json|package-lock\.json|vercel\.json|nginx\.conf\.example)$ - [F,L]
+  RewriteRule \.(md|mjs|cjs|ts|map|log|bak|sql|env|sh|yml|yaml)$ - [F,L,NC]
 </IfModule>
 
 <IfModule mod_headers.c>

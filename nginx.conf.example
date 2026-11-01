@@ -19,9 +19,13 @@ server {
     gzip on;
     gzip_types text/css application/javascript application/json image/svg+xml text/xml;
 
-    location ~ ^/(_build|docs|api|node_modules)/ { return 404; }
-    location ~ ^/(package\.json|package-lock\.json|vercel\.json|README\.md|nginx\.conf\.example)$ { return 404; }
-    location ~ ^/lead-endpoint/(README\.md|check\.mjs)$ { return 404; }
+    # Never serve build tooling, docs, Vercel files, git data or config files. The deploy workflow only
+    # uploads the public site (_build/server-dist.mjs); this is the second line of defence.
+    location ^~ /.well-known/ { try_files $uri =404; }
+    location ~ /\. { return 404; }
+    location ~ ^/(_build|docs|api|node_modules|dist|server-dist)(/|$) { return 404; }
+    location ~ ^/(package\.json|package-lock\.json|vercel\.json|nginx\.conf\.example)$ { return 404; }
+    location ~* \.(md|mjs|cjs|ts|map|log|bak|sql|env|sh|yml|yaml)$ { return 404; }
 
 
     # Old site (PHP) links: 301 to the matching new page. Keep lead.php working (exact match below wins).
