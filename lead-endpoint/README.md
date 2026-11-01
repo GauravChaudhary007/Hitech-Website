@@ -4,7 +4,11 @@ Every inquiry form on the site (popup, call-back strip, contact page, demo form,
 
 WhatsApp cannot receive messages automatically without the WhatsApp Business Platform, so **email is the automatic channel; WhatsApp opens on the visitor's device and the visitor taps send.**
 
-## Setup
+## On Vercel
+
+Vercel does not run PHP. There, `vercel.json` rewrites `/lead-endpoint/lead.php` to the Node function `api/lead.mjs`, which validates the same fields and sends the same email over SMTP. Setup (env vars) is in the main README under "Deploy on Vercel"; `npm run check:vercel` tests it. If you change fields or labels here, change `api/_lead.mjs` too (the check compares them).
+
+## Setup (PHP host)
 
 1. Upload the `lead-endpoint/` folder to the same PHP host as the site, so the file is reachable at `https://<your-site>/lead-endpoint/lead.php`. `site.js` posts to the relative path `lead-endpoint/lead.php` (the `LEAD_ENDPOINT` constant at the top of `assets/js/site.js`; change it only if the file lives elsewhere).
 2. Open `lead.php` and check the settings at the top: `$TO` is the recipient email (set to `info@hitechnepal.com.np`, the address on the contact page; change it to the sales mailbox if you prefer), `$ALLOWED_ORIGIN` stays empty when the site and the file share a host, `$RATE_MAX` and `$RATE_WINDOW` limit each IP to 5 inquiries per 10 minutes.
