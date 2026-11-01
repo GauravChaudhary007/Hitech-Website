@@ -60,7 +60,7 @@ jobs:
           npm run check:server
 
   deploy:
-    name: Deploy to HiTech server (${{ inputs.mode }})
+    name: Deploy to HiTech server (by hand only)
     needs: check
     if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
