@@ -10,6 +10,11 @@
     "build": "node _build/build.mjs",
     "start": "npx --yes serve . -l 3000",
     "check": "node lead-endpoint/check.mjs",
-    "check:site": "node _build/check.mjs"
+    "check:site": "node _build/check.mjs",
+    "vercel-build": "node _build/vercel-dist.mjs",
+    "check:vercel": "node _build/check-vercel.mjs"
+  },
+  "dependencies": {
+    "nodemailer": "10.2.1"
   }
 }

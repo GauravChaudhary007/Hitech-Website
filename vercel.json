@@ -1,0 +1,179 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": null,
+  "installCommand": "npm install",
+  "buildCommand": "npm run vercel-build",
+  "outputDirectory": "dist",
+  "cleanUrls": false,
+  "trailingSlash": false,
+  "functions": {
+    "api/lead.mjs": {
+      "maxDuration": 15
+    }
+  },
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "SAMEORIGIN"
+        }
+      ]
+    },
+    {
+      "source": "/:p(.*\\.(?:css|js))",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=604800"
+        }
+      ]
+    },
+    {
+      "source": "/:p(.*\\.(?:png|jpe?g|svg|webp|mp4|woff2?))",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=2592000"
+        }
+      ]
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/:p(chat/.*)",
+      "destination": "/live-support.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/:p(swastik-accounting-software(?:/.*)?)",
+      "destination": "/product-swastik.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/:p(files/[^/]*swastik[^/]*\\.pdf)",
+      "destination": "/product-swastik.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/:p(files/.*)",
+      "destination": "/products.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/:p((?!lead-endpoint/)(?:.*/)?[^/]*(?:live-?support|helpdesk|ticket)[^/]*\\.php)",
+      "destination": "/live-support.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/:p((?!lead-endpoint/)(?:.*/)?[^/]*(?:myswastik|swastik-?online)[^/]*\\.php)",
+      "destination": "/product-myswastikonline.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/:p((?!lead-endpoint/)(?:.*/)?[^/]*(?:swastik-?pos|pos-?software|point-of-sale|retail)[^/]*\\.php)",
+      "destination": "/product-pos.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/:p((?!lead-endpoint/)(?:.*/)?[^/]*(?:restaurant|cafe|hotel-?pos)[^/]*\\.php)",
+      "destination": "/product-restaurant.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/:p((?!lead-endpoint/)(?:.*/)?[^/]*(?:pharma)[^/]*\\.php)",
+      "destination": "/product-pharmasoft.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/:p((?!lead-endpoint/)(?:.*/)?[^/]*(?:hospitality|ezee|frontdesk|hotel)[^/]*\\.php)",
+      "destination": "/products.html#ezee",
+      "statusCode": 301
+    },
+    {
+      "source": "/:p((?!lead-endpoint/)(?:.*/)?[^/]*(?:avocare|hospital|clinic|health)[^/]*\\.php)",
+      "destination": "/product-avocare.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/:p((?!lead-endpoint/)(?:.*/)?[^/]*(?:bizant|mobile|sfa|sales-?force|field)[^/]*\\.php)",
+      "destination": "/product-bizant.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/:p((?!lead-endpoint/)(?:.*/)?[^/]*(?:swastik|accounting|billing|inventory)[^/]*\\.php)",
+      "destination": "/product-swastik.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/:p((?!lead-endpoint/)(?:.*/)?[^/]*(?:tivora|erp)[^/]*\\.php)",
+      "destination": "/tivora.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/:p((?!lead-endpoint/)(?:.*/)?[^/]*(?:partner|dealer|reseller|distributor|channel)[^/]*\\.php)",
+      "destination": "/partners.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/:p((?!lead-endpoint/)(?:.*/)?[^/]*(?:client|customer|testimonial)[^/]*\\.php)",
+      "destination": "/index.html#clients",
+      "statusCode": 301
+    },
+    {
+      "source": "/:p((?!lead-endpoint/)(?:.*/)?[^/]*(?:about|company|profile|team)[^/]*\\.php)",
+      "destination": "/about.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/:p((?!lead-endpoint/)(?:.*/)?[^/]*(?:career|job|vacanc|recruit)[^/]*\\.php)",
+      "destination": "/careers.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/:p((?!lead-endpoint/)(?:.*/)?[^/]*(?:contact|enquiry|inquiry|demo)[^/]*\\.php)",
+      "destination": "/contact.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/:p((?!lead-endpoint/)(?:.*/)?[^/]*(?:support|download|training)[^/]*\\.php)",
+      "destination": "/support.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/:p((?!lead-endpoint/)(?:.*/)?[^/]*(?:service|solution|custom|software-?dev|web-?dev|ecommerce|e-commerce|mobile-?app)[^/]*\\.php)",
+      "destination": "/solutions.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/:p((?!lead-endpoint/)(?:.*/)?[^/]*(?:product)[^/]*\\.php)",
+      "destination": "/products.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/:p((?!lead-endpoint/)(?:.*/)?index\\.php)",
+      "destination": "/",
+      "statusCode": 301
+    },
+    {
+      "source": "/:p((?!lead-endpoint/).*\\.php)",
+      "destination": "/",
+      "statusCode": 301
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/lead-endpoint/lead.php",
+      "destination": "/api/lead"
+    }
+  ]
+}

@@ -19,8 +19,8 @@ server {
     gzip on;
     gzip_types text/css application/javascript application/json image/svg+xml text/xml;
 
-    location ~ ^/(_build|docs)/ { return 404; }
-    location ~ ^/(package\.json|README\.md|nginx\.conf\.example)$ { return 404; }
+    location ~ ^/(_build|docs|api|node_modules)/ { return 404; }
+    location ~ ^/(package\.json|package-lock\.json|vercel\.json|README\.md|nginx\.conf\.example)$ { return 404; }
     location ~ ^/lead-endpoint/(README\.md|check\.mjs)$ { return 404; }
 
 

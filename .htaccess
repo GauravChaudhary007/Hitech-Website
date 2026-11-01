@@ -13,8 +13,8 @@ ErrorDocument 404 /404.html
 # Never serve build tooling, docs or config files
 <IfModule mod_rewrite.c>
   RewriteEngine On
-  RewriteRule ^(_build|docs)(/|$) - [F,L]
-  RewriteRule ^(package\.json|README\.md|\.gitignore)$ - [F,L]
+  RewriteRule ^(_build|docs|api|node_modules)(/|$) - [F,L]
+  RewriteRule ^(package\.json|package-lock\.json|vercel\.json|README\.md|\.gitignore)$ - [F,L]
   RewriteRule ^lead-endpoint/(README\.md|check\.mjs)$ - [F,L]
 </IfModule>
 
