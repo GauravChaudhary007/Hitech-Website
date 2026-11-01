@@ -10,6 +10,7 @@ Thumbs.db
 Marketing Content/
 .boost/
 
-# Vercel build output and local Vercel CLI state
+# Build outputs: dist/ for Vercel, server-dist/ for HiTech's own server; local Vercel CLI state
 dist/
+server-dist/
 .vercel/

@@ -12,7 +12,9 @@
     "check": "node lead-endpoint/check.mjs",
     "check:site": "node _build/check.mjs",
     "vercel-build": "node _build/vercel-dist.mjs",
-    "check:vercel": "node _build/check-vercel.mjs"
+    "check:vercel": "node _build/check-vercel.mjs",
+    "server-build": "node _build/server-dist.mjs",
+    "check:server": "node _build/check-server.mjs"
   },
   "dependencies": {
     "nodemailer": "10.2.1"
