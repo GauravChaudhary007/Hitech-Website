@@ -6,6 +6,11 @@ Status: **Phase A is done and accepted** (points 1, 4, 5, 6, 7, 8, 9, 10, 12, 13
 
 All changes were made in `_build/build.mjs`, `assets/css/site.css`, `assets/js/site.js` and the new `lead-endpoint/` folder, then regenerated with `node _build/build.mjs`. No generated HTML was edited by hand.
 
+## 4 Nov 2026 (CEO request)
+
+- Partners map: Surkhet added as a dealer location (13 partner cities). The "Partners across N cities" headings and the stat now count the list instead of a hard-coded 12.
+- Inquiry popup: first shown 30 seconds after landing, then 1 minute 30 seconds after each close, until a request is sent.
+
 ## Round 9 (CEO feedback on the home page, 9 Oct 2026)
 
 Edits are in `_build/build.mjs`, `assets/css/site.css`, `assets/js/site.js` and `_build/check.mjs`; all pages regenerated with `npm run build`. Layout was reviewed with the design-taste guidance: fewer boxes, typographic hierarchy, thin rules, real photography from `assets/img/bg`, no icon-in-square cards, no decorative washes.

@@ -236,16 +236,16 @@ const WHATSAPP_NUMBER = '9779709117067';
     });
   }
 
-  /* inquiry popup: 10 s after landing, then 15 s after each of the first three dismissals, then every 3 minutes until a request is sent.
+  /* inquiry popup: 30 s after landing, then 1 min 30 s after each dismissal, until a request is sent.
      State lives in sessionStorage so the sequence continues across pages. Tests may shorten the timings through window.__leadPopupTest. */
   const pop = $('#leadPop');
   if (pop) {
-    const T = window.__leadPopupTest || {}, FIRST = T.first ?? 10000, AGAIN = T.again ?? 15000, LONG = T.long ?? 180000, DEFER = T.defer ?? 5000, K = 'hitech-lead';
+    const T = window.__leadPopupTest || {}, FIRST = T.first ?? 30000, AGAIN = T.again ?? 90000, DEFER = T.defer ?? 5000, K = 'hitech-lead';
     const read = () => { try { return JSON.parse(sessionStorage.getItem(K)) || {}; } catch (e) { return {}; } };
     const st = read(); if (!st.t0) { st.t0 = Date.now(); st.shown = 0; st.last = 0; }
     const save = () => { try { sessionStorage.setItem(K, JSON.stringify(st)); } catch (e) { /* no storage: the schedule restarts on each page */ } };
     save();
-    const due = () => st.shown === 0 ? st.t0 + FIRST : st.last + (st.shown <= 3 ? AGAIN : LONG);
+    const due = () => st.shown === 0 ? st.t0 + FIRST : st.last + AGAIN;
     const card = $('.lp-card', pop), sel = $('[name=interest]', pop), nameF = $('[name=name]', pop), okMsg = $('.form-ok', pop);
     let timer = 0, isOpen = false, prev = null;
     const blocked = () => { const a = d.activeElement; return d.hidden || (a && /^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName)) || !!$('.panel.open', nav) || nav.classList.contains('mopen') || d.body.classList.contains('cv-open'); };

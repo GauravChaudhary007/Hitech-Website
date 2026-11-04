@@ -180,7 +180,7 @@ $env:SITE_URL="https://staging.example.com"; npm run build  # Windows PowerShell
 | --- | --- |
 | Inquiry recipient email | `lead-endpoint/lead.php`, `$TO` |
 | WhatsApp number for inquiries | `assets/js/site.js`, `WHATSAPP_NUMBER`, and `WA_URL` in `_build/build.mjs` (then rebuild) |
-| Popup timing (10 s, then 15 s three times, then every 3 min) | `assets/js/site.js` |
+| Popup timing (30 s, then every 1 min 30 s after each close) | `assets/js/site.js` |
 | Brand colours, font | `assets/css/site.css` (Navy #000059, Cyan #009AD4, Indigo #0B20D6, Poppins) |
 
 ## Notes
