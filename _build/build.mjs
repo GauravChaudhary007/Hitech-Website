@@ -566,7 +566,7 @@ const nepalMap = (items, cls = '') => {
 /* the 22 branch cities, numbered west to east */
 const BRANCH_ORDER = [...BRANCH_KEYS].sort((a, b) => MAP.pins[a].x - MAP.pins[b].x);
 const coverageSection = (paper = true, bg = false) => `<section class="sec${paper ? ' sec-paper' : ''}${bg ? ' has-bg' : ''}" id="coverage">${bg ? bgl('home-himalaya', { mode: 'lw', pos: '50% 45%' }) : ''}<div class="wrap"><div class="sec-head"><div><p class="eyebrow">Our branches</p><h2><span class="bignum">${BRANCH_KEYS.length}</span> cities across Nepal.</h2></div></div>${nepalMap(BRANCH_ORDER.map(k => [k, MAP.pins[k].name]))}</div></section>`;
-const PARTNER_PINS = ['itahari', 'birgunj', 'butwal', 'bhairahawa', 'pokhara', 'nepalgunj', 'janakpur', 'narayanghat', 'lahan', 'jhapa', 'mahendranagar', 'dang'];
+const PARTNER_PINS = ['itahari', 'birgunj', 'butwal', 'bhairahawa', 'pokhara', 'nepalgunj', 'janakpur', 'narayanghat', 'lahan', 'jhapa', 'mahendranagar', 'dang', 'surkhet'];
 
 /* ---------- HOME ---------- */
 
@@ -697,7 +697,7 @@ const solPartners = () => `<section class="sec" id="solutions-teaser">
       <ul class="sx-list stag">
         ${solRow('partners.html#ca', 'For CAs and auditors', 'For people who check the books.')}
         ${solRow('partners.html#partner', 'Partner Connect', 'Training, support and rewards.')}
-        ${solRow('partners.html#network', 'Partner network', 'Partners across 12 cities.')}
+        ${solRow('partners.html#network', 'Partner network', `Partners across ${PARTNER_PINS.length} cities.`)}
       </ul>
       <div class="sx-photo" aria-hidden="true"><img src="${BGD}handshake.jpg" alt="" loading="lazy" decoding="async"></div>
     </div>
@@ -1056,7 +1056,7 @@ const partnersPage = () => `<header class="phero phero-dk has-bg" data-tone="nav
 </section>
 <section class="sec sec-paper" id="network">
   <div class="wrap">
-    <div class="sec-head"><div><p class="eyebrow">Channel partners</p><h2>Partners across 12 cities.</h2></div><p class="lede"><span class="bignum">12</span> cities</p></div>
+    <div class="sec-head"><div><p class="eyebrow">Channel partners</p><h2>Partners across ${PARTNER_PINS.length} cities.</h2></div><p class="lede"><span class="bignum">${PARTNER_PINS.length}</span> cities</p></div>
     ${nepalMap(PARTNER_PINS.map(k => [k, MAP.pins[k].name]), 'nm-p')}
   </div>
 </section>
